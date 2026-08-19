@@ -40,13 +40,13 @@ function CourtPage() {
     [],
   );
 
-  const scenario = scenarios[round];
+  const scenario = scenarios[round]!;
   const total = scenarios.length;
   const score = answers.filter((a) => a.correct).length;
   const streak = useMemo(() => {
     let s = 0;
     for (let i = answers.length - 1; i >= 0; i--) {
-      if (!answers[i].correct) break;
+      if (!answers[i]!.correct) break;
       s++;
     }
     return s;
