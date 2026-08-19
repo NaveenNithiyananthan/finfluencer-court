@@ -40,7 +40,7 @@ export function VerdictReveal({
       </p>
 
       {correct && (
-        <div className="animate-pulse-ring pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-1 w-40 rounded-full bg-primary" />
+        <div className="animate-pulse-ring pointer-events-none absolute inset-x-0 bottom-5 mx-auto h-1 w-32 rounded-full bg-primary" />
       )}
     </div>
   );
