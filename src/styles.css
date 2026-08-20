@@ -53,6 +53,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -113,6 +114,7 @@
   --chart-3: oklch(0.82 0.16 78);
   --chart-4: oklch(0.68 0.2 12);
   --chart-5: oklch(0.72 0.11 300);
+  --chart-6: oklch(0.88 0.18 95);
 
   --sidebar: oklch(0.19 0.02 265);
   --sidebar-foreground: oklch(0.97 0.005 250);
