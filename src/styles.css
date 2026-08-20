@@ -26,6 +26,7 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
+  --color-surface-2: var(--surface-2);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -38,6 +39,10 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-safe: var(--safe);
+  --color-safe-foreground: var(--safe-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-caution: var(--caution);
@@ -77,6 +82,7 @@
   --foreground: oklch(0.97 0.005 250);
   --surface: oklch(0.21 0.021 265);
   --surface-raised: oklch(0.25 0.024 265);
+  --surface-2: var(--surface-raised);
 
   --card: oklch(0.21 0.021 265);
   --card-foreground: oklch(0.97 0.005 250);
@@ -95,6 +101,11 @@
 
   --accent: oklch(0.75 0.15 210);
   --accent-foreground: oklch(0.17 0.03 240);
+
+  --safe: var(--primary);
+  --safe-foreground: var(--primary-foreground);
+  --danger: var(--destructive);
+  --danger-foreground: var(--destructive-foreground);
 
   --destructive: oklch(0.65 0.21 22);
   --destructive-foreground: oklch(0.98 0.01 20);
