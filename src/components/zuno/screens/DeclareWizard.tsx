@@ -6,6 +6,7 @@ import { ProgressIndicator } from "../ProgressIndicator";
 import { SectionHeader } from "../SectionHeader";
 import {
   driverOptions,
+  decisionTypeOptions,
   emptyDeclaration,
   horizonOptions,
   lossCapacityOptions,
@@ -15,7 +16,7 @@ import {
 export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declaration) => void }) {
   const [step, setStep] = useState(1);
   const [draft, setDraft] = useState<Declaration>({ ...emptyDeclaration });
-  const next = () => (step === 5 ? onComplete(draft) : setStep((current) => current + 1));
+  const next = () => (step === 6 ? onComplete(draft) : setStep((current) => current + 1));
   return (
     <div className="space-y-8">
       <ProgressIndicator current={step} total={5} />
@@ -35,12 +36,37 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
               className="w-full resize-none rounded-2xl border border-border bg-surface p-5 text-base text-foreground outline-none focus:border-primary"
               placeholder="Describe the decision in your own words"
             />
+            <input
+              value={draft.assetOrOpportunity}
+              onChange={(event) => setDraft({ ...draft, assetOrOpportunity: event.target.value })}
+              className="w-full rounded-2xl border border-border bg-surface p-4 text-base text-foreground outline-none focus:border-primary"
+              placeholder="Name the asset, team, company or opportunity (optional)"
+            />
           </>
         ) : null}
         {step === 2 ? (
           <>
             <SectionHeader
-              eyebrow="Step 2 - Amount"
+              eyebrow="Step 2 - Decision type"
+              title="What kind of decision is this?"
+            />
+            <div className="space-y-3">
+              {decisionTypeOptions.map((option) => (
+                <OptionCard
+                  key={option.id}
+                  label={option.label}
+                  hint={option.hint}
+                  selected={draft.decisionType === option.id}
+                  onSelect={() => setDraft({ ...draft, decisionType: option.id })}
+                />
+              ))}
+            </div>
+          </>
+        ) : null}
+        {step === 3 ? (
+          <>
+            <SectionHeader
+              eyebrow="Step 3 - Amount"
               title="How much are you thinking of putting in?"
             />
             <AmountInput
@@ -49,9 +75,9 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
             />
           </>
         ) : null}
-        {step === 3 ? (
+        {step === 4 ? (
           <>
-            <SectionHeader eyebrow="Step 3 - Time horizon" title="How long would you hold it?" />
+            <SectionHeader eyebrow="Step 4 - Time horizon" title="How long would you hold it?" />
             <div className="space-y-3">
               {horizonOptions.map((option) => (
                 <OptionCard
@@ -65,9 +91,9 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
             </div>
           </>
         ) : null}
-        {step === 4 ? (
+        {step === 5 ? (
           <>
-            <SectionHeader eyebrow="Step 4 - Motivation" title="Why are you considering this?" />
+            <SectionHeader eyebrow="Step 5 - Motivation" title="Why are you considering this?" />
             <div className="space-y-3">
               {driverOptions.map((option) => (
                 <OptionCard
@@ -81,10 +107,10 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
             </div>
           </>
         ) : null}
-        {step === 5 ? (
+        {step === 6 ? (
           <>
             <SectionHeader
-              eyebrow="Step 5 - Loss capacity"
+              eyebrow="Step 6 - Loss capacity"
               title="What happens if you lose the money?"
             />
             <div className="space-y-3">
@@ -102,7 +128,7 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
         ) : null}
       </div>
       <div className="space-y-3 pt-2">
-        <CtaButton onClick={next}>{step === 5 ? "Stress-test my decision" : "Continue"}</CtaButton>
+        <CtaButton onClick={next}>{step === 6 ? "Stress-test my decision" : "Continue"}</CtaButton>
         {step > 1 ? (
           <CtaButton
             variant="ghost"

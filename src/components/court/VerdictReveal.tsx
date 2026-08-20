@@ -32,7 +32,9 @@ export function VerdictReveal({
           correct ? "text-primary" : "text-foreground"
         }`}
       >
-        {correct ? "Good call. You spotted the warning signs." : "Not quite. Let's break down what you missed."}
+        {correct
+          ? "Good call. You spotted the warning signs."
+          : "Not quite. Let's break down what you missed."}
       </p>
 
       <p className="animate-rise mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">

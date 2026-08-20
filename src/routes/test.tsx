@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PhoneShell } from "@/components/zuno/PhoneShell";
 import { DeclareWizard } from "@/components/zuno/screens/DeclareWizard";
 import { DecisionSummary } from "@/components/zuno/screens/DecisionSummary";
 import { StressTest } from "@/components/zuno/screens/StressTest";
 import { WhyRisky } from "@/components/zuno/screens/WhyRisky";
 import { PauseScreen } from "@/components/zuno/screens/PauseScreen";
-import { emptyDeclaration, type Declaration } from "@/lib/zuno-data";
+import { buildEducationalConcepts, emptyDeclaration, type Declaration } from "@/lib/zuno-data";
+import { useZunoSession } from "@/lib/zuno-session";
 
 export const Route = createFileRoute("/test")({
   head: () => ({
@@ -35,6 +36,11 @@ const stageOrder: Stage[] = ["declare", "summary", "stress", "why", "pause"];
 function TestFlow() {
   const [stage, setStage] = useState<Stage>("declare");
   const [declaration, setDeclaration] = useState<Declaration>(emptyDeclaration);
+  const { session, saveDeclaration, markStressTestCompleted } = useZunoSession();
+
+  useEffect(() => {
+    if (session.declaration) setDeclaration(session.declaration);
+  }, [session.declaration]);
 
   const goBack = () => {
     const i = stageOrder.indexOf(stage);
@@ -54,6 +60,7 @@ function TestFlow() {
         <DeclareWizard
           onComplete={(d) => {
             setDeclaration(d);
+            saveDeclaration(d);
             setStage("summary");
           }}
         />
@@ -62,9 +69,20 @@ function TestFlow() {
         <DecisionSummary declaration={declaration} onContinue={() => setStage("stress")} />
       )}
       {stage === "stress" && (
-        <StressTest declaration={declaration} onContinue={() => setStage("why")} />
+        <StressTest
+          declaration={declaration}
+          onContinue={() => {
+            markStressTestCompleted(
+              buildEducationalConcepts(declaration),
+              declaration.decisionType ?? "crypto",
+            );
+            setStage("why");
+          }}
+        />
       )}
-      {stage === "why" && <WhyRisky declaration={declaration} onContinue={() => setStage("pause")} />}
+      {stage === "why" && (
+        <WhyRisky declaration={declaration} onContinue={() => setStage("pause")} />
+      )}
       {stage === "pause" && <PauseScreen />}
     </PhoneShell>
   );

@@ -22,19 +22,33 @@ export function RiskRecognitionCard({ progress }: { progress: ZunoProgress }) {
       </div>
       <div className="mt-5 flex gap-1.5" aria-hidden>
         {Array.from({ length: max }).map((_, i) => (
-          <span key={i} className={cn("h-1.5 flex-1 rounded-full", i < score ? "bg-primary" : "bg-secondary")} />
+          <span
+            key={i}
+            className={cn("h-1.5 flex-1 rounded-full", i < score ? "bg-primary" : "bg-secondary")}
+          />
         ))}
       </div>
       <ul className="mt-6 grid gap-2 sm:grid-cols-2">
         {concepts.map((c) => (
-          <li key={c.label} className="flex items-center justify-between rounded-2xl border border-border bg-background/40 px-4 py-3">
+          <li
+            key={c.label}
+            className="flex items-center justify-between rounded-2xl border border-border bg-background/40 px-4 py-3"
+          >
             <span className="text-sm">{c.label}</span>
-            <span className={cn("rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-widest", levelStyles[c.level])}>{c.level}</span>
+            <span
+              className={cn(
+                "rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-widest",
+                levelStyles[c.level],
+              )}
+            >
+              {c.level}
+            </span>
           </li>
         ))}
       </ul>
       <p className="mt-5 text-xs text-muted-foreground/80">
-        This is educational progress only. It is not a financial risk score and says nothing about your suitability for any investment.
+        This is educational progress only. It is not a financial risk score and says nothing about
+        your suitability for any investment.
       </p>
     </section>
   );

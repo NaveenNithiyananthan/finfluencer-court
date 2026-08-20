@@ -10,23 +10,30 @@ export type ZunoProgress = {
   concepts: { label: string; level: "New" | "Improving" | "Strong" }[];
 };
 
-export const mockProgress: ZunoProgress = {
-  returning: true,
-  declared: true,
-  stressTested: true,
-  fanPortfolioViewed: false,
-  courtChallengesCompleted: 2,
-  riskRecognitionScore: 3,
-  riskRecognitionMax: 5,
-  lastDecision: "£500 speculative investment",
-  concepts: [
-    { label: "FOMO recognition", level: "Strong" },
-    { label: "Downside awareness", level: "Improving" },
-    { label: "Concentration", level: "Improving" },
-    { label: "Influencer claims", level: "New" },
-  ],
-};
+import { formatGBP } from "./zuno-data";
+import { useZunoSession } from "./zuno-session";
 
 export function useZunoProgress(): ZunoProgress {
-  return mockProgress;
+  const { session } = useZunoSession();
+  const court = session.courtProgress;
+  const concepts = session.educationalConcepts.map(
+    (label, index) =>
+      ({
+        label,
+        level: index === 0 && court.score > 0 ? "Improving" : "New",
+      }) as const,
+  );
+  return {
+    returning: Boolean(session.declaration),
+    declared: Boolean(session.declaration),
+    stressTested: session.stressTestCompleted,
+    fanPortfolioViewed: session.portfolioViewed,
+    courtChallengesCompleted: court.completed,
+    riskRecognitionScore: court.score,
+    riskRecognitionMax: court.max,
+    lastDecision: session.declaration
+      ? `${formatGBP(session.declaration.amount)} ${session.declaration.decisionType ?? "decision"}`
+      : "",
+    concepts,
+  };
 }

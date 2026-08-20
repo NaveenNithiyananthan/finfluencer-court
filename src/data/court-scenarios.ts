@@ -74,7 +74,8 @@ export const scenarios: Scenario[] = [
       },
       {
         label: "Urgency",
-        detail: "\u201cDon't miss out\u201d is designed to trigger a fast decision, not a good one.",
+        detail:
+          "\u201cDon't miss out\u201d is designed to trigger a fast decision, not a good one.",
       },
       {
         label: "Upside without downside",
@@ -128,7 +129,10 @@ export const scenarios: Scenario[] = [
     ],
     warningSigns: [
       { label: "Urgency", detail: "A hard deadline replaces analysis with adrenaline." },
-      { label: "Social proof", detail: "\u201cEveryone is buying\u201d tells you nothing about the business." },
+      {
+        label: "Social proof",
+        detail: "\u201cEveryone is buying\u201d tells you nothing about the business.",
+      },
       { label: "Guaranteed returns", detail: "\u201cCan't lose\u201d is the tell, every time." },
       { label: "One prediction", detail: "One event decides the whole outcome." },
     ],
@@ -221,7 +225,10 @@ export const scenarios: Scenario[] = [
       { label: "Influencer authority", detail: "A big name is not a due-diligence process." },
       { label: "Hidden incentive", detail: "You may be reading an advert." },
       { label: "No fundamentals", detail: "Nothing explains why the asset has value." },
-      { label: "Certainty language", detail: "\u201cEasiest call of the year\u201d is a feeling, not a fact." },
+      {
+        label: "Certainty language",
+        detail: "\u201cEasiest call of the year\u201d is a feeling, not a fact.",
+      },
     ],
     concept: "authority",
     conceptLabel: "Influencer authority",
@@ -274,6 +281,53 @@ export const scenarios: Scenario[] = [
     conceptLabel: "Missing downside",
     skill: "Always ask what happens if it moves against you.",
     difficulty: "Tricky",
+  },
+  {
+    id: "loss-chasing-bet",
+    caseNumber: "CASE #006",
+    handle: "@WinningWeekend",
+    displayName: "Winning Weekend",
+    followers: "61K followers",
+    tag: "Viral",
+    claim:
+      "Arsenal lost last time, so the odds are better now. Double your stake and get it all back in one go. This is how smart bettors recover.",
+    metrics: { likes: "9.8K", comments: "1,087", shares: "2,440" },
+    verdict: "RISKY",
+    headline: "A previous loss does not improve the next probability.",
+    summary:
+      "The claim turns a loss into a reason to risk more. The next result is still uncertain, and increasing the stake can turn entertainment into escalating financial pressure.",
+    reasoning: [
+      {
+        title: "Gambler's fallacy",
+        detail:
+          "A team losing last time does not make a win due next time. Past independent results do not reset the odds.",
+      },
+      {
+        title: "Loss chasing",
+        detail:
+          "Doubling the stake to recover money makes the next decision depend on the first loss.",
+      },
+      {
+        title: "False recovery promise",
+        detail:
+          "There is no guarantee the larger bet wins, and the larger loss can create even more pressure.",
+      },
+    ],
+    warningSigns: [
+      { label: "Loss chasing", detail: "A previous loss is being used to justify a bigger risk." },
+      {
+        label: "Probability ignored",
+        detail: "The last result does not make the next result certain.",
+      },
+      {
+        label: "Escalation",
+        detail: "Doubling down can turn one affordable loss into a sequence.",
+      },
+    ],
+    concept: "loss-chasing",
+    conceptLabel: "Loss chasing",
+    skill: "Separate probability from the urge to get even.",
+    difficulty: "Standard",
   },
 ];
 

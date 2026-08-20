@@ -51,7 +51,8 @@ function Sidebar() {
       </nav>
 
       <p className="mt-auto text-[0.65rem] leading-relaxed text-muted-foreground/70">
-        ZUNO is an education prototype. It uses simulated data and does not provide investment advice.
+        ZUNO is an education prototype. It uses simulated data and does not provide investment
+        advice.
       </p>
     </aside>
   );

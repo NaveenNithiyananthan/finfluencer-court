@@ -1,10 +1,5 @@
 export type CategoryId =
-  | "sportswear"
-  | "media"
-  | "entertainment"
-  | "technology"
-  | "gaming"
-  | "venues";
+  "sportswear" | "media" | "entertainment" | "technology" | "gaming" | "venues";
 
 export interface FanCategory {
   id: CategoryId;
@@ -82,8 +77,7 @@ export const defaultWeights: Weights = FAN_CATEGORIES.reduce((acc, c) => {
   return acc;
 }, {} as Weights);
 
-export const totalWeight = (w: Weights) =>
-  FAN_CATEGORIES.reduce((sum, c) => sum + w[c.id], 0);
+export const totalWeight = (w: Weights) => FAN_CATEGORIES.reduce((sum, c) => sum + w[c.id], 0);
 
 export const normalisedWeights = (w: Weights): Weights => {
   const total = totalWeight(w);
@@ -101,8 +95,7 @@ export const portfolioReturn = (w: Weights) => {
 
 export const applyReturn = (amount: number, pct: number) => amount * (1 + pct / 100);
 
-export const activeExposures = (w: Weights) =>
-  FAN_CATEGORIES.filter((c) => w[c.id] > 0).length;
+export const activeExposures = (w: Weights) => FAN_CATEGORIES.filter((c) => w[c.id] > 0).length;
 
 export const diversificationScore = (w: Weights) => {
   const n = normalisedWeights(w);

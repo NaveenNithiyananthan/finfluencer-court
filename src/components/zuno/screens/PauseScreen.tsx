@@ -3,9 +3,11 @@ import { Link } from "@tanstack/react-router";
 import { OptionCard } from "../OptionCard";
 import { SectionHeader } from "../SectionHeader";
 import { motivationOptions } from "@/lib/zuno-data";
+import { useZunoSession } from "@/lib/zuno-session";
 
 export function PauseScreen() {
   const [motivation, setMotivation] = useState<string | null>(null);
+  const { session, saveGoal } = useZunoSession();
   return (
     <div className="space-y-8">
       <SectionHeader
@@ -16,14 +18,17 @@ export function PauseScreen() {
       <div className="space-y-3">
         {motivationOptions.map((option) => (
           <OptionCard
-            key={option}
-            label={option}
-            selected={motivation === option}
-            onSelect={() => setMotivation(option)}
+            key={option.id}
+            label={option.label}
+            selected={motivation === option.id}
+            onSelect={() => {
+              setMotivation(option.id);
+              saveGoal(option.id);
+            }}
           />
         ))}
       </div>
-      {motivation ? (
+      {motivation && session.declaration ? (
         <div className="surface-card bg-hero space-y-4 p-6">
           <p className="font-display text-2xl leading-snug font-semibold">
             There may be more than one way to achieve the same goal.

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ZunoShell } from "@/components/zuno/ZunoShell";
 import {
   AlternativeIntro,
@@ -12,6 +12,7 @@ import {
 } from "@/components/zuno/screens";
 import { defaultWeights, type Weights } from "@/lib/fan-portfolio";
 import { ZunoButton } from "@/components/zuno/primitives";
+import { useZunoSession } from "@/lib/zuno-session";
 
 const TITLE = "ZUNO Fan Portfolio — explore a diversified alternative";
 const DESCRIPTION =
@@ -42,6 +43,13 @@ const STEPS = [
 function PortfolioModule() {
   const [step, setStep] = useState(1);
   const [weights, setWeights] = useState<Weights>({ ...defaultWeights });
+  const { session, markPortfolioViewed } = useZunoSession();
+  const decision = session.declaration;
+  const amount = decision?.amount ?? 500;
+
+  useEffect(() => {
+    if (decision && !session.portfolioViewed) markPortfolioViewed();
+  }, [decision, markPortfolioViewed, session.portfolioViewed]);
 
   const next = () => {
     setStep((s) => Math.min(s + 1, STEPS.length));
@@ -60,14 +68,16 @@ function PortfolioModule() {
       totalSteps={STEPS.length}
     >
       <div key={step} className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-        {step === 1 && <AlternativeIntro onNext={next} />}
-        {step === 2 && <MeetFanPortfolio onNext={next} />}
-        {step === 3 && <PortfolioDashboard onNext={next} />}
-        {step === 4 && <ConcentratedVsDiversified onNext={next} />}
+        {step === 1 && <AlternativeIntro decision={decision} onNext={next} />}
+        {step === 2 && <MeetFanPortfolio decision={decision} onNext={next} />}
+        {step === 3 && <PortfolioDashboard amount={amount} onNext={next} />}
+        {step === 4 && <ConcentratedVsDiversified amount={amount} onNext={next} />}
         {step === 5 && (
           <BuildYourPortfolio weights={weights} setWeights={setWeights} onNext={next} />
         )}
-        {step === 6 && <CompareDecision weights={weights} onNext={next} />}
+        {step === 6 && (
+          <CompareDecision amount={amount} decision={decision} weights={weights} onNext={next} />
+        )}
         {step === 7 && <LearningTakeaway />}
       </div>
 

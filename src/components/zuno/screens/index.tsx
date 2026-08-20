@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import type { Declaration } from "@/lib/zuno-data";
 import { Link } from "@tanstack/react-router";
 import { AllocationControls } from "../AllocationControls";
 import { AllocationLegend, AllocationRing } from "../AllocationRing";
@@ -34,13 +35,23 @@ export { StressTest } from "./StressTest";
 export { WhyRisky } from "./WhyRisky";
 export { PauseScreen } from "./PauseScreen";
 
-export function AlternativeIntro({ onNext }: { onNext: () => void }) {
+export function AlternativeIntro({
+  decision,
+  onNext,
+}: {
+  decision: Declaration | null;
+  onNext: () => void;
+}) {
   return (
     <div className="space-y-8">
       <SectionHeader
         eyebrow="From stress test to alternative"
         title="You do not have to stop caring about what excites you."
-        supporting="The question is how you choose to get exposure."
+        supporting={
+          decision?.userGoal === "entertainment"
+            ? "You can keep the interest as entertainment without making one outcome carry the whole stake."
+            : "The question is how you choose to get exposure."
+        }
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <ZunoCard tone="danger">
@@ -62,13 +73,23 @@ export function AlternativeIntro({ onNext }: { onNext: () => void }) {
     </div>
   );
 }
-export function MeetFanPortfolio({ onNext }: { onNext: () => void }) {
+export function MeetFanPortfolio({
+  decision,
+  onNext,
+}: {
+  decision: Declaration | null;
+  onNext: () => void;
+}) {
   return (
     <div className="space-y-8">
       <SectionHeader
         eyebrow="The alternative"
         title="Meet the Fan Portfolio"
-        supporting="A simulated portfolio built around the sports and entertainment ecosystem."
+        supporting={
+          decision?.assetOrOpportunity
+            ? `A simulated alternative for staying connected to ${decision.assetOrOpportunity}.`
+            : "A simulated portfolio built around the sports and entertainment ecosystem."
+        }
       />
       <div className="space-y-4">
         {[
@@ -88,13 +109,13 @@ export function MeetFanPortfolio({ onNext }: { onNext: () => void }) {
     </div>
   );
 }
-export function PortfolioDashboard({ onNext }: { onNext: () => void }) {
+export function PortfolioDashboard({ amount, onNext }: { amount: number; onNext: () => void }) {
   return (
     <div className="space-y-8">
       <SectionHeader
         eyebrow="Portfolio dashboard"
         title="Fan Portfolio"
-        supporting={`${formatMoney(SIMULATED_AMOUNT)} simulated`}
+        supporting={`${formatMoney(amount)} simulated`}
       />
       <ZunoCard className="space-y-6">
         <AllocationRing
@@ -129,27 +150,33 @@ export function PortfolioDashboard({ onNext }: { onNext: () => void }) {
     </div>
   );
 }
-export function ConcentratedVsDiversified({ onNext }: { onNext: () => void }) {
+export function ConcentratedVsDiversified({
+  amount = SIMULATED_AMOUNT,
+  onNext,
+}: {
+  amount?: number;
+  onNext: () => void;
+}) {
   const result = portfolioReturn(defaultWeights);
   return (
     <div className="space-y-8">
       <SectionHeader
         eyebrow="Concentrated vs diversified"
         title="What does diversification actually change?"
-        supporting="Two illustrative scenarios from the same £500 starting amount."
+        supporting={`Two illustrative scenarios from the same ${formatMoney(amount)} starting amount.`}
       />
       <ZunoCard tone="danger" className="space-y-4">
         <p className="font-display text-lg font-semibold">One concentrated position</p>
         <div className="grid grid-cols-2 gap-4">
-          <Stat label="If it falls 50%" tone="down" value={formatMoney(250)} />
-          <Stat label="If it rises 50%" tone="up" value={formatMoney(750)} />
+          <Stat label="If it falls 50%" tone="down" value={formatMoney(amount * 0.5)} />
+          <Stat label="If it rises 50%" tone="up" value={formatMoney(amount * 1.5)} />
         </div>
       </ZunoCard>
       <ZunoCard tone="primary" className="space-y-4">
         <p className="font-display text-lg font-semibold">Fan Portfolio</p>
         <div className="grid grid-cols-2 gap-4">
           <Stat label="Weighted outcome" tone="up" value={formatPct(result)} />
-          <Stat label="£500 becomes" value={formatMoney(applyReturn(SIMULATED_AMOUNT, result))} />
+          <Stat label="Starting amount becomes" value={formatMoney(applyReturn(amount, result))} />
         </div>
       </ZunoCard>
       <Callout label="The point">
@@ -203,7 +230,17 @@ export function BuildYourPortfolio({
     </div>
   );
 }
-export function CompareDecision({ weights, onNext }: { weights: Weights; onNext: () => void }) {
+export function CompareDecision({
+  amount,
+  decision,
+  weights,
+  onNext,
+}: {
+  amount: number;
+  decision: Declaration | null;
+  weights: Weights;
+  onNext: () => void;
+}) {
   const score = diversificationScore(weights);
   return (
     <div className="space-y-8">
@@ -216,9 +253,10 @@ export function CompareDecision({ weights, onNext }: { weights: Weights; onNext:
         <ZunoCard tone="danger" className="space-y-4">
           <p className="font-display text-lg font-semibold">Original idea</p>
           <Stat label="Exposures" value="1" />
+          <Stat label="Amount" value={formatMoney(amount)} />
           <BulletList
             tone="danger"
-            items={["Highly concentrated", CONCENTRATED_POSITION.description]}
+            items={["Highly concentrated", decision?.idea || CONCENTRATED_POSITION.description]}
           />
         </ZunoCard>
         <ZunoCard tone="primary" className="space-y-4">

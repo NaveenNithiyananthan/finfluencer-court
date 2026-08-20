@@ -26,9 +26,7 @@ export function CourtButton({
   size,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof courtButtonVariants>) {
-  return (
-    <button className={cn(courtButtonVariants({ variant, size }), className)} {...props} />
-  );
+  return <button className={cn(courtButtonVariants({ variant, size }), className)} {...props} />;
 }
 
 export { courtButtonVariants };

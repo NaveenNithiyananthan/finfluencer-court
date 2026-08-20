@@ -10,13 +10,7 @@ interface ZunoShellProps {
   children: ReactNode;
 }
 
-export function ZunoShell({
-  moduleLabel,
-  stepLabel,
-  step,
-  totalSteps,
-  children,
-}: ZunoShellProps) {
+export function ZunoShell({ moduleLabel, stepLabel, step, totalSteps, children }: ZunoShellProps) {
   return (
     <div className="relative min-h-screen">
       <div className="zuno-hero-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" />
@@ -55,9 +49,7 @@ export function ZunoShell({
         <main className="flex-1 pt-8">{children}</main>
 
         <footer className="pt-12">
-          <p className="text-center text-xs leading-relaxed text-muted-foreground">
-            {DISCLAIMER}
-          </p>
+          <p className="text-center text-xs leading-relaxed text-muted-foreground">{DISCLAIMER}</p>
         </footer>
       </div>
     </div>

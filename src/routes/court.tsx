@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Gavel, HelpCircle, RotateCcw, Sparkles } from "lucide-react";
 import { ClaimCard } from "@/components/court/ClaimCard";
 import { CourtButton } from "@/components/court/CourtButton";
@@ -11,6 +11,7 @@ import { VerdictButton } from "@/components/court/VerdictButton";
 import { VerdictReveal } from "@/components/court/VerdictReveal";
 import { ReasoningCardView, WarningSignCard } from "@/components/court/WarningSignCard";
 import { scenarios, verdictOptions, type Verdict } from "@/data/court-scenarios";
+import { useZunoSession } from "@/lib/zuno-session";
 
 const title = "Finfluencer Court — ZUNO";
 const description =
@@ -36,12 +37,27 @@ function CourtPage() {
   const [stage, setStage] = useState<Stage>("intro");
   const [round, setRound] = useState(0);
   const [choice, setChoice] = useState<Verdict | null>(null);
-  const [answers, setAnswers] = useState<{ scenarioId: string; choice: Verdict; correct: boolean }[]>(
-    [],
-  );
+  const [answers, setAnswers] = useState<
+    { scenarioId: string; choice: Verdict; correct: boolean }[]
+  >([]);
+  const { session, saveCourtProgress } = useZunoSession();
+  const orderedScenarios = useMemo(() => {
+    const preferredId =
+      session.selectedScenario === "gambling"
+        ? "loss-chasing-bet"
+        : session.selectedScenario === "stock"
+          ? "earnings-fomo"
+          : session.selectedScenario === "etf"
+            ? "leverage"
+            : "guaranteed-crypto";
+    const preferred = scenarios.find((item) => item.id === preferredId);
+    return preferred
+      ? [preferred, ...scenarios.filter((item) => item.id !== preferredId)]
+      : scenarios;
+  }, [session.selectedScenario]);
 
-  const scenario = scenarios[round]!;
-  const total = scenarios.length;
+  const scenario = orderedScenarios[round]!;
+  const total = orderedScenarios.length;
   const score = answers.filter((a) => a.correct).length;
   const streak = useMemo(() => {
     let s = 0;
@@ -55,7 +71,7 @@ function CourtPage() {
   const categories: CategoryResult[] = useMemo(() => {
     const map = new Map<string, { hit: number; seen: number }>();
     answers.forEach((a) => {
-      const s = scenarios.find((x) => x.id === a.scenarioId)!;
+      const s = orderedScenarios.find((x) => x.id === a.scenarioId)!;
       const entry = map.get(s.conceptLabel) ?? { hit: 0, seen: 0 };
       entry.seen += 1;
       if (a.correct) entry.hit += 1;
@@ -65,7 +81,11 @@ function CourtPage() {
       label,
       strength: v.hit === v.seen ? "Strong" : "Improving",
     }));
-  }, [answers]);
+  }, [answers, orderedScenarios]);
+
+  useEffect(() => {
+    if (answers.length > 0) saveCourtProgress(answers.length, score, total);
+  }, [answers, saveCourtProgress, score, total]);
 
   function lockIn(v: Verdict) {
     if (choice) return;
@@ -145,7 +165,11 @@ function CourtPage() {
 
         {stage === "reveal" && choice && (
           <section className="space-y-8">
-            <VerdictReveal scenario={scenario} choice={choice} correct={choice === scenario.verdict} />
+            <VerdictReveal
+              scenario={scenario}
+              choice={choice}
+              correct={choice === scenario.verdict}
+            />
 
             <div>
               <div className="flex items-center gap-2">

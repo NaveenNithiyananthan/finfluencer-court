@@ -33,7 +33,10 @@ export function ScenarioProgress({
           Score <span className="text-foreground">{score}</span>
         </span>
         <span className="flex items-center gap-1.5 rounded-full border border-border bg-surface-raised px-3 py-1">
-          <Flame className={`size-3.5 ${streak > 0 ? "text-caution" : "text-muted-foreground"}`} aria-hidden />
+          <Flame
+            className={`size-3.5 ${streak > 0 ? "text-caution" : "text-muted-foreground"}`}
+            aria-hidden
+          />
           <span className="label-mono text-foreground">{streak} streak</span>
         </span>
       </div>

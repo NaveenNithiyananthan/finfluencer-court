@@ -407,12 +407,12 @@ Finfluencer Court should feel more interactive and entertaining than a tradition
 
 Include lightweight gamification such as:
 
-* progress through rounds
-* animated verdict reveal
-* score updates
-* streak/progression indicator
-* subtle celebratory animation after correct answers
-* clear feedback after incorrect answers
+- progress through rounds
+- animated verdict reveal
+- score updates
+- streak/progression indicator
+- subtle celebratory animation after correct answers
+- clear feedback after incorrect answers
 
 Do NOT introduce excessive game mechanics, leaderboards or meaningless points.
 
@@ -426,14 +426,14 @@ Create a small hard-coded scenario dataset so additional claims can easily be ad
 
 Each scenario should contain:
 
-* claim text
-* fictional creator name
-* follower count
-* verdict
-* explanation
-* warning signs
-* underlying financial concept
-* difficulty level
+- claim text
+- fictional creator name
+- follower count
+- verdict
+- explanation
+- warning signs
+- underlying financial concept
+- difficulty level
 
 Create at least **5 example scenarios**.
 
@@ -467,14 +467,14 @@ A large following does not prove either.
 
 The user should learn to evaluate:
 
-* evidence
-* certainty
-* incentives
-* downside
-* urgency
-* concentration
-* leverage
-* omitted information
+- evidence
+- certainty
+- incentives
+- downside
+- urgency
+- concentration
+- leverage
+- omitted information
 
 ---
 
@@ -484,11 +484,11 @@ This should be the most distinctive module while remaining unmistakably ZUNO.
 
 Use subtle visual references to a courtroom/game environment:
 
-* “CASE #001”
-* “EVIDENCE”
-* “VERDICT”
-* “WARNING SIGN”
-* “DECISION LOCKED”
+- “CASE #001”
+- “EVIDENCE”
+- “VERDICT”
+- “WARNING SIGN”
+- “DECISION LOCKED”
 
 Do NOT make it look like a literal legal application.
 
@@ -513,15 +513,15 @@ Use React and reusable components.
 
 Create reusable components for:
 
-* ClaimCard
-* VerdictButton
-* DecisionLock
-* VerdictReveal
-* WarningSignCard
-* ScenarioProgress
-* ScoreCard
-* LearningTakeaway
-* CTA buttons
+- ClaimCard
+- VerdictButton
+- DecisionLock
+- VerdictReveal
+- WarningSignCard
+- ScenarioProgress
+- ScoreCard
+- LearningTakeaway
+- CTA buttons
 
 Store the scenarios in a simple local data structure so they can easily be edited or expanded.
 
@@ -529,13 +529,13 @@ Use static data only.
 
 Do NOT implement:
 
-* real social-media APIs
-* live financial information
-* LLM functionality
-* authentication
-* user accounts
-* complex backend infrastructure
-* real fact-checking APIs
+- real social-media APIs
+- live financial information
+- LLM functionality
+- authentication
+- user accounts
+- complex backend infrastructure
+- real fact-checking APIs
 
 The claims and educational explanations are predefined for the prototype.
 
