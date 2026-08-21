@@ -16,13 +16,17 @@ export function DecisionSummary({
         subtitle="A quick read-back before we look at the downside."
         title="Here is what you told us."
       />
-      <div className="surface-card bg-hero p-6">
-        <p className="font-display text-5xl font-semibold">{formatGBP(declaration.amount)}</p>
+      <div className="bg-hero surface-card animate-scale-in space-y-2 p-6 text-center">
+        <p className="zuno-num text-primary text-5xl font-semibold">
+          {formatGBP(declaration.amount)}
+        </p>
         <p className="mt-3 text-base leading-relaxed">
           {declaration.idea.trim() || "No description added"}
         </p>
       </div>
-      <CtaButton onClick={onContinue}>Show me the downside</CtaButton>
+      <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <CtaButton onClick={onContinue}>Show me the downside</CtaButton>
+      </div>
     </div>
   );
 }

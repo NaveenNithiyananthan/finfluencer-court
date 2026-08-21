@@ -20,9 +20,13 @@ export function WhyRisky({
       />
       <div className="space-y-3">
         {cards.map((card, index) => (
-          <article key={card.title} className="surface-card p-5">
+          <article
+            key={card.title}
+            className="surface-card animate-fade-up p-5 transition-shadow duration-200 hover:shadow-elevated"
+            style={{ animationDelay: `${index * 80}ms` }}
+          >
             <div className="flex items-center gap-3">
-              <span className="grid size-8 place-items-center rounded-full bg-surface-2 font-display text-sm text-primary">
+              <span className="bg-primary/10 font-display text-primary grid size-8 place-items-center rounded-full text-sm">
                 {index + 1}
               </span>
               <h2 className="font-display text-lg font-semibold">{card.title}</h2>

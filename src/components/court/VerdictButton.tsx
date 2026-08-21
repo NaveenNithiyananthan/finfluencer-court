@@ -1,5 +1,3 @@
-import type { Verdict } from "@/data/court-scenarios";
-
 const copy: Record<Verdict, { hint: string; tone: string }> = {
   LEGITIMATE: {
     hint: "Reasoning holds up",
@@ -7,7 +5,7 @@ const copy: Record<Verdict, { hint: string; tone: string }> = {
   },
   RISKY: {
     hint: "Possible, but exposed",
-    tone: "hover:border-caution hover:text-caution data-[state=chosen]:border-caution data-[state=chosen]:text-caution",
+    tone: "hover:border-caution hover:text-caution-foreground data-[state=chosen]:border-caution data-[state=chosen]:text-caution-foreground",
   },
   MISLEADING: {
     hint: "The reasoning is broken",
@@ -32,7 +30,7 @@ export function VerdictButton({
       disabled={disabled}
       data-state={chosen ? "chosen" : undefined}
       onClick={() => onSelect(verdict)}
-      className={`group flex flex-col items-start gap-1 rounded-2xl border border-border bg-surface px-5 py-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-raised disabled:cursor-default disabled:hover:translate-y-0 data-[state=chosen]:bg-surface-raised data-[state=chosen]:animate-lock ${copy[verdict].tone} ${
+      className={`surface-card animate-fade-up group flex flex-col items-start gap-1 px-5 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-elevated disabled:cursor-default disabled:hover:translate-y-0 disabled:hover:shadow-none data-[state=chosen]:animate-lock ${copy[verdict].tone} ${
         disabled && !chosen ? "opacity-40" : ""
       }`}
     >

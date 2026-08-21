@@ -11,9 +11,9 @@ export function SectionHeader({
   supporting?: string;
 }) {
   return (
-    <div className="space-y-3">
+    <div className="animate-fade-up space-y-3">
       {eyebrow ? <p className="zuno-eyebrow">{eyebrow}</p> : null}
-      <h1 className="text-3xl font-bold leading-[1.1] sm:text-4xl">{title}</h1>
+      <h1 className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl">{title}</h1>
       {supporting ? (
         <p className="text-base leading-relaxed text-muted-foreground">{supporting}</p>
       ) : null}
@@ -33,12 +33,12 @@ export function ZunoCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-card p-5",
+        "surface-card p-5",
         tone === "primary" &&
-          "border-primary/40 bg-[color-mix(in_oklab,var(--primary)_8%,var(--card))]",
+          "border-primary/25 bg-[color-mix(in_oklab,var(--primary)_5%,var(--card))]",
         tone === "danger" &&
-          "border-danger/40 bg-[color-mix(in_oklab,var(--danger)_8%,var(--card))]",
-        tone === "quiet" && "bg-surface/60",
+          "border-danger/25 bg-[color-mix(in_oklab,var(--danger)_5%,var(--card))]",
+        tone === "quiet" && "bg-surface-2/60 shadow-none",
         className,
       )}
     >
@@ -56,11 +56,10 @@ export function ZunoButton({
     <button
       {...props}
       className={cn(
-        "inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 font-display text-base font-semibold transition-all duration-200 disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex w-full items-center justify-center rounded-full px-5 py-4 font-display text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
         variant === "primary" &&
-          "bg-primary text-primary-foreground hover:brightness-110 active:scale-[0.99] shadow-[var(--shadow-glow)]",
-        variant === "ghost" &&
-          "border border-border bg-surface/60 text-foreground hover:bg-surface-2",
+          "bg-primary text-primary-foreground shadow-glow hover:brightness-110",
+        variant === "ghost" && "surface-card hover:border-primary/40",
         className,
       )}
     />
@@ -75,9 +74,9 @@ export function Callout({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-primary/30 bg-[color-mix(in_oklab,var(--primary)_9%,var(--surface))] p-5">
-      <p className="zuno-eyebrow">{label}</p>
-      <p className="mt-2 text-[15px] leading-relaxed text-foreground">{children}</p>
+    <div className="animate-fade-up rounded-3xl border border-primary/25 bg-[color-mix(in_oklab,var(--primary)_6%,var(--surface))] p-5 shadow-card">
+      <p className="zuno-eyebrow text-primary">{label}</p>
+      <p className="mt-2 text-[15px] leading-relaxed">{children}</p>
     </div>
   );
 }
@@ -107,8 +106,8 @@ export function Stat({
 }
 export function DemoTag({ children = "Illustrative demo allocation" }: { children?: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-2/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-      <span className="size-1.5 rounded-full bg-caution" />
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-caution/40 bg-caution/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-caution-foreground">
+      <span className="size-1.5 animate-pulse rounded-full bg-caution" />
       {children}
     </span>
   );

@@ -8,10 +8,10 @@ export function ProgressIndicator({
   label?: string;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="animate-fade-up space-y-2">
       <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-muted-foreground">
         <span>{label}</span>
-        <span>
+        <span className="zuno-num tracking-normal">
           {current} / {total}
         </span>
       </div>
@@ -19,7 +19,10 @@ export function ProgressIndicator({
         {Array.from({ length: total }, (_, index) => (
           <span
             key={index}
-            className={`h-1 flex-1 rounded-full ${index < current ? "bg-primary" : "bg-surface-2"}`}
+            style={{ transitionDelay: `${index * 50}ms` }}
+            className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+              index < current ? "bg-primary" : "bg-surface-2"
+            }`}
           />
         ))}
       </div>

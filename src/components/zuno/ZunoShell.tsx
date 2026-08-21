@@ -14,22 +14,19 @@ export function ZunoShell({ moduleLabel, stepLabel, step, totalSteps, children }
   return (
     <div className="relative min-h-screen">
       <div className="zuno-hero-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" />
-      <div className="zuno-court-lines pointer-events-none absolute inset-x-0 top-0 h-[420px] opacity-40" />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-3xl flex-col px-5 pb-10 pt-6 sm:px-8">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-3xl flex-col px-5 pt-6 pb-10 sm:px-8">
         <header className="flex items-center justify-between gap-3">
-          <span className="font-display text-lg font-bold tracking-[0.3em] text-foreground">
-            ZUNO
-          </span>
-          <span className="rounded-full border border-border bg-surface/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <span className="font-display text-lg font-bold tracking-[0.3em]">ZUNO</span>
+          <span className="surface-card rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
             {moduleLabel}
           </span>
         </header>
 
-        <div className="mt-6">
+        <div className="mt-8">
           <div className="flex items-baseline justify-between">
             <span className="zuno-eyebrow">{stepLabel}</span>
-            <span className="text-xs tracking-[0.14em] text-muted-foreground">
+            <span className="zuno-num text-xs tracking-[0.14em] text-muted-foreground">
               {step} / {totalSteps}
             </span>
           </div>
@@ -38,15 +35,16 @@ export function ZunoShell({ moduleLabel, stepLabel, step, totalSteps, children }
               <span
                 key={i}
                 className={cn(
-                  "h-1 flex-1 rounded-full transition-colors duration-500",
+                  "h-1.5 flex-1 overflow-hidden rounded-full transition-colors duration-500",
                   i < step ? "bg-primary" : "bg-surface-2",
                 )}
+                style={{ transitionDelay: `${i * 40}ms` }}
               />
             ))}
           </div>
         </div>
 
-        <main className="flex-1 pt-8">{children}</main>
+        <main className="flex-1 pt-10">{children}</main>
 
         <footer className="pt-12">
           <p className="text-center text-xs leading-relaxed text-muted-foreground">{DISCLAIMER}</p>

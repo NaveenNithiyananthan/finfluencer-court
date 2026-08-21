@@ -10,13 +10,11 @@ export function SectionHeader({
   align?: "left" | "center";
 }) {
   return (
-    <header className={align === "center" ? "text-center" : undefined}>
+    <header className={align === "center" ? "animate-fade-up text-center" : "animate-fade-up"}>
       {eyebrow ? (
-        <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-primary">
-          {eyebrow}
-        </p>
+        <p className="zuno-eyebrow text-primary mb-3">{eyebrow}</p>
       ) : null}
-      <h1 className="text-3xl leading-tight font-semibold text-foreground sm:text-4xl">{title}</h1>
+      <h1 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">{title}</h1>
       {subtitle ? (
         <p className="mt-3 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
       ) : null}

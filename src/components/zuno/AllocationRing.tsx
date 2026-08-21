@@ -26,8 +26,7 @@ export function AllocationRing({
           fill="none"
           stroke="var(--surface-2)"
           strokeWidth={stroke}
-        />
-        <g transform={`rotate(-90 ${size / 2} ${size / 2})`}>
+        />        <g transform={`rotate(-90 ${size / 2} ${size / 2})`}>
           {FAN_CATEGORIES.map((category) => {
             const share = normalised[category.id] / 100;
             const length = share * circumference;
@@ -42,15 +41,17 @@ export function AllocationRing({
                 fill="none"
                 stroke={category.colorVar}
                 strokeWidth={stroke}
+                strokeLinecap="butt"
                 strokeDasharray={`${Math.max(length - 2, 0)} ${circumference}`}
                 strokeDashoffset={dashOffset}
+                className="transition-all duration-500 ease-out"
               />
             );
           })}
         </g>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className="zuno-num text-3xl">{centerTop}</span>
+        <span className="zuno-num text-3xl transition-all duration-300">{centerTop}</span>
         <span className="mt-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
           {centerBottom}
         </span>

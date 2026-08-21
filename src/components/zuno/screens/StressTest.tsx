@@ -25,16 +25,22 @@ export function StressTest({
         prefix={copy.visualiser.prefix}
       />
       <section className="space-y-4">
-        <h2 className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          {copy.snapshotHeading}
-        </h2>
+        <h2 className="zuno-eyebrow">{copy.snapshotHeading}</h2>
         <div className="grid grid-cols-2 gap-3">
-          {metrics.map((metric) => (
-            <RiskMetricCard key={metric.label} {...metric} />
+          {metrics.map((metric, i) => (
+            <div
+              key={metric.label}
+              className="animate-fade-up"
+              style={{ animationDelay: `${i * 70}ms` }}
+            >
+              <RiskMetricCard {...metric} />
+            </div>
           ))}
         </div>
       </section>
-      <CtaButton onClick={onContinue}>Why does ZUNO think this is risky?</CtaButton>
+      <div className="animate-fade-up">
+        <CtaButton onClick={onContinue}>Why does ZUNO think this is risky?</CtaButton>
+      </div>
     </div>
   );
 }

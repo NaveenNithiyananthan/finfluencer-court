@@ -16,25 +16,30 @@ export function PauseScreen() {
         title="Before you act, ask one more question."
       />
       <div className="space-y-3">
-        {motivationOptions.map((option) => (
-          <OptionCard
+        {motivationOptions.map((option, i) => (
+          <div
             key={option.id}
-            label={option.label}
-            selected={motivation === option.id}
-            onSelect={() => {
-              setMotivation(option.id);
-              saveGoal(option.id);
-            }}
-          />
+            className="animate-fade-up"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <OptionCard
+              label={option.label}
+              selected={motivation === option.id}
+              onSelect={() => {
+                setMotivation(option.id);
+                saveGoal(option.id);
+              }}
+            />
+          </div>
         ))}
       </div>
       {motivation && session.declaration ? (
-        <div className="surface-card bg-hero space-y-4 p-6">
-          <p className="font-display text-2xl leading-snug font-semibold">
+        <div className="bg-hero surface-card animate-scale-in space-y-4 p-6">
+          <p className="font-display text-2xl leading-snug font-semibold tracking-tight">
             There may be more than one way to achieve the same goal.
           </p>
           <Link
-            className="inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-4 font-display text-base font-semibold text-primary-foreground"
+            className="shadow-glow inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-4 font-display text-base font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 active:scale-[0.99]"
             to="/portfolio"
           >
             Explore an alternative

@@ -37,22 +37,22 @@ export function JourneyTracker() {
       <ol className="relative mt-6 grid gap-4 md:grid-cols-3">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-8 top-6 hidden h-px w-[calc(100%-4rem)] bg-gradient-to-r from-primary/60 via-border to-border md:block"
+          className="pointer-events-none absolute top-6 left-8 hidden h-px w-[calc(100%-4rem)] bg-gradient-to-r from-primary/50 via-primary/20 to-border md:block"
         />
-        {stages.map(({ number, title, copy, to, Icon }) => (
-          <li key={number} className="relative">
+        {stages.map(({ number, title, copy, to, Icon }, i) => (
+          <li key={number} className="group animate-fade-up relative" style={{ animationDelay: `${i * 90}ms` }}>
             <Link
               to={to}
-              className="flex h-full flex-col gap-3 rounded-3xl border border-border bg-card p-5 transition-colors hover:border-primary/40"
+              className="surface-card card-hover flex h-full flex-col gap-3 p-5 hover:border-primary/40"
             >
               <div className="flex items-center gap-3">
-                <span className="grid size-9 place-items-center rounded-full border border-primary/40 bg-background text-primary">
+                <span className="bg-primary/10 grid size-9 place-items-center rounded-full text-primary transition-transform duration-300 group-hover:scale-110">
                   <Icon className="size-4" />
                 </span>
                 <span className="zuno-eyebrow">{number}</span>
               </div>
               <h3 className="font-display text-base font-bold tracking-wide">{title}</h3>
-              <p className="text-sm text-muted-foreground">{copy}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{copy}</p>
             </Link>
           </li>
         ))}

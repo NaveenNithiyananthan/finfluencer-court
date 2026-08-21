@@ -1,7 +1,7 @@
 const levelTone: Record<string, string> = {
   None: "text-safe",
   Low: "text-safe",
-  Medium: "text-caution",
+  Medium: "text-caution-foreground",
   High: "text-danger",
   "Very High": "text-danger",
 };
@@ -29,16 +29,16 @@ export function RiskMetricCard({
   note?: string;
 }) {
   return (
-    <div className="surface-card p-4">
-      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
+    <div className="surface-card h-full p-4 transition-shadow duration-200 hover:shadow-elevated">
+      <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
       <p
-        className={`mt-1 font-display text-lg font-semibold ${levelTone[level] ?? "text-foreground"}`}
+        className={`font-display mt-1 text-lg font-semibold ${levelTone[level] ?? "text-foreground"}`}
       >
         {level}
       </p>
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
         <div
-          className={`h-full rounded-full ${levelBar[level] ?? "bg-primary"}`}
+          className={`h-full rounded-full transition-all duration-700 ease-out ${levelBar[level] ?? "bg-primary"}`}
           style={{ width: `${(levelFill[level] ?? 0.5) * 100}%` }}
         />
       </div>

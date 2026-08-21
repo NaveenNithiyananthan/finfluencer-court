@@ -8,15 +8,15 @@ export function AmountInput({
   presets?: number[];
 }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-5 py-4 focus-within:border-primary">
-        <span className="font-display text-3xl text-muted-foreground">£</span>
+    <div className="animate-fade-up space-y-4">
+      <div className="surface-card flex items-center gap-3 px-5 py-4 transition-colors duration-200 focus-within:border-primary focus-within:shadow-glow">
+        <span className="font-display text-muted-foreground/60 text-3xl">£</span>
         <input
           inputMode="numeric"
           aria-label="Amount in pounds"
           value={Number.isFinite(value) ? value : ""}
           onChange={(event) => onChange(Number(event.target.value.replace(/[^0-9]/g, "")) || 0)}
-          className="w-full bg-transparent font-display text-3xl font-semibold text-foreground outline-none"
+          className="font-display zuno-num w-full bg-transparent text-3xl font-semibold outline-none placeholder:text-muted-foreground/40"
           placeholder="500"
         />
       </div>
@@ -26,7 +26,11 @@ export function AmountInput({
             type="button"
             key={preset}
             onClick={() => onChange(preset)}
-            className={`rounded-full border px-4 py-2 text-sm ${value === preset ? "border-primary bg-primary text-primary-foreground" : "border-border bg-surface text-muted-foreground"}`}
+            className={`rounded-full border px-4 py-2 text-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
+              value === preset
+                ? "border-primary bg-primary text-primary-foreground shadow-glow"
+                : "surface-card shadow-none text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            }`}
           >
             £{preset}
           </button>

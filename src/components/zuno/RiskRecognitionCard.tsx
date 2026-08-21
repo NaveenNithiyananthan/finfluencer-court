@@ -2,21 +2,21 @@ import { cn } from "@/lib/utils";
 import type { ZunoProgress } from "@/lib/zuno-progress";
 
 const levelStyles: Record<string, string> = {
-  Strong: "border-primary/40 text-primary",
-  Improving: "border-accent/40 text-accent",
-  New: "border-border text-muted-foreground",
+  Strong: "border-primary/40 text-primary bg-primary/10",
+  Improving: "border-accent/40 text-accent bg-accent/10",
+  New: "border-border text-muted-foreground bg-surface-2",
 };
 
 export function RiskRecognitionCard({ progress }: { progress: ZunoProgress }) {
   const { riskRecognitionScore: score, riskRecognitionMax: max, concepts } = progress;
   return (
-    <section className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
+    <section className="surface-card animate-fade-up p-6 transition-shadow duration-300 hover:shadow-elevated sm:p-8">
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="zuno-eyebrow">Learning progress</p>
-          <h2 className="mt-3 text-2xl font-bold">Risk Recognition</h2>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight">Risk Recognition</h2>
         </div>
-        <p className="font-display text-3xl font-bold text-primary">
+        <p className="font-display text-primary text-3xl font-bold">
           {score} <span className="text-lg text-muted-foreground">/ {max}</span>
         </p>
       </div>
@@ -24,7 +24,11 @@ export function RiskRecognitionCard({ progress }: { progress: ZunoProgress }) {
         {Array.from({ length: max }).map((_, i) => (
           <span
             key={i}
-            className={cn("h-1.5 flex-1 rounded-full", i < score ? "bg-primary" : "bg-secondary")}
+            className={cn(
+              "h-1.5 flex-1 rounded-full transition-all duration-500",
+              i < score ? "bg-primary" : "bg-secondary",
+            )}
+            style={{ transitionDelay: `${i * 60}ms` }}
           />
         ))}
       </div>
@@ -32,7 +36,7 @@ export function RiskRecognitionCard({ progress }: { progress: ZunoProgress }) {
         {concepts.map((c) => (
           <li
             key={c.label}
-            className="flex items-center justify-between rounded-2xl border border-border bg-background/40 px-4 py-3"
+            className="flex items-center justify-between rounded-2xl border border-border bg-surface-2/50 px-4 py-3 transition-colors duration-200 hover:border-primary/30"
           >
             <span className="text-sm">{c.label}</span>
             <span
