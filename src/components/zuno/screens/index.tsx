@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { Declaration } from "@/lib/zuno-data";
 import { Link } from "@tanstack/react-router";
 import { AllocationControls } from "../AllocationControls";
@@ -23,7 +23,6 @@ import {
   FAN_CATEGORIES,
   formatMoney,
   formatPct,
-  LEARNING_STATEMENTS,
   portfolioReturn,
   SIMULATED_AMOUNT,
   type CategoryId,
@@ -273,49 +272,26 @@ export function CompareDecision({
           express the same financial belief.
         </p>
       </ZunoCard>
-      <ZunoButton onClick={onNext}>What did you learn?</ZunoButton>
+      <ZunoButton onClick={onNext}>What's next?</ZunoButton>
     </div>
   );
 }
 export function LearningTakeaway() {
-  const [selected, setSelected] = useState<string[]>([]);
   return (
     <div className="space-y-8">
       <SectionHeader
-        eyebrow="Learning takeaway"
-        title="What changed?"
-        supporting="Pick anything that now feels true. Nothing here is scored."
+        eyebrow="What's next"
+        title="Want to learn how portfolios are actually built?"
+        supporting="Everything you just explored was a simulation. The real skill is learning how investors choose, weight and review holdings over time."
       />
-      <ul className="space-y-3">
-        {LEARNING_STATEMENTS.map((statement) => {
-          const active = selected.includes(statement);
-          return (
-            <li key={statement}>
-              <button
-                type="button"
-                onClick={() =>
-                  setSelected((current) =>
-                    active ? current.filter((item) => item !== statement) : [...current, statement],
-                  )
-                }
-                aria-pressed={active}
-                className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left ${active ? "border-primary/60 bg-primary/10" : "border-border bg-card"}`}
-              >
-                <span
-                  className={`size-5 shrink-0 rounded-md border ${active ? "border-primary bg-primary" : "border-border"}`}
-                />
-                <span className="text-sm leading-relaxed">{statement}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <Callout>
-        Being excited about an industry, company or trend does not necessarily mean you have to make
-        one concentrated bet on it.
-      </Callout>
-      <Link className="block" to="/court">
-        <ZunoButton>Continue to Finfluencer Court</ZunoButton>
+      <ZunoCard tone="quiet">
+        <p className="text-[15px] leading-relaxed">
+          You've seen how concentration raises the stakes and diversification spreads them. The next
+          step is turning that instinct into a repeatable process you could use with real money.
+        </p>
+      </ZunoCard>
+      <Link className="block" to="/">
+        <ZunoButton>Back to home</ZunoButton>
       </Link>
     </div>
   );
