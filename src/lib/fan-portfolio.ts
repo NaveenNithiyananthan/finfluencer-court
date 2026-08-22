@@ -17,7 +17,7 @@ export const FAN_CATEGORIES: FanCategory[] = [
     blurb: "Kit, footwear and performance apparel makers",
     defaultWeight: 20,
     scenarioReturn: 25,
-    colorVar: "var(--chart-1)",
+    colorVar: "hsl(var(--chart-1))",
   },
   {
     id: "media",
@@ -25,7 +25,7 @@ export const FAN_CATEGORIES: FanCategory[] = [
     blurb: "Broadcast rights, streaming and sports publishing",
     defaultWeight: 20,
     scenarioReturn: -10,
-    colorVar: "var(--chart-2)",
+    colorVar: "hsl(var(--chart-2))",
   },
   {
     id: "entertainment",
@@ -33,7 +33,7 @@ export const FAN_CATEGORIES: FanCategory[] = [
     blurb: "Live events, music and wider entertainment groups",
     defaultWeight: 20,
     scenarioReturn: 8,
-    colorVar: "var(--chart-3)",
+    colorVar: "hsl(var(--chart-3))",
   },
   {
     id: "technology",
@@ -41,7 +41,7 @@ export const FAN_CATEGORIES: FanCategory[] = [
     blurb: "Wearables, performance data and analytics",
     defaultWeight: 15,
     scenarioReturn: -5,
-    colorVar: "var(--chart-5)",
+    colorVar: "hsl(var(--chart-5))",
   },
   {
     id: "gaming",
@@ -49,7 +49,7 @@ export const FAN_CATEGORIES: FanCategory[] = [
     blurb: "Sports games, fantasy leagues and fan platforms",
     defaultWeight: 15,
     scenarioReturn: 12,
-    colorVar: "var(--chart-6)",
+    colorVar: "hsl(var(--chart-6))",
   },
   {
     id: "venues",
@@ -57,7 +57,7 @@ export const FAN_CATEGORIES: FanCategory[] = [
     blurb: "Stadiums, arenas and event infrastructure",
     defaultWeight: 10,
     scenarioReturn: -8,
-    colorVar: "var(--chart-4)",
+    colorVar: "hsl(var(--chart-4))",
   },
 ];
 

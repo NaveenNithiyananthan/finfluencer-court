@@ -36,9 +36,9 @@ export function ZunoCard({
       className={cn(
         "surface-card p-5",
         tone === "primary" &&
-          "border-primary/25 bg-[color-mix(in_oklab,var(--primary)_5%,var(--card))]",
+          "border-primary/25 bg-[color-mix(in_oklab,hsl(var(--primary))_5%,hsl(var(--card)))]",
         tone === "danger" &&
-          "border-danger/25 bg-[color-mix(in_oklab,var(--danger)_5%,var(--card))]",
+          "border-danger/25 bg-[color-mix(in_oklab,hsl(var(--danger))_5%,hsl(var(--card)))]",
         tone === "quiet" && "bg-surface-2/60 shadow-none",
         className,
       )}
@@ -102,7 +102,7 @@ export function Callout({
   children: ReactNode;
 }) {
   return (
-    <div className="animate-fade-up rounded-3xl border border-primary/25 bg-[color-mix(in_oklab,var(--primary)_6%,var(--surface))] p-5 shadow-card">
+    <div className="animate-fade-up rounded-3xl border border-primary/25 bg-[color-mix(in_oklab,hsl(var(--primary))_6%,hsl(var(--surface)))] p-5 shadow-card">
       <p className="zuno-eyebrow text-primary">{label}</p>
       <p className="mt-2 text-[15px] leading-relaxed">{children}</p>
     </div>
