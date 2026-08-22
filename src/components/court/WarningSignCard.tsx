@@ -11,7 +11,7 @@ export function WarningSignCard({
 }) {
   return (
     <div
-      className="animate-rise rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-caution/50 hover:bg-surface-raised"
+      className="animate-fade-up rounded-2xl border border-border bg-surface-2/50 p-5 transition-colors hover:border-caution/50"
       style={{ animationDelay: `${index * 70}ms` }}
     >
       <div className="flex items-center gap-2">
@@ -35,7 +35,7 @@ export function ReasoningCardView({
 }) {
   return (
     <div
-      className="animate-rise rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/50 hover:bg-surface-raised"
+      className="animate-fade-up rounded-2xl border border-border bg-surface-2/50 p-5 transition-colors hover:border-accent/50"
       style={{ animationDelay: `${index * 70}ms` }}
     >
       <span className="label-mono text-accent">Evidence 0{index + 1}</span>

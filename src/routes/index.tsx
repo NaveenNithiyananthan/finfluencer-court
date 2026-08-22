@@ -35,20 +35,33 @@ function Index() {
     <ZunoShell>
       <div className="space-y-12 lg:space-y-16">
         <section>
-          <p className="font-display text-sm font-bold tracking-[0.28em] text-muted-foreground">
-            ZUNO
-          </p>
-          <h1 className="mt-5 text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl">
-            Think before you <span className="text-primary">win.</span>
+
+
+
+
+
+          <p className="zuno-eyebrow">ZUNO</p>
+          <h1 className="animate-fade-up mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            Think before you{" "}
+            <span className="text-gradient-primary">win.</span>
           </h1>
-          <p className="mt-4 max-w-lg text-base text-muted-foreground sm:text-lg">
+
+          <p
+            className="animate-fade-up mt-4 max-w-lg text-base text-muted-foreground sm:text-lg"
+            style={{ animationDelay: "100ms" }}
+          >
             Understand the risk behind the hype before you act. ZUNO helps you think — it never
             tells you what to invest in.
           </p>
 
-          <div className="mt-8 rounded-3xl border border-primary/30 bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
+
+          <div
+            className="surface-card card-hover animate-fade-up mt-8 p-6 hover:border-primary/40 sm:p-8"
+            style={{ animationDelay: "200ms" }}
+          >
             <p className="zuno-eyebrow">Decision support</p>
-            <h2 className="mt-3 text-2xl font-bold">Test a decision</h2>
+
+            <h2 className="font-display mt-3 text-2xl font-bold tracking-tight">Test a decision</h2>
             <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
               Thinking about putting your money into something? Stress-test it first.
             </p>
