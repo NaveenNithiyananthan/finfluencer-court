@@ -30,7 +30,6 @@ import {
   type Weights,
 } from "@/lib/fan-portfolio";
 export { DeclareWizard } from "./DeclareWizard";
-export { DecisionSummary } from "./DecisionSummary";
 export { StressTest } from "./StressTest";
 export { WhyRisky } from "./WhyRisky";
 export { PauseScreen } from "./PauseScreen";
