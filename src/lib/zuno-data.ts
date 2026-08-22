@@ -122,6 +122,9 @@ export const formatGBP = (amount: number) =>
 export const recoveryGain = (lossPct: number) =>
   lossPct >= 100 ? Infinity : (lossPct / (100 - lossPct)) * 100;
 
+const lossCapacityLevel = (capacity: LossCapacity | null) =>
+  capacity === "none" ? "Very High" : capacity === "limited" ? "High" : "Medium";
+
 const typeLabel: Record<DecisionType, string> = {
   crypto: "crypto or a speculative asset",
   stock: "one individual stock",
@@ -213,12 +216,7 @@ export function buildRiskSnapshot(declaration: Declaration) {
       },
       {
         label: "Affordability",
-        level:
-          declaration.lossCapacity === "none"
-            ? "Very High"
-            : declaration.lossCapacity === "limited"
-              ? "High"
-              : "Medium",
+        level: lossCapacityLevel(declaration.lossCapacity),
         note: "A stake is not entertainment money if losing it changes essential plans.",
       },
     ];
@@ -242,12 +240,7 @@ export function buildRiskSnapshot(declaration: Declaration) {
       },
       {
         label: "Loss capacity",
-        level:
-          declaration.lossCapacity === "none"
-            ? "Very High"
-            : declaration.lossCapacity === "limited"
-              ? "High"
-              : "Medium",
+        level: lossCapacityLevel(declaration.lossCapacity),
         note: "Diversification does not make a loss harmless to your plans.",
       },
     ];
@@ -289,12 +282,7 @@ export function buildRiskSnapshot(declaration: Declaration) {
     },
     {
       label: "Loss capacity",
-      level:
-        declaration.lossCapacity === "none"
-          ? "Very High"
-          : declaration.lossCapacity === "limited"
-            ? "High"
-            : "Medium",
+      level: lossCapacityLevel(declaration.lossCapacity),
       note:
         declaration.lossCapacity === "none" || declaration.lossCapacity === "limited"
           ? "A loss matters more when it competes with essential plans."

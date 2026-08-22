@@ -40,6 +40,10 @@ const STEPS = [
   "Step 7 — Learn",
 ];
 
+const scrollToTop = () => {
+  if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
 function PortfolioModule() {
   const [step, setStep] = useState(1);
   const [weights, setWeights] = useState<Weights>({ ...defaultWeights });
@@ -53,11 +57,11 @@ function PortfolioModule() {
 
   const next = () => {
     setStep((s) => Math.min(s + 1, STEPS.length));
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop();
   };
   const back = () => {
     setStep((s) => Math.max(s - 1, 1));
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop();
   };
 
   return (

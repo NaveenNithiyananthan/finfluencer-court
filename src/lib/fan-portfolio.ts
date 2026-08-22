@@ -81,7 +81,15 @@ export const totalWeight = (w: Weights) => FAN_CATEGORIES.reduce((sum, c) => sum
 
 export const normalisedWeights = (w: Weights): Weights => {
   const total = totalWeight(w);
-  if (total <= 0) return FAN_CATEGORIES.reduce((a, c) => ((a[c.id] = 0), a), {} as Weights);
+  if (total <= 0) {
+    return FAN_CATEGORIES.reduce(
+      (a, c) => {
+        a[c.id] = 0;
+        return a;
+      },
+      {} as Weights,
+    );
+  }
   return FAN_CATEGORIES.reduce((a, c) => {
     a[c.id] = (w[c.id] / total) * 100;
     return a;
