@@ -1,5 +1,5 @@
-export type Horizon = "short" | "medium" | "long";
-export type Driver = "conviction" | "hype" | "curiosity" | "fear-of-missing-out";
+export type Horizon = "under-six-months" | "short" | "medium" | "long";
+export type Driver = "conviction" | "hype" | "curiosity" | "fear-of-missing-out" | "entertainment";
 export type LossCapacity = "none" | "limited" | "manageable" | "high";
 export type DecisionType = "crypto" | "stock" | "gambling" | "etf";
 export type UserGoal =
@@ -52,8 +52,13 @@ export const decisionTypeOptions = [
 
 export const horizonOptions = [
   {
+    id: "under-six-months" as const,
+    label: "Less than 6 months",
+    hint: "A very short deadline gives a fall almost no time to recover.",
+  },
+  {
     id: "short" as const,
-    label: "Less than a year",
+    label: "Six months to a year",
     hint: "A short-term decision can leave less time to recover from a fall.",
   },
   {
@@ -88,6 +93,11 @@ export const driverOptions = [
     id: "fear-of-missing-out" as const,
     label: "I do not want to miss out",
     hint: "FOMO can compress the time available for a calm decision.",
+  },
+  {
+    id: "entertainment" as const,
+    label: "It's for fun or recreation",
+    hint: "Entertainment money is spent to enjoy, not to grow — a loss should end the game.",
   },
 ];
 
@@ -124,6 +134,9 @@ export const recoveryGain = (lossPct: number) =>
 
 const lossCapacityLevel = (capacity: LossCapacity | null) =>
   capacity === "none" ? "Very High" : capacity === "limited" ? "High" : "Medium";
+
+const isShortHorizon = (horizon: Horizon | null) =>
+  horizon === "under-six-months" || horizon === "short";
 
 const typeLabel: Record<DecisionType, string> = {
   crypto: "crypto or a speculative asset",
@@ -235,7 +248,7 @@ export function buildRiskSnapshot(declaration: Declaration) {
       },
       {
         label: "Drawdown exposure",
-        level: declaration.horizon === "short" ? "High" : "Medium",
+        level: isShortHorizon(declaration.horizon) ? "High" : "Medium",
         note: "A short horizon leaves less time for a fall to recover.",
       },
       {
@@ -264,7 +277,7 @@ export function buildRiskSnapshot(declaration: Declaration) {
       },
       {
         label: "Time horizon",
-        level: declaration.horizon === "short" ? "High" : "Medium",
+        level: isShortHorizon(declaration.horizon) ? "High" : "Medium",
         note: "A short deadline gives one prediction less room to be tested over time.",
       },
     ];
@@ -330,10 +343,9 @@ export function buildReasoningCards(declaration: Declaration) {
       },
       {
         title: "A drawdown tests the horizon",
-        body:
-          declaration.horizon === "short"
-            ? "A short horizon gives a fall less time to recover before you need the money."
-            : "A longer horizon may give a drawdown more time to recover, without guaranteeing that it will.",
+        body: isShortHorizon(declaration.horizon)
+          ? "A short horizon gives a fall less time to recover before you need the money."
+          : "A longer horizon may give a drawdown more time to recover, without guaranteeing that it will.",
       },
       {
         title: "Spread is not certainty",
@@ -374,8 +386,8 @@ export function buildReasoningCards(declaration: Declaration) {
       body:
         declaration.driver === "fear-of-missing-out"
           ? "When the main driver is fear of missing out, slowing down is a useful test of whether the decision still stands."
-          : pressure
-            ? "FOMO compresses the decision and makes the upside story feel more urgent than the downside."
+          : declaration.driver === "entertainment"
+            ? "If this is entertainment, decide the price of the ticket before you play — a loss should end the game, not fund another attempt."
             : "Conviction can be useful, but it is strongest when paired with a plan for being wrong.",
     },
   ];
@@ -394,9 +406,11 @@ export function buildEducationalConcepts(declaration: Declaration) {
       ? ["Company-specific risk", "Concentration", "Confirmation bias"]
       : ["Company-specific risk", "Concentration", "Narrative investing"];
   }
-  return declaration.driver === "fear-of-missing-out"
-    ? ["FOMO", "Concentration", "Volatility"]
-    : ["Volatility", "Concentration", "Liquidity risk"];
+  if (declaration.driver === "fear-of-missing-out")
+    return ["FOMO", "Concentration", "Volatility"];
+  if (declaration.driver === "entertainment")
+    return ["Concentration", "Entertainment budgeting", "Volatility"];
+  return ["Volatility", "Concentration", "Liquidity risk"];
 }
 
 export const motivationOptions = [
