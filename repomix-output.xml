@@ -100,6 +100,34 @@ src/
       toggle-group.tsx
       toggle.tsx
       tooltip.tsx
+    zuno/
+      screens/
+        DecisionSummary.tsx
+        DeclareWizard.tsx
+        index.tsx
+        PauseScreen.tsx
+        StressTest.tsx
+        WhyRisky.tsx
+      AllocationControls.tsx
+      AllocationRing.tsx
+      AmountInput.tsx
+      ConcentrationMeter.tsx
+      ContinueJourneyCard.tsx
+      CourtEntryCard.tsx
+      CtaButton.tsx
+      FanPortfolioCard.tsx
+      JourneyTracker.tsx
+      LossScenarioVisualiser.tsx
+      OptionCard.tsx
+      PhoneShell.tsx
+      primitives.tsx
+      ProgressIndicator.tsx
+      ReturningUserPanel.tsx
+      RiskMetricCard.tsx
+      RiskRecognitionCard.tsx
+      SectionHeader.tsx
+      ZunoNav.tsx
+      ZunoShell.tsx
   data/
     court-scenarios.ts
   hooks/
@@ -107,12 +135,18 @@ src/
   lib/
     error-capture.ts
     error-page.ts
+    fan-portfolio.ts
     lovable-error-reporting.ts
     utils.ts
+    zuno-data.ts
+    zuno-progress.ts
+    zuno-session.ts
   routes/
     __root.tsx
     court.tsx
     index.tsx
+    portfolio.tsx
+    test.tsx
   router.tsx
   routeTree.gen.ts
   server.ts
@@ -121,324 +155,6 @@ src/
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="src/components/court/ClaimCard.tsx">
-import { BadgeCheck, Heart, MessageCircle, Repeat2 } from "lucide-react";
-import type { Scenario } from "@/data/court-scenarios";
-
-export function ClaimCard({ scenario, locked }: { scenario: Scenario; locked?: boolean }) {
-  return (
-    <div
-      className={`relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-elevated transition-all duration-500 sm:p-8 ${
-        locked ? "opacity-70 saturate-50" : ""
-      }`}
-    >
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <span className="label-mono text-muted-foreground">Simulated post · {scenario.tag}</span>
-        <span className="label-mono rounded-full border border-border bg-surface-raised px-3 py-1 text-muted-foreground">
-          {scenario.difficulty}
-        </span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <div className="flex size-11 items-center justify-center rounded-full bg-secondary font-display text-base font-bold text-foreground">
-          {scenario.displayName
-            .split(" ")
-            .map((w) => w[0])
-            .join("")
-            .slice(0, 2)}
-        </div>
-        <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className="truncate font-display text-base font-semibold">
-              {scenario.displayName}
-            </span>
-            <BadgeCheck className="size-4 shrink-0 text-accent" aria-hidden />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {scenario.handle} · {scenario.followers}
-          </p>
-        </div>
-      </div>
-
-      <blockquote className="mt-6 font-display text-xl leading-snug font-medium text-foreground sm:text-2xl">
-        “{scenario.claim}”
-      </blockquote>
-
-      <div className="mt-7 flex items-center gap-6 border-t border-border pt-4 text-sm text-muted-foreground">
-        <span className="flex items-center gap-2">
-          <Heart className="size-4" aria-hidden /> {scenario.metrics.likes}
-        </span>
-        <span className="flex items-center gap-2">
-          <MessageCircle className="size-4" aria-hidden /> {scenario.metrics.comments}
-        </span>
-        <span className="flex items-center gap-2">
-          <Repeat2 className="size-4" aria-hidden /> {scenario.metrics.shares}
-        </span>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/court/CourtButton.tsx">
-import { cva, type VariantProps } from "class-variance-authority";
-import type { ButtonHTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
-
-const courtButtonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full font-display font-semibold tracking-tight transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        primary: "bg-primary text-primary-foreground shadow-glow hover:-translate-y-0.5",
-        outline: "border border-border bg-surface text-foreground hover:bg-surface-raised",
-        ghost: "text-muted-foreground hover:text-foreground",
-      },
-      size: {
-        md: "px-6 py-3 text-sm",
-        lg: "px-8 py-4 text-base",
-      },
-    },
-    defaultVariants: { variant: "primary", size: "md" },
-  },
-);
-
-export function CourtButton({
-  className,
-  variant,
-  size,
-  ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof courtButtonVariants>) {
-  return (
-    <button className={cn(courtButtonVariants({ variant, size }), className)} {...props} />
-  );
-}
-
-export { courtButtonVariants };
-</file>
-
-<file path="src/components/court/DecisionLock.tsx">
-import { Lock } from "lucide-react";
-import type { Verdict } from "@/data/court-scenarios";
-
-export function DecisionLock({ choice }: { choice: Verdict }) {
-  return (
-    <div className="animate-rise flex items-center justify-center gap-3 rounded-2xl border border-primary/40 bg-primary/10 px-5 py-4">
-      <Lock className="size-4 text-primary" aria-hidden />
-      <p className="label-mono text-primary">Decision locked · {choice}</p>
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/court/LearningTakeaway.tsx">
-export function LearningTakeaway({ skill }: { skill: string }) {
-  return (
-    <div className="rounded-3xl border border-primary/35 bg-primary/10 p-7">
-      <p className="label-mono text-primary">The skill you just practised</p>
-      <p className="mt-3 font-display text-2xl font-semibold text-foreground sm:text-3xl">{skill}</p>
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/court/ScenarioProgress.tsx">
-import { Flame } from "lucide-react";
-
-export function ScenarioProgress({
-  current,
-  total,
-  score,
-  streak,
-}: {
-  current: number;
-  total: number;
-  score: number;
-  streak: number;
-}) {
-  return (
-    <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-surface px-5 py-4">
-      <div className="flex items-center gap-3">
-        <span className="label-mono text-muted-foreground">
-          Round {current} / {total}
-        </span>
-        <div className="flex gap-1.5">
-          {Array.from({ length: total }).map((_, i) => (
-            <span
-              key={i}
-              className={`h-1.5 w-7 rounded-full transition-colors duration-300 ${
-                i < current - 1 ? "bg-primary" : i === current - 1 ? "bg-accent" : "bg-muted"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <span className="label-mono text-muted-foreground">
-          Score <span className="text-foreground">{score}</span>
-        </span>
-        <span className="flex items-center gap-1.5 rounded-full border border-border bg-surface-raised px-3 py-1">
-          <Flame className={`size-3.5 ${streak > 0 ? "text-caution" : "text-muted-foreground"}`} aria-hidden />
-          <span className="label-mono text-foreground">{streak} streak</span>
-        </span>
-      </div>
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/court/ScoreCard.tsx">
-export type CategoryResult = { label: string; strength: "Strong" | "Improving" };
-
-export function ScoreCard({
-  score,
-  total,
-  categories,
-}: {
-  score: number;
-  total: number;
-  categories: CategoryResult[];
-}) {
-  const pct = Math.round((score / total) * 100);
-
-  return (
-    <div className="rounded-3xl border border-border bg-card p-8 shadow-elevated">
-      <p className="label-mono text-muted-foreground">Risk recognition score</p>
-      <div className="mt-3 flex items-end gap-3">
-        <span className="text-gradient-primary font-display text-6xl font-bold">{score}</span>
-        <span className="pb-2 font-display text-2xl text-muted-foreground">/ {total}</span>
-      </div>
-
-      <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-muted">
-        <div
-          className="h-full rounded-full bg-primary transition-all duration-700"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-
-      <p className="mt-5 font-display text-lg font-semibold">
-        You're getting better at spotting the signals.
-      </p>
-
-      <ul className="mt-6 space-y-2.5">
-        {categories.map((c) => (
-          <li
-            key={c.label}
-            className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-4 py-3"
-          >
-            <span className="text-sm text-foreground">{c.label}</span>
-            <span
-              className={`label-mono rounded-full px-2.5 py-1 ${
-                c.strength === "Strong"
-                  ? "bg-primary/15 text-primary"
-                  : "bg-caution/15 text-caution"
-              }`}
-            >
-              {c.strength}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-</file>
-
-<file path="src/components/court/VerdictButton.tsx">
-import type { Verdict } from "@/data/court-scenarios";
-
-const copy: Record<Verdict, { hint: string; tone: string }> = {
-  LEGITIMATE: {
-    hint: "Reasoning holds up",
-    tone: "hover:border-primary hover:text-primary data-[state=chosen]:border-primary data-[state=chosen]:text-primary",
-  },
-  RISKY: {
-    hint: "Possible, but exposed",
-    tone: "hover:border-caution hover:text-caution data-[state=chosen]:border-caution data-[state=chosen]:text-caution",
-  },
-  MISLEADING: {
-    hint: "The reasoning is broken",
-    tone: "hover:border-verdict hover:text-verdict data-[state=chosen]:border-verdict data-[state=chosen]:text-verdict",
-  },
-};
-
-export function VerdictButton({
-  verdict,
-  chosen,
-  disabled,
-  onSelect,
-}: {
-  verdict: Verdict;
-  chosen?: boolean;
-  disabled?: boolean;
-  onSelect: (v: Verdict) => void;
-}) {
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      data-state={chosen ? "chosen" : undefined}
-      onClick={() => onSelect(verdict)}
-      className={`group flex flex-col items-start gap-1 rounded-2xl border border-border bg-surface px-5 py-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-raised disabled:cursor-default disabled:hover:translate-y-0 data-[state=chosen]:bg-surface-raised data-[state=chosen]:animate-lock ${copy[verdict].tone} ${
-        disabled && !chosen ? "opacity-40" : ""
-      }`}
-    >
-      <span className="font-display text-lg font-bold tracking-tight">{verdict}</span>
-      <span className="text-sm text-muted-foreground">{copy[verdict].hint}</span>
-    </button>
-  );
-}
-</file>
-
-<file path="src/components/court/WarningSignCard.tsx">
-import { AlertTriangle } from "lucide-react";
-
-export function WarningSignCard({
-  index,
-  label,
-  detail,
-}: {
-  index: number;
-  label: string;
-  detail: string;
-}) {
-  return (
-    <div
-      className="animate-rise rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-caution/50 hover:bg-surface-raised"
-      style={{ animationDelay: `${index * 70}ms` }}
-    >
-      <div className="flex items-center gap-2">
-        <AlertTriangle className="size-4 text-caution" aria-hidden />
-        <span className="label-mono text-caution">Warning sign 0{index + 1}</span>
-      </div>
-      <h3 className="mt-3 font-display text-lg font-semibold">{label}</h3>
-      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{detail}</p>
-    </div>
-  );
-}
-
-export function ReasoningCardView({
-  index,
-  title,
-  detail,
-}: {
-  index: number;
-  title: string;
-  detail: string;
-}) {
-  return (
-    <div
-      className="animate-rise rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/50 hover:bg-surface-raised"
-      style={{ animationDelay: `${index * 70}ms` }}
-    >
-      <span className="label-mono text-accent">Evidence 0{index + 1}</span>
-      <h3 className="mt-3 font-display text-lg font-semibold">{title}</h3>
-      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{detail}</p>
-    </div>
-  );
-}
-</file>
 
 <file path="src/components/ui/accordion.tsx">
 import * as React from "react";
@@ -4939,289 +4655,6 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
 </file>
 
-<file path="src/data/court-scenarios.ts">
-export type Verdict = "LEGITIMATE" | "RISKY" | "MISLEADING";
-
-export type WarningSign = {
-  label: string;
-  detail: string;
-};
-
-export type ReasoningCard = {
-  title: string;
-  detail: string;
-};
-
-export type Scenario = {
-  id: string;
-  caseNumber: string;
-  handle: string;
-  displayName: string;
-  followers: string;
-  tag: "Trending" | "Sponsored" | "Viral";
-  claim: string;
-  metrics: { likes: string; comments: string; shares: string };
-  verdict: Verdict;
-  headline: string;
-  summary: string;
-  reasoning: ReasoningCard[];
-  warningSigns: WarningSign[];
-  concept: string;
-  conceptLabel: string;
-  skill: string;
-  difficulty: "Warm-up" | "Standard" | "Tricky";
-};
-
-export const scenarios: Scenario[] = [
-  {
-    id: "guaranteed-crypto",
-    caseNumber: "CASE #001",
-    handle: "@MarketKing",
-    displayName: "Market King",
-    followers: "128K followers",
-    tag: "Trending",
-    claim:
-      "I've made 300% this year doing this. This crypto is going to 10x before the end of the month. Don't miss it.",
-    metrics: { likes: "42.1K", comments: "3,204", shares: "8,911" },
-    verdict: "MISLEADING",
-    headline: "A future price is being sold as a fact.",
-    summary:
-      "The claim isn't wrong because crypto is bad. It's misleading because a prediction is presented as a certainty, with no evidence and no downside.",
-    reasoning: [
-      {
-        title: "Unrealistic certainty",
-        detail:
-          "A future price is stated as if it were already decided. Nobody can know that a specific asset will 10x in a specific month.",
-      },
-      {
-        title: "FOMO",
-        detail:
-          "\u201cDon't miss it\u201d exists to compress your thinking time. Urgency is a persuasion tool, not evidence.",
-      },
-      {
-        title: "Missing downside",
-        detail:
-          "An asset that can move 10x up can also fall 80%. The post never mentions what happens if it goes the other way.",
-      },
-      {
-        title: "Cherry-picked evidence",
-        detail:
-          "One past return is used to imply future accuracy. You never see the trades that lost money.",
-      },
-    ],
-    warningSigns: [
-      {
-        label: "Guaranteed returns",
-        detail: "No legitimate investment can promise a specific outcome by a specific date.",
-      },
-      {
-        label: "Urgency",
-        detail: "\u201cDon't miss out\u201d is designed to trigger a fast decision, not a good one.",
-      },
-      {
-        label: "Upside without downside",
-        detail: "The gain is loud, the possible loss is silent.",
-      },
-      {
-        label: "Influencer authority",
-        detail: "128K followers is a measure of attention, not of accuracy.",
-      },
-    ],
-    concept: "certainty-and-fomo",
-    conceptLabel: "Guaranteed returns",
-    skill: "Question the reasoning, not the hype.",
-    difficulty: "Warm-up",
-  },
-  {
-    id: "earnings-fomo",
-    caseNumber: "CASE #002",
-    handle: "@StockSprint",
-    displayName: "Stock Sprint",
-    followers: "94K followers",
-    tag: "Viral",
-    claim:
-      "Everyone is buying this stock before earnings. Analysts are saying it can't lose. Get in before the announcement Thursday.",
-    metrics: { likes: "18.7K", comments: "1,442", shares: "2,318" },
-    verdict: "MISLEADING",
-    headline: "Same pattern, new outfit.",
-    summary:
-      "Different asset, identical reasoning: a deadline, a crowd, and a claim that losing isn't possible. Earnings are one of the least predictable events for a single stock.",
-    reasoning: [
-      {
-        title: "Deadline pressure",
-        detail:
-          "A date is used to force action before you can do your own thinking. That's the same FOMO mechanic as case #001.",
-      },
-      {
-        title: "\u201cCan't lose\u201d is not a real category",
-        detail:
-          "Analyst expectations are already reflected in the price. A beat can still be followed by a fall.",
-      },
-      {
-        title: "Crowd as evidence",
-        detail:
-          "\u201cEveryone is buying\u201d describes popularity, not value. Popularity is not a reason.",
-      },
-      {
-        title: "Single-outcome exposure",
-        detail:
-          "The whole position depends on one announcement on one day. That is concentration, not a strategy.",
-      },
-    ],
-    warningSigns: [
-      { label: "Urgency", detail: "A hard deadline replaces analysis with adrenaline." },
-      { label: "Social proof", detail: "\u201cEveryone is buying\u201d tells you nothing about the business." },
-      { label: "Guaranteed returns", detail: "\u201cCan't lose\u201d is the tell, every time." },
-      { label: "One prediction", detail: "One event decides the whole outcome." },
-    ],
-    concept: "certainty-and-fomo",
-    conceptLabel: "FOMO recognition",
-    skill: "A deadline is not evidence.",
-    difficulty: "Standard",
-  },
-  {
-    id: "passive-income",
-    caseNumber: "CASE #003",
-    handle: "@FreedomFlowHQ",
-    displayName: "Freedom Flow",
-    followers: "312K followers",
-    tag: "Sponsored",
-    claim:
-      "I make \u00a34,000 a month in truly passive income. Zero effort, zero risk. Full breakdown in my \u00a3199 course \u2014 link in bio.",
-    metrics: { likes: "63.4K", comments: "5,870", shares: "12.2K" },
-    verdict: "MISLEADING",
-    headline: "The product being sold isn't the income. It's the course.",
-    summary:
-      "The strongest signal here isn't the number, it's the incentive. The creator earns money whether or not the strategy works for you.",
-    reasoning: [
-      {
-        title: "Misaligned incentive",
-        detail:
-          "Income comes from selling the method, not from the method. That changes what the post is optimised for.",
-      },
-      {
-        title: "\u201cZero risk\u201d does not exist",
-        detail:
-          "Every return is compensation for some risk. A claim of zero risk with high return is a contradiction.",
-      },
-      {
-        title: "Unverifiable numbers",
-        detail:
-          "A revenue screenshot is not profit, and no costs, taxes or failed months are shown.",
-      },
-      {
-        title: "Omitted information",
-        detail: "You aren't told how many buyers reproduced the result. Almost none usually do.",
-      },
-    ],
-    warningSigns: [
-      { label: "Follow the incentive", detail: "Ask who gets paid when you act." },
-      { label: "Zero-risk framing", detail: "Risk-free plus high return is a marketing sentence." },
-      { label: "Upside without downside", detail: "No failed months are ever shown." },
-      { label: "Paywalled proof", detail: "Evidence you must buy is not evidence." },
-    ],
-    concept: "incentives",
-    conceptLabel: "Incentives & omissions",
-    skill: "Ask who profits from your decision.",
-    difficulty: "Standard",
-  },
-  {
-    id: "celebrity-token",
-    caseNumber: "CASE #004",
-    handle: "@TheHypeDesk",
-    displayName: "The Hype Desk",
-    followers: "540K followers",
-    tag: "Trending",
-    claim:
-      "A massive footballer just backed this new token. If he's in, it's happening. This is the easiest call of the year.",
-    metrics: { likes: "88.9K", comments: "9,013", shares: "21.4K" },
-    verdict: "MISLEADING",
-    headline: "An endorsement is attention, not analysis.",
-    summary:
-      "A famous name tells you about marketing spend, not about the asset. Endorsers are often paid, and they're rarely exposed to your downside.",
-    reasoning: [
-      {
-        title: "Borrowed authority",
-        detail:
-          "Fame in one field does not transfer to financial judgement. Being good at sport says nothing about a token.",
-      },
-      {
-        title: "Undisclosed payment",
-        detail: "Endorsements are frequently paid promotions. The endorser's upside is the fee.",
-      },
-      {
-        title: "No underlying evidence",
-        detail:
-          "Nothing is said about what the asset does, who uses it, or how it could be worth anything.",
-      },
-      {
-        title: "\u201cEasiest call\u201d framing",
-        detail: "Confidence is being used as a substitute for reasoning.",
-      },
-    ],
-    warningSigns: [
-      { label: "Influencer authority", detail: "A big name is not a due-diligence process." },
-      { label: "Hidden incentive", detail: "You may be reading an advert." },
-      { label: "No fundamentals", detail: "Nothing explains why the asset has value." },
-      { label: "Certainty language", detail: "\u201cEasiest call of the year\u201d is a feeling, not a fact." },
-    ],
-    concept: "authority",
-    conceptLabel: "Influencer authority",
-    skill: "Judge the claim, not the name attached to it.",
-    difficulty: "Standard",
-  },
-  {
-    id: "leverage",
-    caseNumber: "CASE #005",
-    handle: "@LeverageLab",
-    displayName: "Leverage Lab",
-    followers: "76K followers",
-    tag: "Viral",
-    claim:
-      "Why buy \u00a31,000 of an index when you can control \u00a310,000 with 10x leverage? Same idea, ten times the result. Risk management is just fear.",
-    metrics: { likes: "12.3K", comments: "2,109", shares: "1,884" },
-    verdict: "MISLEADING",
-    headline: "Leverage multiplies both directions \u2014 only one is mentioned.",
-    summary:
-      "This one sounds technical, which makes it more persuasive. But a 10% move against a 10x position removes the entire stake.",
-    reasoning: [
-      {
-        title: "Symmetry removed",
-        detail:
-          "Leverage multiplies losses exactly as it multiplies gains. Only the gain half is described.",
-      },
-      {
-        title: "Liquidation is not mentioned",
-        detail:
-          "With 10x, a 10% adverse move can wipe out the position before any thesis has time to play out.",
-      },
-      {
-        title: "Risk framed as weakness",
-        detail:
-          "Calling risk management \u201cfear\u201d discourages the exact behaviour that keeps you solvent.",
-      },
-      {
-        title: "Timing dependence",
-        detail:
-          "Leverage turns a long-term view into a short-term bet on when the move happens, not whether it does.",
-      },
-    ],
-    warningSigns: [
-      { label: "Amplified downside", detail: "10x up also means 10x down." },
-      { label: "Risk dismissed", detail: "Anyone mocking caution is not managing your money." },
-      { label: "Missing mechanics", detail: "Costs, margin calls and liquidation are left out." },
-      { label: "Timing bet", detail: "Being right too late is the same as being wrong." },
-    ],
-    concept: "leverage",
-    conceptLabel: "Missing downside",
-    skill: "Always ask what happens if it moves against you.",
-    difficulty: "Tricky",
-  },
-];
-
-export const verdictOptions: Verdict[] = ["LEGITIMATE", "RISKY", "MISLEADING"];
-</file>
-
 <file path="src/hooks/use-mobile.tsx">
 import * as React from "react";
 
@@ -5431,6 +4864,104 @@ export function cn(...inputs: ClassValue[]) {
 }
 </file>
 
+<file path="src/lib/zuno-session.ts">
+import { useCallback, useEffect, useState } from "react";
+import type { Declaration } from "./zuno-data";
+
+export interface ZunoSession {
+  declaration: Declaration | null;
+  selectedScenario: string | null;
+  stressTestCompleted: boolean;
+  portfolioViewed: boolean;
+  courtProgress: { completed: number; score: number; max: number };
+  educationalConcepts: string[];
+}
+
+const STORAGE_KEY = "zuno-session-v1";
+
+export const emptySession: ZunoSession = {
+  declaration: null,
+  selectedScenario: null,
+  stressTestCompleted: false,
+  portfolioViewed: false,
+  courtProgress: { completed: 0, score: 0, max: 0 },
+  educationalConcepts: [],
+};
+
+function readSession(): ZunoSession {
+  if (typeof window === "undefined") return emptySession;
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (!saved) return emptySession;
+    return { ...emptySession, ...JSON.parse(saved) } as ZunoSession;
+  } catch {
+    return emptySession;
+  }
+}
+
+function persist(session: ZunoSession) {
+  if (typeof window !== "undefined")
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+}
+
+export function useZunoSession() {
+  const [session, setSession] = useState<ZunoSession>(emptySession);
+
+  useEffect(() => setSession(readSession()), []);
+
+  const update = useCallback((change: (current: ZunoSession) => ZunoSession) => {
+    setSession((current) => {
+      const next = change(current);
+      persist(next);
+      return next;
+    });
+  }, []);
+
+  return {
+    session,
+    saveDeclaration: useCallback(
+      (declaration: Declaration) =>
+        update((current) => ({
+          ...current,
+          declaration,
+          stressTestCompleted: false,
+          portfolioViewed: false,
+          educationalConcepts: [],
+        })),
+      [update],
+    ),
+    markStressTestCompleted: useCallback(
+      (concepts: string[], selectedScenario: string) =>
+        update((current) => ({
+          ...current,
+          stressTestCompleted: true,
+          educationalConcepts: concepts,
+          selectedScenario,
+        })),
+      [update],
+    ),
+    markPortfolioViewed: useCallback(
+      () => update((current) => ({ ...current, portfolioViewed: true })),
+      [update],
+    ),
+    saveGoal: useCallback(
+      (userGoal: Declaration["userGoal"]) =>
+        update((current) =>
+          current.declaration
+            ? { ...current, declaration: { ...current.declaration, userGoal } }
+            : current,
+        ),
+      [update],
+    ),
+    saveCourtProgress: useCallback(
+      (completed: number, score: number, max: number) =>
+        update((current) => ({ ...current, courtProgress: { completed, score, max } })),
+      [update],
+    ),
+  };
+}
+</file>
+
 <file path="src/router.tsx">
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
@@ -5546,54 +5077,3176 @@ export const startInstance = createStart(() => ({
 }));
 </file>
 
-<file path="src/components/court/VerdictReveal.tsx">
-import type { Scenario, Verdict } from "@/data/court-scenarios";
+<file path="src/components/court/CourtButton.tsx">
+import { cva, type VariantProps } from "class-variance-authority";
+import type { ButtonHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-const toneFor: Record<Verdict, string> = {
-  LEGITIMATE: "text-primary border-primary/40 bg-primary/10",
-  RISKY: "text-caution border-caution/40 bg-caution/10",
-  MISLEADING: "text-verdict border-verdict/40 bg-verdict/10",
-};
+const courtButtonVariants = cva(
+  "inline-flex items-center justify-center gap-2 rounded-full font-display font-semibold tracking-tight transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        primary: "bg-primary text-primary-foreground shadow-glow hover:-translate-y-0.5",
+        outline: "border border-border bg-surface text-foreground hover:bg-surface-raised",
+        ghost: "text-muted-foreground hover:text-foreground",
+      },
+      size: {
+        md: "px-6 py-3 text-sm",
+        lg: "px-8 py-4 text-base",
+      },
+    },
+    defaultVariants: { variant: "primary", size: "md" },
+  },
+);
 
-export function VerdictReveal({
-  scenario,
-  choice,
-  correct,
-}: {
-  scenario: Scenario;
-  choice: Verdict;
-  correct: boolean;
-}) {
+export function CourtButton({
+  className,
+  variant,
+  size,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof courtButtonVariants>) {
+  return <button className={cn(courtButtonVariants({ variant, size }), className)} {...props} />;
+}
+
+export { courtButtonVariants };
+</file>
+
+<file path="src/components/court/DecisionLock.tsx">
+import { Lock } from "lucide-react";
+import type { Verdict } from "@/data/court-scenarios";
+
+export function DecisionLock({ choice }: { choice: Verdict }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 text-center shadow-elevated sm:p-12">
-      <p className="label-mono text-muted-foreground">{scenario.caseNumber} · Verdict</p>
 
-      <h2
-        className={`animate-verdict-slam mx-auto mt-5 inline-block rounded-2xl border px-6 py-3 font-display text-4xl font-bold tracking-tight sm:text-6xl ${toneFor[scenario.verdict]}`}
-      >
-        {scenario.verdict}
-      </h2>
-
-      <p className="animate-rise mt-6 text-sm text-muted-foreground">You chose: {choice}</p>
-
-      <p
-        className={`animate-rise mt-3 font-display text-xl font-semibold sm:text-2xl ${
-          correct ? "text-primary" : "text-foreground"
-        }`}
-      >
-        {correct ? "Good call. You spotted the warning signs." : "Not quite. Let's break down what you missed."}
-      </p>
-
-      <p className="animate-rise mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-        {scenario.summary}
-      </p>
-
-      {correct && (
-        <div className="animate-pulse-ring pointer-events-none absolute inset-x-0 bottom-5 mx-auto h-1 w-32 rounded-full bg-primary" />
-      )}
+    <div className="animate-fade-up flex items-center justify-center gap-3 rounded-2xl border border-primary/40 bg-[color-mix(in_oklab,var(--primary)_8%,var(--surface))] px-5 py-4 shadow-card">
+      <Lock className="size-4 text-primary" aria-hidden />
+      <p className="label-mono text-primary">Decision locked · {choice}</p>
     </div>
   );
 }
+</file>
+
+<file path="src/components/court/ScoreCard.tsx">
+export type CategoryResult = { label: string; strength: "Strong" | "Improving" };
+
+export function ScoreCard({
+  score,
+  total,
+  categories,
+}: {
+  score: number;
+  total: number;
+  categories: CategoryResult[];
+}) {
+  const pct = Math.round((score / total) * 100);
+
+  return (
+
+    <div className="surface-card animate-fade-up p-8">
+      <p className="label-mono text-muted-foreground">Risk recognition score</p>
+      <div className="mt-3 flex items-end gap-3">
+        <span className="text-gradient-primary font-display text-6xl font-bold">{score}</span>
+
+        <span className="font-display pb-2 text-2xl text-muted-foreground">/ {total}</span>
+      </div>
+
+
+      <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-secondary">
+        <div
+
+          className="h-full rounded-full bg-primary transition-all duration-700 ease-out"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+
+
+      <p className="font-display mt-5 text-lg font-semibold tracking-tight">
+        You're getting better at spotting the signals.
+      </p>
+
+      <ul className="mt-6 space-y-2.5">
+
+        {categories.map((c, i) => (
+          <li
+            key={c.label}
+
+            className="animate-fade-up flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2/50 px-4 py-3 transition-colors hover:border-primary/30"
+            style={{ animationDelay: `${i * 70}ms` }}
+          >
+
+            <span className="text-sm">{c.label}</span>
+            <span
+              className={`label-mono rounded-full px-2.5 py-1 ${
+                c.strength === "Strong"
+                  ? "bg-primary/15 text-primary"
+
+                  : "bg-caution/25 text-caution-foreground"
+              }`}
+            >
+              {c.strength}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/court/VerdictButton.tsx">
+const copy: Record<Verdict, { hint: string; tone: string }> = {
+  LEGITIMATE: {
+    hint: "Reasoning holds up",
+    tone: "hover:border-primary hover:text-primary data-[state=chosen]:border-primary data-[state=chosen]:text-primary",
+  },
+  RISKY: {
+    hint: "Possible, but exposed",
+    tone: "hover:border-caution hover:text-caution-foreground data-[state=chosen]:border-caution data-[state=chosen]:text-caution-foreground",
+  },
+  MISLEADING: {
+    hint: "The reasoning is broken",
+    tone: "hover:border-verdict hover:text-verdict data-[state=chosen]:border-verdict data-[state=chosen]:text-verdict",
+  },
+};
+
+export function VerdictButton({
+  verdict,
+  chosen,
+  disabled,
+  onSelect,
+}: {
+  verdict: Verdict;
+  chosen?: boolean;
+  disabled?: boolean;
+  onSelect: (v: Verdict) => void;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      data-state={chosen ? "chosen" : undefined}
+      onClick={() => onSelect(verdict)}
+      className={`surface-card animate-fade-up group flex flex-col items-start gap-1 px-5 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-elevated disabled:cursor-default disabled:hover:translate-y-0 disabled:hover:shadow-none data-[state=chosen]:animate-lock ${copy[verdict].tone} ${
+        disabled && !chosen ? "opacity-40" : ""
+      }`}
+    >
+      <span className="font-display text-lg font-bold tracking-tight">{verdict}</span>
+      <span className="text-sm text-muted-foreground">{copy[verdict].hint}</span>
+    </button>
+  );
+}
+</file>
+
+<file path="src/components/court/WarningSignCard.tsx">
+import { AlertTriangle } from "lucide-react";
+
+export function WarningSignCard({
+  index,
+  label,
+  detail,
+}: {
+  index: number;
+  label: string;
+  detail: string;
+}) {
+  return (
+    <div
+      className="animate-fade-up rounded-2xl border border-border bg-surface-2/50 p-5 transition-colors hover:border-caution/50"
+      style={{ animationDelay: `${index * 70}ms` }}
+    >
+      <div className="flex items-center gap-2">
+        <AlertTriangle className="size-4 text-caution" aria-hidden />
+        <span className="label-mono text-caution">Warning sign 0{index + 1}</span>
+      </div>
+      <h3 className="mt-3 font-display text-lg font-semibold">{label}</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{detail}</p>
+    </div>
+  );
+}
+
+export function ReasoningCardView({
+  index,
+  title,
+  detail,
+}: {
+  index: number;
+  title: string;
+  detail: string;
+}) {
+  return (
+    <div
+      className="animate-fade-up rounded-2xl border border-border bg-surface-2/50 p-5 transition-colors hover:border-accent/50"
+      style={{ animationDelay: `${index * 70}ms` }}
+    >
+      <span className="label-mono text-accent">Evidence 0{index + 1}</span>
+      <h3 className="mt-3 font-display text-lg font-semibold">{title}</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{detail}</p>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/screens/DecisionSummary.tsx">
+import { CtaButton } from "../CtaButton";
+import { SectionHeader } from "../SectionHeader";
+import { formatGBP, type Declaration } from "@/lib/zuno-data";
+
+export function DecisionSummary({
+  declaration,
+  onContinue,
+}: {
+  declaration: Declaration;
+  onContinue: () => void;
+}) {
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="Your decision"
+        subtitle="A quick read-back before we look at the downside."
+        title="Here is what you told us."
+      />
+      <div className="bg-hero surface-card animate-scale-in space-y-2 p-6 text-center">
+        <p className="zuno-num text-primary text-5xl font-semibold">
+          {formatGBP(declaration.amount)}
+        </p>
+        <p className="mt-3 text-base leading-relaxed">
+          {declaration.idea.trim() || "No description added"}
+        </p>
+      </div>
+      <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <CtaButton onClick={onContinue}>Show me the downside</CtaButton>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/screens/index.tsx">
+import { useMemo, useState } from "react";
+import type { Declaration } from "@/lib/zuno-data";
+import { Link } from "@tanstack/react-router";
+import { AllocationControls } from "../AllocationControls";
+import { AllocationLegend, AllocationRing } from "../AllocationRing";
+import { ConcentrationMeter } from "../ConcentrationMeter";
+import {
+  BulletList,
+  Callout,
+  DemoTag,
+  SectionHeader,
+  Stat,
+  ZunoButton,
+  ZunoCard,
+} from "../primitives";
+import {
+  applyReturn,
+  activeExposures,
+  concentrationLabel,
+  CONCENTRATED_POSITION,
+  defaultWeights,
+  diversificationScore,
+  FAN_CATEGORIES,
+  formatMoney,
+  formatPct,
+  LEARNING_STATEMENTS,
+  portfolioReturn,
+  SIMULATED_AMOUNT,
+  type CategoryId,
+  type Weights,
+} from "@/lib/fan-portfolio";
+export { DeclareWizard } from "./DeclareWizard";
+export { DecisionSummary } from "./DecisionSummary";
+export { StressTest } from "./StressTest";
+export { WhyRisky } from "./WhyRisky";
+export { PauseScreen } from "./PauseScreen";
+
+export function AlternativeIntro({
+  decision,
+  onNext,
+}: {
+  decision: Declaration | null;
+  onNext: () => void;
+}) {
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="From stress test to alternative"
+        title="You do not have to stop caring about what excites you."
+        supporting={
+          decision?.userGoal === "entertainment"
+            ? "You can keep the interest as entertainment without making one outcome carry the whole stake."
+            : "The question is how you choose to get exposure."
+        }
+      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <ZunoCard tone="danger">
+          <p className="font-display text-lg font-semibold">Concentrated position</p>
+          <BulletList
+            tone="danger"
+            items={["Highly dependent on one outcome", "One prediction decides the range"]}
+          />
+        </ZunoCard>
+        <ZunoCard tone="primary">
+          <p className="font-display text-lg font-semibold">Fan Portfolio</p>
+          <BulletList
+            tone="primary"
+            items={["More diversified exposures", "Several parts of one ecosystem"]}
+          />
+        </ZunoCard>
+      </div>
+      <ZunoButton onClick={onNext}>Explore the Fan Portfolio</ZunoButton>
+    </div>
+  );
+}
+export function MeetFanPortfolio({
+  decision,
+  onNext,
+}: {
+  decision: Declaration | null;
+  onNext: () => void;
+}) {
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="The alternative"
+        title="Meet the Fan Portfolio"
+        supporting={
+          decision?.assetOrOpportunity
+            ? `A simulated alternative for staying connected to ${decision.assetOrOpportunity}.`
+            : "A simulated portfolio built around the sports and entertainment ecosystem."
+        }
+      />
+      <div className="space-y-4">
+        {[
+          "Same interest, different shape",
+          "See how diversification changes the risk profile",
+          "This is a simulation, not a shopping list",
+        ].map((title) => (
+          <ZunoCard key={title} tone="quiet">
+            <p className="font-display text-base font-semibold">{title}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              You can care about sport and still spread how you are exposed to it.
+            </p>
+          </ZunoCard>
+        ))}
+      </div>
+      <ZunoButton onClick={onNext}>See the simulated portfolio</ZunoButton>
+    </div>
+  );
+}
+export function PortfolioDashboard({ amount, onNext }: { amount: number; onNext: () => void }) {
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="Portfolio dashboard"
+        title="Fan Portfolio"
+        supporting={`${formatMoney(amount)} simulated`}
+      />
+      <ZunoCard className="space-y-6">
+        <AllocationRing
+          centerBottom="Illustrative exposures"
+          centerTop="6"
+          weights={defaultWeights}
+        />
+        <AllocationLegend weights={defaultWeights} />
+      </ZunoCard>
+      <ul className="space-y-3">
+        {FAN_CATEGORIES.map((category) => (
+          <li
+            key={category.id}
+            className="flex items-start gap-3 rounded-2xl border border-border bg-surface/60 p-4"
+          >
+            <span
+              className="mt-1 size-2.5 shrink-0 rounded-full"
+              style={{ background: category.colorVar }}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-sm font-medium">{category.name}</p>
+                <span className="zuno-num text-sm">{category.defaultWeight}%</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{category.blurb}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <DemoTag />
+      <ZunoButton onClick={onNext}>Compare concentrated vs diversified</ZunoButton>
+    </div>
+  );
+}
+export function ConcentratedVsDiversified({
+  amount = SIMULATED_AMOUNT,
+  onNext,
+}: {
+  amount?: number;
+  onNext: () => void;
+}) {
+  const result = portfolioReturn(defaultWeights);
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="Concentrated vs diversified"
+        title="What does diversification actually change?"
+        supporting={`Two illustrative scenarios from the same ${formatMoney(amount)} starting amount.`}
+      />
+      <ZunoCard tone="danger" className="space-y-4">
+        <p className="font-display text-lg font-semibold">One concentrated position</p>
+        <div className="grid grid-cols-2 gap-4">
+          <Stat label="If it falls 50%" tone="down" value={formatMoney(amount * 0.5)} />
+          <Stat label="If it rises 50%" tone="up" value={formatMoney(amount * 1.5)} />
+        </div>
+      </ZunoCard>
+      <ZunoCard tone="primary" className="space-y-4">
+        <p className="font-display text-lg font-semibold">Fan Portfolio</p>
+        <div className="grid grid-cols-2 gap-4">
+          <Stat label="Weighted outcome" tone="up" value={formatPct(result)} />
+          <Stat label="Starting amount becomes" value={formatMoney(applyReturn(amount, result))} />
+        </div>
+      </ZunoCard>
+      <Callout label="The point">
+        Diversification does not remove risk. It can change how much the result depends on one
+        prediction.
+      </Callout>
+      <ZunoButton onClick={onNext}>Build your own version</ZunoButton>
+    </div>
+  );
+}
+export function BuildYourPortfolio({
+  weights,
+  setWeights,
+  onNext,
+}: {
+  weights: Weights;
+  setWeights: (weights: Weights) => void;
+  onNext: () => void;
+}) {
+  const result = useMemo(() => portfolioReturn(weights), [weights]);
+  const score = diversificationScore(weights);
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="Build your Fan Portfolio"
+        title="Move the weights and watch concentration change"
+        supporting="There is no correct allocation here. The point is to feel the relationship between concentration and diversification."
+      />
+      <ZunoCard className="space-y-6">
+        <AllocationRing
+          centerBottom="Diversification score"
+          centerTop={`${Math.round(score)}`}
+          weights={weights}
+        />
+        <div className="grid grid-cols-2 gap-4">
+          <Stat label="Exposures in play" value={`${activeExposures(weights)} of 6`} />
+          <Stat
+            label="Scenario outcome"
+            tone={result >= 0 ? "up" : "down"}
+            value={formatPct(result)}
+          />
+        </div>
+      </ZunoCard>
+      <ConcentrationMeter weights={weights} />
+      <AllocationControls
+        weights={weights}
+        onChange={(id: CategoryId, value: number) => setWeights({ ...weights, [id]: value })}
+        onReset={() => setWeights({ ...defaultWeights })}
+      />
+      <ZunoButton onClick={onNext}>Compare with your original decision</ZunoButton>
+    </div>
+  );
+}
+export function CompareDecision({
+  amount,
+  decision,
+  weights,
+  onNext,
+}: {
+  amount: number;
+  decision: Declaration | null;
+  weights: Weights;
+  onNext: () => void;
+}) {
+  const score = diversificationScore(weights);
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="Compare your decision"
+        title="Two ways to express the same belief"
+        supporting="Same interest in the industry. Very different dependence on being right about one thing."
+      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <ZunoCard tone="danger" className="space-y-4">
+          <p className="font-display text-lg font-semibold">Original idea</p>
+          <Stat label="Exposures" value="1" />
+          <Stat label="Amount" value={formatMoney(amount)} />
+          <BulletList
+            tone="danger"
+            items={["Highly concentrated", decision?.idea || CONCENTRATED_POSITION.description]}
+          />
+        </ZunoCard>
+        <ZunoCard tone="primary" className="space-y-4">
+          <p className="font-display text-lg font-semibold">Fan Portfolio</p>
+          <Stat label="Exposures" value={`${activeExposures(weights)}`} />
+          <BulletList
+            tone="primary"
+            items={[concentrationLabel(score), "Spread across an ecosystem"]}
+          />
+        </ZunoCard>
+      </div>
+      <ZunoCard tone="quiet">
+        <p className="text-[15px] leading-relaxed">
+          The goal is not to tell you what to choose. It is to show that there are different ways to
+          express the same financial belief.
+        </p>
+      </ZunoCard>
+      <ZunoButton onClick={onNext}>What did you learn?</ZunoButton>
+    </div>
+  );
+}
+export function LearningTakeaway() {
+  const [selected, setSelected] = useState<string[]>([]);
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="Learning takeaway"
+        title="What changed?"
+        supporting="Pick anything that now feels true. Nothing here is scored."
+      />
+      <ul className="space-y-3">
+        {LEARNING_STATEMENTS.map((statement) => {
+          const active = selected.includes(statement);
+          return (
+            <li key={statement}>
+              <button
+                type="button"
+                onClick={() =>
+                  setSelected((current) =>
+                    active ? current.filter((item) => item !== statement) : [...current, statement],
+                  )
+                }
+                aria-pressed={active}
+                className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left ${active ? "border-primary/60 bg-primary/10" : "border-border bg-card"}`}
+              >
+                <span
+                  className={`size-5 shrink-0 rounded-md border ${active ? "border-primary bg-primary" : "border-border"}`}
+                />
+                <span className="text-sm leading-relaxed">{statement}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <Callout>
+        Being excited about an industry, company or trend does not necessarily mean you have to make
+        one concentrated bet on it.
+      </Callout>
+      <Link className="block" to="/court">
+        <ZunoButton>Continue to Finfluencer Court</ZunoButton>
+      </Link>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/screens/StressTest.tsx">
+import { useState } from "react";
+import { CtaButton } from "../CtaButton";
+import { LossScenarioVisualiser } from "../LossScenarioVisualiser";
+import { RiskMetricCard } from "../RiskMetricCard";
+import { SectionHeader } from "../SectionHeader";
+import { buildRiskSnapshot, scenarioCopy, type Declaration } from "@/lib/zuno-data";
+
+export function StressTest({
+  declaration,
+  onContinue,
+}: {
+  declaration: Declaration;
+  onContinue: () => void;
+}) {
+  const [lossPct, setLossPct] = useState(50);
+  const copy = scenarioCopy(declaration);
+  const metrics = buildRiskSnapshot(declaration);
+  return (
+    <div className="space-y-8">
+      <SectionHeader eyebrow={copy.eyebrow} subtitle={copy.subtitle} title={copy.title} />
+      <LossScenarioVisualiser
+        amount={declaration.amount}
+        lossPct={lossPct}
+        onChange={setLossPct}
+        prefix={copy.visualiser.prefix}
+      />
+      <section className="space-y-4">
+        <h2 className="zuno-eyebrow">{copy.snapshotHeading}</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {metrics.map((metric, i) => (
+            <div
+              key={metric.label}
+              className="animate-fade-up"
+              style={{ animationDelay: `${i * 70}ms` }}
+            >
+              <RiskMetricCard {...metric} />
+            </div>
+          ))}
+        </div>
+      </section>
+      <div className="animate-fade-up">
+        <CtaButton onClick={onContinue}>Why does ZUNO think this is risky?</CtaButton>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/screens/WhyRisky.tsx">
+import { CtaButton } from "../CtaButton";
+import { SectionHeader } from "../SectionHeader";
+import { buildReasoningCards, scenarioCopy, type Declaration } from "@/lib/zuno-data";
+
+export function WhyRisky({
+  declaration,
+  onContinue,
+}: {
+  declaration: Declaration;
+  onContinue: () => void;
+}) {
+  const copy = scenarioCopy(declaration);
+  const cards = buildReasoningCards(declaration);
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="The reasoning"
+        subtitle={copy.reasoningSubtitle}
+        title={copy.reasoningTitle}
+      />
+      <div className="space-y-3">
+        {cards.map((card, index) => (
+          <article
+            key={card.title}
+            className="surface-card animate-fade-up p-5 transition-shadow duration-200 hover:shadow-elevated"
+            style={{ animationDelay: `${index * 80}ms` }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="bg-primary/10 font-display text-primary grid size-8 place-items-center rounded-full text-sm">
+                {index + 1}
+              </span>
+              <h2 className="font-display text-lg font-semibold">{card.title}</h2>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{card.body}</p>
+          </article>
+        ))}
+      </div>
+      <CtaButton onClick={onContinue}>Continue</CtaButton>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/AllocationControls.tsx">
+import { FAN_CATEGORIES, totalWeight, type CategoryId, type Weights } from "@/lib/fan-portfolio";
+
+export function AllocationControls({
+  weights,
+  onChange,
+  onReset,
+}: {
+  weights: Weights;
+  onChange: (id: CategoryId, value: number) => void;
+  onReset: () => void;
+}) {
+  return (
+    <div className="animate-fade-up space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Raw total <span className="zuno-num font-medium">{totalWeight(weights)}%</span>
+        </p>
+        <button
+          type="button"
+          onClick={onReset}
+          className="rounded-full border border-border px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-primary active:scale-95"
+        >
+          Reset
+        </button>
+      </div>
+      <ul className="space-y-4">
+        {FAN_CATEGORIES.map((category) => (
+          <li key={category.id} className="surface-card p-4 transition-shadow duration-200 hover:shadow-elevated">
+            <div className="flex items-center justify-between gap-3">
+              <span className="flex items-center gap-2.5">
+                <span
+                  className="size-2.5 rounded-full ring-3 ring-current/10"
+                  style={{ background: category.colorVar }}
+                />
+                <span className="text-sm font-medium">{category.name}</span>
+              </span>
+              <span className="zuno-num rounded-lg bg-surface-2 px-2 py-0.5 text-base tabular-nums">
+                {weights[category.id]}%
+              </span>
+            </div>
+            <p className="mt-1 pl-5 text-xs leading-relaxed text-muted-foreground">{category.blurb}</p>
+            <input
+              aria-label={`${category.name} allocation`}
+              type="range"
+              min={0}
+              max={60}
+              step={5}
+              value={weights[category.id]}
+              onChange={(event) => onChange(category.id, Number(event.target.value))}
+              style={{ ["--fill" as string]: `${(weights[category.id] / 60) * 100}` }}
+              className="mt-4 h-1.5 w-full cursor-pointer"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/AllocationRing.tsx">
+import { FAN_CATEGORIES, normalisedWeights, type Weights } from "@/lib/fan-portfolio";
+
+export function AllocationRing({
+  weights,
+  centerTop,
+  centerBottom,
+  size = 220,
+}: {
+  weights: Weights;
+  centerTop: string;
+  centerBottom: string;
+  size?: number;
+}) {
+  const normalised = normalisedWeights(weights);
+  const stroke = 22;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  let offset = 0;
+  return (
+    <div className="relative mx-auto" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--surface-2)"
+          strokeWidth={stroke}
+        />        <g transform={`rotate(-90 ${size / 2} ${size / 2})`}>
+          {FAN_CATEGORIES.map((category) => {
+            const share = normalised[category.id] / 100;
+            const length = share * circumference;
+            const dashOffset = -offset * circumference;
+            offset += share;
+            return (
+              <circle
+                key={category.id}
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke={category.colorVar}
+                strokeWidth={stroke}
+                strokeLinecap="butt"
+                strokeDasharray={`${Math.max(length - 2, 0)} ${circumference}`}
+                strokeDashoffset={dashOffset}
+                className="transition-all duration-500 ease-out"
+              />
+            );
+          })}
+        </g>
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span className="zuno-num text-3xl transition-all duration-300">{centerTop}</span>
+        <span className="mt-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          {centerBottom}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export function AllocationLegend({ weights }: { weights: Weights }) {
+  const normalised = normalisedWeights(weights);
+  return (
+    <ul className="grid gap-2.5 sm:grid-cols-2">
+      {FAN_CATEGORIES.map((category) => (
+        <li
+          key={category.id}
+          className="flex items-center justify-between gap-3 rounded-xl bg-surface/70 px-3 py-2.5"
+        >
+          <span className="flex min-w-0 items-center gap-2.5">
+            <span
+              className="size-2.5 shrink-0 rounded-full"
+              style={{ background: category.colorVar }}
+            />
+            <span className="truncate text-sm text-foreground">{category.name}</span>
+          </span>
+          <span className="zuno-num text-sm text-muted-foreground">
+            {normalised[category.id].toFixed(0)}%
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+</file>
+
+<file path="src/components/zuno/AmountInput.tsx">
+export function AmountInput({
+  value,
+  onChange,
+  presets = [100, 250, 500, 1000],
+}: {
+  value: number;
+  onChange: (value: number) => void;
+  presets?: number[];
+}) {
+  return (
+    <div className="animate-fade-up space-y-4">
+      <div className="surface-card flex items-center gap-3 px-5 py-4 transition-colors duration-200 focus-within:border-primary focus-within:shadow-glow">
+        <span className="font-display text-muted-foreground/60 text-3xl">£</span>
+        <input
+          inputMode="numeric"
+          aria-label="Amount in pounds"
+          value={Number.isFinite(value) ? value : ""}
+          onChange={(event) => onChange(Number(event.target.value.replace(/[^0-9]/g, "")) || 0)}
+          className="font-display zuno-num w-full bg-transparent text-3xl font-semibold outline-none placeholder:text-muted-foreground/40"
+          placeholder="500"
+        />
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {presets.map((preset) => (
+          <button
+            type="button"
+            key={preset}
+            onClick={() => onChange(preset)}
+            className={`rounded-full border px-4 py-2 text-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
+              value === preset
+                ? "border-primary bg-primary text-primary-foreground shadow-glow"
+                : "surface-card shadow-none text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            }`}
+          >
+            £{preset}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/ConcentrationMeter.tsx">
+import {
+  activeExposures,
+  concentrationLabel,
+  concentrationNote,
+  diversificationScore,
+  type Weights,
+} from "@/lib/fan-portfolio";
+
+export function ConcentrationMeter({ weights }: { weights: Weights }) {
+  const score = diversificationScore(weights);
+  return (
+    <div className="surface-card animate-fade-up p-5">
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="zuno-eyebrow">Concentration indicator</p>
+        <span className="font-display text-sm font-semibold">{concentrationLabel(score)}</span>
+      </div>
+      <div className="relative mt-4 h-2 rounded-full" style={{ background: "var(--gradient-risk)" }}>
+        <span
+          className="absolute top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-white shadow-md transition-[left] duration-500 ease-out"
+          style={{ left: `${100 - score}%` }}
+        />
+      </div>
+      <div className="mt-2 flex justify-between text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <span>More diversified</span>
+        <span>More concentrated</span>
+      </div>
+      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+        {concentrationNote(score)}
+      </p>
+      <p className="mt-3 text-xs text-muted-foreground">
+        {activeExposures(weights)} of 6 illustrative exposures in play
+      </p>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/OptionCard.tsx">
+export function OptionCard({
+  label,
+  hint,
+  selected,
+  onSelect,
+}: {
+  label: string;
+  hint?: string;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-pressed={selected}
+      className={`group w-full rounded-2xl border p-4 text-left transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
+        selected
+          ? "shadow-glow border-primary bg-[color-mix(in_oklab,var(--primary)_6%,var(--surface))]"
+          : "surface-card shadow-none hover:border-primary/40"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className={`font-display text-base font-medium ${selected ? "text-primary" : ""}`}>
+            {label}
+          </p>
+          {hint ? <p className="mt-1 text-sm text-muted-foreground">{hint}</p> : null}
+        </div>
+        <span
+          className={`mt-1 grid size-5 shrink-0 place-items-center rounded-full border transition-all duration-200 ${
+            selected ? "border-primary bg-primary" : "border-border group-hover:border-primary/50"
+          }`}
+        >
+          <span
+            className={`size-2 scale-0 rounded-full bg-primary-foreground transition-transform duration-200 ${selected ? "scale-100" : ""}`}
+          />
+        </span>
+      </div>
+    </button>
+  );
+}
+</file>
+
+<file path="src/components/zuno/primitives.tsx">
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { cn } from "@/lib/utils";
+
+export function SectionHeader({
+  eyebrow,
+  title,
+  supporting,
+}: {
+  eyebrow?: string;
+  title: string;
+  supporting?: string;
+}) {
+  return (
+    <div className="animate-fade-up space-y-3">
+      {eyebrow ? <p className="zuno-eyebrow">{eyebrow}</p> : null}
+      <h1 className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl">{title}</h1>
+      {supporting ? (
+        <p className="text-base leading-relaxed text-muted-foreground">{supporting}</p>
+      ) : null}
+    </div>
+  );
+}
+
+export function ZunoCard({
+  children,
+  className,
+  tone = "default",
+}: {
+  children: ReactNode;
+  className?: string;
+  tone?: "default" | "primary" | "danger" | "quiet";
+}) {
+  return (
+    <div
+      className={cn(
+        "surface-card p-5",
+        tone === "primary" &&
+          "border-primary/25 bg-[color-mix(in_oklab,var(--primary)_5%,var(--card))]",
+        tone === "danger" &&
+          "border-danger/25 bg-[color-mix(in_oklab,var(--danger)_5%,var(--card))]",
+        tone === "quiet" && "bg-surface-2/60 shadow-none",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function ZunoButton({
+  variant = "primary",
+  className,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" }) {
+  return (
+    <button
+      {...props}
+      className={cn(
+        "inline-flex w-full items-center justify-center rounded-full px-5 py-4 font-display text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50",
+        variant === "primary" &&
+          "bg-primary text-primary-foreground shadow-glow hover:brightness-110",
+        variant === "ghost" && "surface-card hover:border-primary/40",
+        className,
+      )}
+    />
+  );
+}
+
+export function Callout({
+  label = "ZUNO takeaway",
+  children,
+}: {
+  label?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="animate-fade-up rounded-3xl border border-primary/25 bg-[color-mix(in_oklab,var(--primary)_6%,var(--surface))] p-5 shadow-card">
+      <p className="zuno-eyebrow text-primary">{label}</p>
+      <p className="mt-2 text-[15px] leading-relaxed">{children}</p>
+    </div>
+  );
+}
+export function Stat({
+  label,
+  value,
+  tone = "neutral",
+}: {
+  label: string;
+  value: string;
+  tone?: "neutral" | "up" | "down";
+}) {
+  return (
+    <div>
+      <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{label}</p>
+      <p
+        className={cn(
+          "zuno-num mt-1 text-2xl",
+          tone === "up" && "text-safe",
+          tone === "down" && "text-danger",
+        )}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
+export function DemoTag({ children = "Illustrative demo allocation" }: { children?: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-caution/40 bg-caution/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-caution-foreground">
+      <span className="size-1.5 animate-pulse rounded-full bg-caution" />
+      {children}
+    </span>
+  );
+}
+export function BulletList({ items, tone }: { items: string[]; tone: "danger" | "primary" }) {
+  return (
+    <ul className="mt-4 space-y-2.5">
+      {items.map((item) => (
+        <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+          <span
+            className={cn(
+              "mt-1.5 size-1.5 shrink-0 rounded-full",
+              tone === "danger" ? "bg-danger" : "bg-primary",
+            )}
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+</file>
+
+<file path="src/components/zuno/ProgressIndicator.tsx">
+export function ProgressIndicator({
+  current,
+  total,
+  label = "Declare",
+}: {
+  current: number;
+  total: number;
+  label?: string;
+}) {
+  return (
+    <div className="animate-fade-up space-y-2">
+      <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-muted-foreground">
+        <span>{label}</span>
+        <span className="zuno-num tracking-normal">
+          {current} / {total}
+        </span>
+      </div>
+      <div className="flex gap-1.5">
+        {Array.from({ length: total }, (_, index) => (
+          <span
+            key={index}
+            style={{ transitionDelay: `${index * 50}ms` }}
+            className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+              index < current ? "bg-primary" : "bg-surface-2"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/RiskMetricCard.tsx">
+const levelTone: Record<string, string> = {
+  None: "text-safe",
+  Low: "text-safe",
+  Medium: "text-caution-foreground",
+  High: "text-danger",
+  "Very High": "text-danger",
+};
+const levelFill: Record<string, number> = {
+  None: 0.08,
+  Low: 0.3,
+  Medium: 0.55,
+  High: 0.8,
+  "Very High": 1,
+};
+const levelBar: Record<string, string> = {
+  None: "bg-safe",
+  Low: "bg-safe",
+  Medium: "bg-caution",
+  High: "bg-danger",
+  "Very High": "bg-danger",
+};
+export function RiskMetricCard({
+  label,
+  level,
+  note,
+}: {
+  label: string;
+  level: string;
+  note?: string;
+}) {
+  return (
+    <div className="surface-card h-full p-4 transition-shadow duration-200 hover:shadow-elevated">
+      <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
+      <p
+        className={`font-display mt-1 text-lg font-semibold ${levelTone[level] ?? "text-foreground"}`}
+      >
+        {level}
+      </p>
+      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+        <div
+          className={`h-full rounded-full transition-all duration-700 ease-out ${levelBar[level] ?? "bg-primary"}`}
+          style={{ width: `${(levelFill[level] ?? 0.5) * 100}%` }}
+        />
+      </div>
+      {note ? <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{note}</p> : null}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/SectionHeader.tsx">
+export function SectionHeader({
+  eyebrow,
+  title,
+  subtitle,
+  align = "left",
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  align?: "left" | "center";
+}) {
+  return (
+    <header className={align === "center" ? "animate-fade-up text-center" : "animate-fade-up"}>
+      {eyebrow ? (
+        <p className="zuno-eyebrow text-primary mb-3">{eyebrow}</p>
+      ) : null}
+      <h1 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">{title}</h1>
+      {subtitle ? (
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">{subtitle}</p>
+      ) : null}
+    </header>
+  );
+}
+</file>
+
+<file path="src/data/court-scenarios.ts">
+export type Verdict = "LEGITIMATE" | "RISKY" | "MISLEADING";
+
+export type WarningSign = {
+  label: string;
+  detail: string;
+};
+
+export type ReasoningCard = {
+  title: string;
+  detail: string;
+};
+
+export type Scenario = {
+  id: string;
+  caseNumber: string;
+  handle: string;
+  displayName: string;
+  followers: string;
+  tag: "Trending" | "Sponsored" | "Viral";
+  claim: string;
+  metrics: { likes: string; comments: string; shares: string };
+  verdict: Verdict;
+  headline: string;
+  summary: string;
+  reasoning: ReasoningCard[];
+  warningSigns: WarningSign[];
+  concept: string;
+  conceptLabel: string;
+  skill: string;
+  difficulty: "Warm-up" | "Standard" | "Tricky";
+};
+
+export const scenarios: Scenario[] = [
+  {
+    id: "guaranteed-crypto",
+    caseNumber: "CASE #001",
+    handle: "@MarketKing",
+    displayName: "Market King",
+    followers: "128K followers",
+    tag: "Trending",
+    claim:
+      "I've made 300% this year doing this. This crypto is going to 10x before the end of the month. Don't miss it.",
+    metrics: { likes: "42.1K", comments: "3,204", shares: "8,911" },
+    verdict: "MISLEADING",
+    headline: "A future price is being sold as a fact.",
+    summary:
+      "The claim isn't wrong because crypto is bad. It's misleading because a prediction is presented as a certainty, with no evidence and no downside.",
+    reasoning: [
+      {
+        title: "Unrealistic certainty",
+        detail:
+          "A future price is stated as if it were already decided. Nobody can know that a specific asset will 10x in a specific month.",
+      },
+      {
+        title: "FOMO",
+        detail:
+          "\u201cDon't miss it\u201d exists to compress your thinking time. Urgency is a persuasion tool, not evidence.",
+      },
+      {
+        title: "Missing downside",
+        detail:
+          "An asset that can move 10x up can also fall 80%. The post never mentions what happens if it goes the other way.",
+      },
+      {
+        title: "Cherry-picked evidence",
+        detail:
+          "One past return is used to imply future accuracy. You never see the trades that lost money.",
+      },
+    ],
+    warningSigns: [
+      {
+        label: "Guaranteed returns",
+        detail: "No legitimate investment can promise a specific outcome by a specific date.",
+      },
+      {
+        label: "Urgency",
+        detail:
+          "\u201cDon't miss out\u201d is designed to trigger a fast decision, not a good one.",
+      },
+      {
+        label: "Upside without downside",
+        detail: "The gain is loud, the possible loss is silent.",
+      },
+      {
+        label: "Influencer authority",
+        detail: "128K followers is a measure of attention, not of accuracy.",
+      },
+    ],
+    concept: "certainty-and-fomo",
+    conceptLabel: "Guaranteed returns",
+    skill: "Question the reasoning, not the hype.",
+    difficulty: "Warm-up",
+  },
+  {
+    id: "earnings-fomo",
+    caseNumber: "CASE #002",
+    handle: "@StockSprint",
+    displayName: "Stock Sprint",
+    followers: "94K followers",
+    tag: "Viral",
+    claim:
+      "Everyone is buying this stock before earnings. Analysts are saying it can't lose. Get in before the announcement Thursday.",
+    metrics: { likes: "18.7K", comments: "1,442", shares: "2,318" },
+    verdict: "MISLEADING",
+    headline: "Same pattern, new outfit.",
+    summary:
+      "Different asset, identical reasoning: a deadline, a crowd, and a claim that losing isn't possible. Earnings are one of the least predictable events for a single stock.",
+    reasoning: [
+      {
+        title: "Deadline pressure",
+        detail:
+          "A date is used to force action before you can do your own thinking. That's the same FOMO mechanic as case #001.",
+      },
+      {
+        title: "\u201cCan't lose\u201d is not a real category",
+        detail:
+          "Analyst expectations are already reflected in the price. A beat can still be followed by a fall.",
+      },
+      {
+        title: "Crowd as evidence",
+        detail:
+          "\u201cEveryone is buying\u201d describes popularity, not value. Popularity is not a reason.",
+      },
+      {
+        title: "Single-outcome exposure",
+        detail:
+          "The whole position depends on one announcement on one day. That is concentration, not a strategy.",
+      },
+    ],
+    warningSigns: [
+      { label: "Urgency", detail: "A hard deadline replaces analysis with adrenaline." },
+      {
+        label: "Social proof",
+        detail: "\u201cEveryone is buying\u201d tells you nothing about the business.",
+      },
+      { label: "Guaranteed returns", detail: "\u201cCan't lose\u201d is the tell, every time." },
+      { label: "One prediction", detail: "One event decides the whole outcome." },
+    ],
+    concept: "certainty-and-fomo",
+    conceptLabel: "FOMO recognition",
+    skill: "A deadline is not evidence.",
+    difficulty: "Standard",
+  },
+  {
+    id: "passive-income",
+    caseNumber: "CASE #003",
+    handle: "@FreedomFlowHQ",
+    displayName: "Freedom Flow",
+    followers: "312K followers",
+    tag: "Sponsored",
+    claim:
+      "I make \u00a34,000 a month in truly passive income. Zero effort, zero risk. Full breakdown in my \u00a3199 course \u2014 link in bio.",
+    metrics: { likes: "63.4K", comments: "5,870", shares: "12.2K" },
+    verdict: "MISLEADING",
+    headline: "The product being sold isn't the income. It's the course.",
+    summary:
+      "The strongest signal here isn't the number, it's the incentive. The creator earns money whether or not the strategy works for you.",
+    reasoning: [
+      {
+        title: "Misaligned incentive",
+        detail:
+          "Income comes from selling the method, not from the method. That changes what the post is optimised for.",
+      },
+      {
+        title: "\u201cZero risk\u201d does not exist",
+        detail:
+          "Every return is compensation for some risk. A claim of zero risk with high return is a contradiction.",
+      },
+      {
+        title: "Unverifiable numbers",
+        detail:
+          "A revenue screenshot is not profit, and no costs, taxes or failed months are shown.",
+      },
+      {
+        title: "Omitted information",
+        detail: "You aren't told how many buyers reproduced the result. Almost none usually do.",
+      },
+    ],
+    warningSigns: [
+      { label: "Follow the incentive", detail: "Ask who gets paid when you act." },
+      { label: "Zero-risk framing", detail: "Risk-free plus high return is a marketing sentence." },
+      { label: "Upside without downside", detail: "No failed months are ever shown." },
+      { label: "Paywalled proof", detail: "Evidence you must buy is not evidence." },
+    ],
+    concept: "incentives",
+    conceptLabel: "Incentives & omissions",
+    skill: "Ask who profits from your decision.",
+    difficulty: "Standard",
+  },
+  {
+    id: "celebrity-token",
+    caseNumber: "CASE #004",
+    handle: "@TheHypeDesk",
+    displayName: "The Hype Desk",
+    followers: "540K followers",
+    tag: "Trending",
+    claim:
+      "A massive footballer just backed this new token. If he's in, it's happening. This is the easiest call of the year.",
+    metrics: { likes: "88.9K", comments: "9,013", shares: "21.4K" },
+    verdict: "MISLEADING",
+    headline: "An endorsement is attention, not analysis.",
+    summary:
+      "A famous name tells you about marketing spend, not about the asset. Endorsers are often paid, and they're rarely exposed to your downside.",
+    reasoning: [
+      {
+        title: "Borrowed authority",
+        detail:
+          "Fame in one field does not transfer to financial judgement. Being good at sport says nothing about a token.",
+      },
+      {
+        title: "Undisclosed payment",
+        detail: "Endorsements are frequently paid promotions. The endorser's upside is the fee.",
+      },
+      {
+        title: "No underlying evidence",
+        detail:
+          "Nothing is said about what the asset does, who uses it, or how it could be worth anything.",
+      },
+      {
+        title: "\u201cEasiest call\u201d framing",
+        detail: "Confidence is being used as a substitute for reasoning.",
+      },
+    ],
+    warningSigns: [
+      { label: "Influencer authority", detail: "A big name is not a due-diligence process." },
+      { label: "Hidden incentive", detail: "You may be reading an advert." },
+      { label: "No fundamentals", detail: "Nothing explains why the asset has value." },
+      {
+        label: "Certainty language",
+        detail: "\u201cEasiest call of the year\u201d is a feeling, not a fact.",
+      },
+    ],
+    concept: "authority",
+    conceptLabel: "Influencer authority",
+    skill: "Judge the claim, not the name attached to it.",
+    difficulty: "Standard",
+  },
+  {
+    id: "leverage",
+    caseNumber: "CASE #005",
+    handle: "@LeverageLab",
+    displayName: "Leverage Lab",
+    followers: "76K followers",
+    tag: "Viral",
+    claim:
+      "Why buy \u00a31,000 of an index when you can control \u00a310,000 with 10x leverage? Same idea, ten times the result. Risk management is just fear.",
+    metrics: { likes: "12.3K", comments: "2,109", shares: "1,884" },
+    verdict: "MISLEADING",
+    headline: "Leverage multiplies both directions \u2014 only one is mentioned.",
+    summary:
+      "This one sounds technical, which makes it more persuasive. But a 10% move against a 10x position removes the entire stake.",
+    reasoning: [
+      {
+        title: "Symmetry removed",
+        detail:
+          "Leverage multiplies losses exactly as it multiplies gains. Only the gain half is described.",
+      },
+      {
+        title: "Liquidation is not mentioned",
+        detail:
+          "With 10x, a 10% adverse move can wipe out the position before any thesis has time to play out.",
+      },
+      {
+        title: "Risk framed as weakness",
+        detail:
+          "Calling risk management \u201cfear\u201d discourages the exact behaviour that keeps you solvent.",
+      },
+      {
+        title: "Timing dependence",
+        detail:
+          "Leverage turns a long-term view into a short-term bet on when the move happens, not whether it does.",
+      },
+    ],
+    warningSigns: [
+      { label: "Amplified downside", detail: "10x up also means 10x down." },
+      { label: "Risk dismissed", detail: "Anyone mocking caution is not managing your money." },
+      { label: "Missing mechanics", detail: "Costs, margin calls and liquidation are left out." },
+      { label: "Timing bet", detail: "Being right too late is the same as being wrong." },
+    ],
+    concept: "leverage",
+    conceptLabel: "Missing downside",
+    skill: "Always ask what happens if it moves against you.",
+    difficulty: "Tricky",
+  },
+  {
+    id: "loss-chasing-bet",
+    caseNumber: "CASE #006",
+    handle: "@WinningWeekend",
+    displayName: "Winning Weekend",
+    followers: "61K followers",
+    tag: "Viral",
+    claim:
+      "Arsenal lost last time, so the odds are better now. Double your stake and get it all back in one go. This is how smart bettors recover.",
+    metrics: { likes: "9.8K", comments: "1,087", shares: "2,440" },
+    verdict: "RISKY",
+    headline: "A previous loss does not improve the next probability.",
+    summary:
+      "The claim turns a loss into a reason to risk more. The next result is still uncertain, and increasing the stake can turn entertainment into escalating financial pressure.",
+    reasoning: [
+      {
+        title: "Gambler's fallacy",
+        detail:
+          "A team losing last time does not make a win due next time. Past independent results do not reset the odds.",
+      },
+      {
+        title: "Loss chasing",
+        detail:
+          "Doubling the stake to recover money makes the next decision depend on the first loss.",
+      },
+      {
+        title: "False recovery promise",
+        detail:
+          "There is no guarantee the larger bet wins, and the larger loss can create even more pressure.",
+      },
+    ],
+    warningSigns: [
+      { label: "Loss chasing", detail: "A previous loss is being used to justify a bigger risk." },
+      {
+        label: "Probability ignored",
+        detail: "The last result does not make the next result certain.",
+      },
+      {
+        label: "Escalation",
+        detail: "Doubling down can turn one affordable loss into a sequence.",
+      },
+    ],
+    concept: "loss-chasing",
+    conceptLabel: "Loss chasing",
+    skill: "Separate probability from the urge to get even.",
+    difficulty: "Standard",
+  },
+];
+
+export const verdictOptions: Verdict[] = ["LEGITIMATE", "RISKY", "MISLEADING"];
+</file>
+
+<file path="src/lib/zuno-progress.ts">
+export type ZunoProgress = {
+  returning: boolean;
+  declared: boolean;
+  stressTested: boolean;
+  fanPortfolioViewed: boolean;
+  courtChallengesCompleted: number;
+  riskRecognitionScore: number;
+  riskRecognitionMax: number;
+  lastDecision: string;
+  concepts: { label: string; level: "New" | "Improving" | "Strong" }[];
+};
+
+import { formatGBP } from "./zuno-data";
+import { useZunoSession } from "./zuno-session";
+
+export function useZunoProgress(): ZunoProgress {
+  const { session } = useZunoSession();
+  const court = session.courtProgress;
+  const concepts = session.educationalConcepts.map(
+    (label, index) =>
+      ({
+        label,
+        level: index === 0 && court.score > 0 ? "Improving" : "New",
+      }) as const,
+  );
+  return {
+    returning: Boolean(session.declaration),
+    declared: Boolean(session.declaration),
+    stressTested: session.stressTestCompleted,
+    fanPortfolioViewed: session.portfolioViewed,
+    courtChallengesCompleted: court.completed,
+    riskRecognitionScore: court.score,
+    riskRecognitionMax: court.max,
+    lastDecision: session.declaration
+      ? `${formatGBP(session.declaration.amount)} ${session.declaration.decisionType ?? "decision"}`
+      : "",
+    concepts,
+  };
+}
+</file>
+
+<file path="src/components/court/ClaimCard.tsx">
+import { BadgeCheck, Heart, MessageCircle, Repeat2 } from "lucide-react";
+import type { Scenario } from "@/data/court-scenarios";
+
+export function ClaimCard({ scenario, locked }: { scenario: Scenario; locked?: boolean }) {
+  return (
+    <div
+      className={`surface-card animate-scale-in relative overflow-hidden p-6 transition-all duration-500 sm:p-8 ${
+        locked ? "opacity-60 saturate-50" : ""
+      }`}
+    >
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <span className="label-mono text-muted-foreground">Simulated post · {scenario.tag}</span>
+        <span className="label-mono rounded-full border border-border bg-surface-2 px-3 py-1 text-muted-foreground">
+          {scenario.difficulty}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <div className="bg-court/10 font-display text-court grid size-11 items-center justify-center rounded-full text-base font-bold">
+          {scenario.displayName
+            .split(" ")
+            .map((w) => w[0])
+            .join("")
+            .slice(0, 2)}
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="font-display truncate text-base font-semibold">
+              {scenario.displayName}
+            </span>
+            <BadgeCheck className="text-accent size-4 shrink-0" aria-hidden />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {scenario.handle} · {scenario.followers}
+          </p>
+        </div>
+      </div>
+
+      <blockquote className="font-display mt-6 text-xl leading-snug font-medium tracking-tight sm:text-2xl">
+        “{scenario.claim}”
+      </blockquote>
+
+      <div className="mt-7 flex items-center gap-6 border-t border-border pt-4 text-sm text-muted-foreground">
+        <span className="flex items-center gap-2 transition-colors hover:text-danger">
+          <Heart className="size-4" aria-hidden /> {scenario.metrics.likes}
+        </span>
+        <span className="flex items-center gap-2 transition-colors hover:text-accent">
+          <MessageCircle className="size-4" aria-hidden /> {scenario.metrics.comments}
+        </span>
+        <span className="flex items-center gap-2 transition-colors hover:text-primary">
+          <Repeat2 className="size-4" aria-hidden /> {scenario.metrics.shares}
+        </span>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/court/LearningTakeaway.tsx">
+export function LearningTakeaway({ skill }: { skill: string }) {
+  return (
+    <div className="animate-scale-in rounded-3xl border border-primary/30 bg-[color-mix(in_oklab,var(--primary)_7%,var(--surface))] p-7 text-center">
+      <p className="label-mono text-primary">The skill you just practised</p>
+      <p className="font-display mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">{skill}</p>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/court/ScenarioProgress.tsx">
+import { Flame } from "lucide-react";
+
+export function ScenarioProgress({
+  current,
+  total,
+  score,
+  streak,
+}: {
+  current: number;
+  total: number;
+  score: number;
+  streak: number;
+}) {
+  return (
+    <div className="surface-card animate-fade-up flex flex-wrap items-center justify-between gap-4 px-5 py-4">
+      <div className="flex items-center gap-3">
+        <span className="label-mono text-muted-foreground">
+          Round {current} / {total}
+        </span>
+        <div className="flex gap-1.5">
+          {Array.from({ length: total }).map((_, i) => (
+            <span
+              key={i}
+              style={{ transitionDelay: `${i * 50}ms` }}
+              className={`h-1.5 w-7 rounded-full transition-colors duration-500 ${
+                i < current - 1 ? "bg-primary" : i === current - 1 ? "bg-accent" : "bg-secondary"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <span className="label-mono text-muted-foreground">
+          Score <span className="zuno-num">{score}</span>
+        </span>
+        <span className="flex items-center gap-1.5 rounded-full border border-border bg-surface-2 px-3 py-1">
+          <Flame
+            className={`size-3.5 ${streak > 0 ? "animate-pulse text-caution" : "text-muted-foreground"}`}
+            aria-hidden
+          />
+          <span className="label-mono">{streak} streak</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/screens/DeclareWizard.tsx">
+import { useState } from "react";
+import { AmountInput } from "../AmountInput";
+import { CtaButton } from "../CtaButton";
+import { OptionCard } from "../OptionCard";
+import { ProgressIndicator } from "../ProgressIndicator";
+import { SectionHeader } from "../SectionHeader";
+import {
+  driverOptions,
+  decisionTypeOptions,
+  emptyDeclaration,
+  horizonOptions,
+  lossCapacityOptions,
+  type Declaration,
+} from "@/lib/zuno-data";
+
+export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declaration) => void }) {
+  const [step, setStep] = useState(1);
+  const [dir, setDir] = useState<1 | -1>(1);
+  const [draft, setDraft] = useState<Declaration>({ ...emptyDeclaration });
+  const go = (next: number) => {
+    setDir(next > step ? 1 : -1);
+    setStep(next);
+  };
+  const next = () => (step === 6 ? onComplete(draft) : go(step + 1));
+  return (
+    <div className="space-y-8">
+      <ProgressIndicator current={step} total={6} />
+      <div key={step} className={dir === 1 ? "animate-slide-fwd" : "animate-slide-back"}>
+        <div className="space-y-6">
+          {step === 1 ? (
+            <>
+              <SectionHeader
+                eyebrow="Step 1 - Declare"
+                subtitle="Tell ZUNO what you are considering."
+                title="What are you thinking of doing?"
+              />
+              <textarea
+                autoFocus
+                value={draft.idea}
+                onChange={(event) => setDraft({ ...draft, idea: event.target.value })}
+                rows={5}
+                className="surface-card w-full resize-none p-5 text-base outline-none transition-shadow duration-200 focus:border-primary focus:shadow-glow placeholder:text-muted-foreground/50"
+                placeholder="Describe the decision in your own words"
+              />
+              <input
+                value={draft.assetOrOpportunity}
+                onChange={(event) => setDraft({ ...draft, assetOrOpportunity: event.target.value })}
+                className="surface-card w-full p-4 text-base outline-none transition-shadow duration-200 focus:border-primary focus:shadow-glow placeholder:text-muted-foreground/50"
+                placeholder="Name the asset, team, company or opportunity (optional)"
+              />
+            </>
+          ) : null}
+          {step === 2 ? (
+            <>
+              <SectionHeader
+                eyebrow="Step 2 - Decision type"
+                title="What kind of decision is this?"
+              />
+              <div className="space-y-3">
+                {decisionTypeOptions.map((option, i) => (
+                  <div
+                    key={option.id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${i * 60}ms` }}
+                  >
+                    <OptionCard
+                      label={option.label}
+                      hint={option.hint}
+                      selected={draft.decisionType === option.id}
+                      onSelect={() => setDraft({ ...draft, decisionType: option.id })}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+          {step === 3 ? (
+            <>
+              <SectionHeader
+                eyebrow="Step 3 - Amount"
+                title="How much are you thinking of putting in?"
+              />
+              <AmountInput
+                value={draft.amount}
+                onChange={(amount) => setDraft({ ...draft, amount })}
+              />
+            </>
+          ) : null}
+          {step === 4 ? (
+            <>
+              <SectionHeader eyebrow="Step 4 - Time horizon" title="How long would you hold it?" />
+              <div className="space-y-3">
+                {horizonOptions.map((option, i) => (
+                  <div
+                    key={option.id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${i * 60}ms` }}
+                  >
+                    <OptionCard
+                      label={option.label}
+                      hint={option.hint}
+                      selected={draft.horizon === option.id}
+                      onSelect={() => setDraft({ ...draft, horizon: option.id })}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+          {step === 5 ? (
+            <>
+              <SectionHeader eyebrow="Step 5 - Motivation" title="Why are you considering this?" />
+              <div className="space-y-3">
+                {driverOptions.map((option, i) => (
+                  <div
+                    key={option.id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${i * 60}ms` }}
+                  >
+                    <OptionCard
+                      label={option.label}
+                      hint={option.hint}
+                      selected={draft.driver === option.id}
+                      onSelect={() => setDraft({ ...draft, driver: option.id })}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+          {step === 6 ? (
+            <>
+              <SectionHeader
+                eyebrow="Step 6 - Loss capacity"
+                title="What happens if you lose the money?"
+              />
+              <div className="space-y-3">
+                {lossCapacityOptions.map((option, i) => (
+                  <div
+                    key={option.id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${i * 60}ms` }}
+                  >
+                    <OptionCard
+                      label={option.label}
+                      hint={option.hint}
+                      selected={draft.lossCapacity === option.id}
+                      onSelect={() => setDraft({ ...draft, lossCapacity: option.id })}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
+      </div>
+      <div className="animate-fade-up space-y-3 pt-2" style={{ animationDelay: "120ms" }}>
+        <CtaButton onClick={next}>{step === 6 ? "Stress-test my decision" : "Continue"}</CtaButton>
+        {step > 1 ? (
+          <CtaButton
+            variant="ghost"
+            withArrow={false}
+            onClick={() => go(step - 1)}
+          >
+            Back
+          </CtaButton>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/screens/PauseScreen.tsx">
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { OptionCard } from "../OptionCard";
+import { SectionHeader } from "../SectionHeader";
+import { motivationOptions } from "@/lib/zuno-data";
+import { useZunoSession } from "@/lib/zuno-session";
+
+export function PauseScreen() {
+  const [motivation, setMotivation] = useState<string | null>(null);
+  const { session, saveGoal } = useZunoSession();
+  return (
+    <div className="space-y-8">
+      <SectionHeader
+        eyebrow="The pause"
+        subtitle="What are you actually trying to achieve?"
+        title="Before you act, ask one more question."
+      />
+      <div className="space-y-3">
+        {motivationOptions.map((option, i) => (
+          <div
+            key={option.id}
+            className="animate-fade-up"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <OptionCard
+              label={option.label}
+              selected={motivation === option.id}
+              onSelect={() => {
+                setMotivation(option.id);
+                saveGoal(option.id);
+              }}
+            />
+          </div>
+        ))}
+      </div>
+      {motivation && session.declaration ? (
+        <div className="bg-hero surface-card animate-scale-in space-y-4 p-6">
+          <p className="font-display text-2xl leading-snug font-semibold tracking-tight">
+            There may be more than one way to achieve the same goal.
+          </p>
+          <Link
+            className="shadow-glow inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-4 font-display text-base font-semibold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 active:scale-[0.99]"
+            to="/portfolio"
+          >
+            Explore an alternative
+          </Link>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/ContinueJourneyCard.tsx">
+import { CtaButton } from "./CtaButton";
+import type { ZunoProgress } from "@/lib/zuno-progress";
+
+export function ContinueJourneyCard({ progress }: { progress: ZunoProgress }) {
+  const afterFanPortfolio = progress.fanPortfolioViewed;
+  return (
+    <section className="surface-card animate-fade-up p-6 transition-shadow duration-300 hover:shadow-elevated sm:p-8">
+      <p className="zuno-eyebrow">Continue your journey</p>
+      {afterFanPortfolio ? (
+        <>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight">
+            You've explored concentration and diversification.
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            That completes the core decision journey. Optional next: keep training your judgement.
+          </p>
+          <div className="mt-5 rounded-2xl border border-court/20 bg-[color-mix(in_oklab,var(--court)_4%,var(--surface))] p-4">
+            <p className="font-display text-base font-bold">Ready to test your judgement?</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Optional — Court is a standalone learning loop.
+            </p>
+            <CtaButton to="/court" tone="court" className="mt-4">
+              Enter Finfluencer Court
+            </CtaButton>
+          </div>
+        </>
+      ) : (
+        <>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight">
+            You've stress-tested your decision.
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            Next: explore a different way to express your interest.
+          </p>
+          <CtaButton to="/portfolio" className="mt-5">
+            Explore Fan Portfolio
+          </CtaButton>
+        </>
+      )}
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/zuno/CourtEntryCard.tsx">
+import { Gavel } from "lucide-react";
+import { CtaButton } from "./CtaButton";
+
+const verdicts = ["Legitimate", "Risky", "Misleading"];
+
+export function CourtEntryCard({ variant }: { variant: "hero" | "feature" }) {
+  const hero = variant === "hero";
+  return (
+    <section className="surface-card animate-fade-up relative overflow-hidden p-6 transition-shadow duration-300 hover:shadow-elevated sm:p-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -right-20 size-64 rounded-full bg-court opacity-15 blur-3xl"
+      />
+      <div className="relative">
+        <div className="flex items-center gap-2.5">
+          <span className="bg-court/10 grid size-8 place-items-center rounded-full text-court">
+            <Gavel className="size-4" />
+          </span>
+          <p className="zuno-eyebrow text-court/80">Finfluencer Court · Standalone</p>
+        </div>
+        <h2 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
+          {hero ? "Think you can spot the hype?" : "Can you spot a bad financial claim?"}
+        </h2>
+        <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
+          {hero
+            ? "Judge viral financial claims and train your risk recognition."
+            : "See the claim. Make the call. Then find out what you missed."}
+        </p>
+        {!hero ? (
+          <div className="mt-6 rounded-2xl border border-border bg-surface-2/50 p-5">
+            <p className="zuno-eyebrow">The claim</p>
+            <p className="mt-2 font-display text-lg font-bold">“This stock is guaranteed to 5x.”</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {verdicts.map((v) => (
+                <span
+                  key={v}
+                  className="surface-card rounded-full px-4 py-2 text-xs font-semibold text-muted-foreground"
+                >
+                  {v}
+                </span>
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground/80">
+              Verdict revealed inside the Court.
+            </p>
+          </div>
+        ) : null}
+        <div className="mt-6 flex flex-wrap items-center gap-4">
+          <CtaButton to="/court" tone="court">
+            {hero ? "Enter Court" : "Enter the Court"}
+          </CtaButton>
+          <p className="text-xs text-muted-foreground">
+            No investment required. Just your judgement.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/zuno/CtaButton.tsx">
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+
+type Tone = "primary" | "court" | "ghost" | "outline";
+
+type CtaButtonProps = {
+  to?: string;
+  children: ReactNode;
+  tone?: Tone;
+  variant?: Tone;
+  withArrow?: boolean;
+  className?: string;
+  onClick?: () => void;
+};
+
+const toneClasses: Record<Tone, string> = {
+  primary:
+    "bg-primary text-primary-foreground shadow-glow hover:brightness-110 disabled:opacity-40",
+  court:
+    "bg-court text-court-foreground shadow-[0_0_0_1px_color-mix(in_oklab,var(--court)_22%,transparent),0_12px_32px_-14px_color-mix(in_oklab,var(--court)_55%,transparent)] hover:brightness-110",
+  ghost: "surface-card text-muted-foreground hover:text-foreground hover:border-primary/40",
+  outline: "surface-card hover:border-primary/50 hover:text-primary",
+};
+
+export function CtaButton({
+  to,
+  children,
+  tone = "primary",
+  variant,
+  withArrow = true,
+  className,
+  onClick,
+}: CtaButtonProps) {
+  const activeTone = variant || tone;
+  const baseClasses =
+    "group inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-display text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40";
+
+  if (to) {
+    return (
+      <Link to={to} className={cn(baseClasses, toneClasses[activeTone as Tone], className)}>
+        {children}
+        {withArrow && (
+          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        )}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(baseClasses, toneClasses[activeTone as Tone], className)}
+    >
+      {children}
+    </button>
+  );
+}
+</file>
+
+<file path="src/components/zuno/FanPortfolioCard.tsx">
+import { CtaButton } from "./CtaButton";
+
+export function FanPortfolioCard() {
+  return (
+    <section className="surface-card animate-fade-up relative overflow-hidden p-6 transition-shadow duration-300 hover:shadow-elevated sm:p-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-10 -left-20 size-64 rounded-full bg-primary opacity-15 blur-3xl"
+      />
+      <div className="relative">
+        <p className="zuno-eyebrow">Fan Portfolio</p>
+        <h2 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+          Love the idea. Think about the exposure.
+        </h2>
+        <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
+          Explore the Fan Portfolio and see how diversification changes your dependence on one
+          prediction.
+        </p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-surface-2/50 p-5">
+            <p className="font-display text-sm font-bold">Concentrated position</p>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-border/60">
+              <div className="h-full w-full rounded-full bg-danger/80" />
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              One outcome. Highly dependent on one prediction.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-primary/25 bg-[color-mix(in_oklab,var(--primary)_4%,var(--surface))] p-5">
+            <p className="font-display text-sm font-bold">Fan Portfolio</p>
+            <div className="mt-3 flex gap-1">
+              {[40, 25, 20, 15].map((w) => (
+                <div
+                  key={w}
+                  style={{ width: `${w}%` }}
+                  className="h-2 rounded-full bg-primary/80"
+                />
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Multiple exposures. Less dependent on one prediction.
+            </p>
+          </div>
+        </div>
+        <CtaButton to="/portfolio" className="mt-6">
+          Explore Fan Portfolio
+        </CtaButton>
+        <p className="mt-4 text-xs text-muted-foreground/80">
+          Educational illustration of concentration versus diversification. Not a recommendation or
+          financial advice.
+        </p>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/zuno/JourneyTracker.tsx">
+import { Link } from "@tanstack/react-router";
+import { Target, LineChart, PieChart } from "lucide-react";
+
+const stages = [
+  {
+    number: "01",
+    title: "DECLARE",
+    copy: "What are you thinking of doing?",
+    to: "/test",
+    Icon: Target,
+  },
+  {
+    number: "02",
+    title: "STRESS TEST",
+    copy: "What are you actually risking?",
+    to: "/test",
+    Icon: LineChart,
+  },
+  {
+    number: "03",
+    title: "FAN PORTFOLIO",
+    copy: "Is there another way to express the same belief?",
+    to: "/portfolio",
+    Icon: PieChart,
+  },
+];
+
+export function JourneyTracker() {
+  return (
+    <section className="relative">
+      <p className="zuno-eyebrow">Core ZUNO journey</p>
+      <h2 className="mt-3 text-2xl font-bold sm:text-3xl">Before you act, think it through.</h2>
+      <p className="mt-3 max-w-xl text-sm text-muted-foreground">
+        Three connected stages. Each one exists to slow the decision down, not to tell you what to
+        buy.
+      </p>
+      <ol className="relative mt-6 grid gap-4 md:grid-cols-3">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-6 left-8 hidden h-px w-[calc(100%-4rem)] bg-gradient-to-r from-primary/50 via-primary/20 to-border md:block"
+        />
+        {stages.map(({ number, title, copy, to, Icon }, i) => (
+          <li key={number} className="group animate-fade-up relative" style={{ animationDelay: `${i * 90}ms` }}>
+            <Link
+              to={to}
+              className="surface-card card-hover flex h-full flex-col gap-3 p-5 hover:border-primary/40"
+            >
+              <div className="flex items-center gap-3">
+                <span className="bg-primary/10 grid size-9 place-items-center rounded-full text-primary transition-transform duration-300 group-hover:scale-110">
+                  <Icon className="size-4" />
+                </span>
+                <span className="zuno-eyebrow">{number}</span>
+              </div>
+              <h3 className="font-display text-base font-bold tracking-wide">{title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{copy}</p>
+            </Link>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-4 text-xs text-muted-foreground/80">
+        Finfluencer Court is not a step in this journey — it is a separate learning loop you can
+        enter at any time.
+      </p>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/zuno/LossScenarioVisualiser.tsx">
+import { formatGBP, lossScenarios, recoveryGain } from "@/lib/zuno-data";
+
+export function LossScenarioVisualiser({
+  amount,
+  lossPct,
+  onChange,
+  prefix,
+}: {
+  amount: number;
+  lossPct: number;
+  onChange: (nextLossPct: number) => void;
+  prefix: string;
+}) {
+  const remaining = Math.round(amount * (1 - lossPct / 100));
+  const lost = amount - remaining;
+  const gainNeeded = recoveryGain(lossPct);
+  const sliderIdx = Math.max(0, lossScenarios.indexOf(lossPct));
+
+  return (
+    <div className="surface-card animate-fade-up overflow-hidden">
+      <div className="bg-hero p-6">
+        <p className="zuno-eyebrow">
+          {prefix} {lossPct}%
+        </p>
+        <p className="zuno-num mt-2 text-5xl font-semibold">{formatGBP(remaining)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Your {formatGBP(amount)} becomes {formatGBP(remaining)}.{" "}
+          <span className="font-medium text-danger">{formatGBP(lost)} gone</span>
+        </p>
+        <div className="mt-6 flex h-14 overflow-hidden rounded-2xl bg-surface-2">
+          <div
+            className="bg-primary transition-all duration-500 ease-out"
+            style={{ width: `${100 - lossPct}%` }}
+          />
+          <div
+            className="bg-danger/80 transition-all duration-500 ease-out"
+            style={{ width: `${lossPct}%` }}
+          />
+        </div>
+      </div>
+      <div className="space-y-4 p-5">
+        <input
+          aria-label="Loss scenario"
+          type="range"
+          min={0}
+          max={lossScenarios.length - 1}
+          value={sliderIdx}
+          onChange={(event) => onChange(lossScenarios[Number(event.target.value)] ?? 0)}
+          style={{ ["--fill" as string]: `${(sliderIdx / (lossScenarios.length - 1)) * 100}` }}
+          className="h-1.5 w-full"
+        />
+        <div className="grid grid-cols-5 gap-1.5">
+          {lossScenarios.map((scenario) => (
+            <button
+              type="button"
+              key={scenario}
+              onClick={() => onChange(scenario)}
+              className={`rounded-xl border px-1 py-2 text-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 ${
+                scenario === lossPct
+                  ? "border-primary bg-primary text-primary-foreground shadow-glow"
+                  : "border-border bg-surface-2 text-muted-foreground hover:border-primary/40"
+              }`}
+            >
+              -{scenario}%
+            </button>
+          ))}
+        </div>
+        {Number.isFinite(gainNeeded) && lossPct > 0 ? (
+          <p className="text-xs text-muted-foreground">
+            A {lossPct}% fall needs a{" "}
+            <span className="font-medium text-caution-foreground">{gainNeeded.toFixed(0)}% gain</span>{" "}
+            to recover.
+          </p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/PhoneShell.tsx">
+import type { ReactNode } from "react";
+
+interface PhoneShellProps {
+  children: ReactNode;
+  onBack?: (() => void) | undefined;
+  step?: ReactNode | undefined;
+}
+
+export function PhoneShell({ children, onBack, step }: PhoneShellProps) {
+  return (
+    <div className="bg-hero min-h-screen">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pt-6 pb-12 sm:max-w-lg">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            {onBack ? (
+              <button
+                type="button"
+                onClick={onBack}
+                aria-label="Go back"
+                className="surface-card grid size-9 place-items-center rounded-full text-muted-foreground transition-all duration-200 hover:-translate-x-0.5 hover:text-foreground active:scale-95"
+              >
+                ←
+              </button>
+            ) : null}
+            <span className="font-display text-lg font-bold tracking-[0.3em]">ZUNO</span>
+          </div>
+          {step}
+        </div>
+        <main className="flex-1">{children}</main>
+        <p className="mt-10 text-center text-[11px] leading-relaxed text-muted-foreground">
+          ZUNO is a decision-training prototype. Nothing here is financial advice or a personalised
+          recommendation. Figures are illustrative demo data.
+        </p>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/ReturningUserPanel.tsx">
+import { CtaButton } from "./CtaButton";
+import type { ZunoProgress } from "@/lib/zuno-progress";
+
+export function ReturningUserPanel({ progress }: { progress: ZunoProgress }) {
+  return (
+    <section>
+      <p className="zuno-eyebrow">Welcome back</p>
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <div className="surface-card card-hover animate-fade-up p-6" style={{ animationDelay: "60ms" }}>
+          <p className="zuno-eyebrow">Decision support</p>
+          <h3 className="mt-3 text-xl font-bold tracking-tight">Continue a decision</h3>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Your last decision: <span className="font-medium text-foreground">{progress.lastDecision}</span>
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">Next: Explore Fan Portfolio</p>
+          <CtaButton to="/portfolio" className="mt-5">
+            Continue
+          </CtaButton>
+        </div>
+        <div className="surface-card card-hover animate-fade-up border-court/20 p-6" style={{ animationDelay: "140ms" }}>
+          <p className="zuno-eyebrow text-court/80">Learning</p>
+          <h3 className="mt-3 text-xl font-bold tracking-tight">Keep training</h3>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Risk Recognition Score:{" "}
+            <span className="zuno-num font-medium text-court">
+              {progress.riskRecognitionScore + 1} / {progress.riskRecognitionMax}
+            </span>
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">A new Court challenge is waiting.</p>
+          <CtaButton to="/court" tone="court" className="mt-5">
+            Play Court
+          </CtaButton>
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/zuno/RiskRecognitionCard.tsx">
+import { cn } from "@/lib/utils";
+import type { ZunoProgress } from "@/lib/zuno-progress";
+
+const levelStyles: Record<string, string> = {
+  Strong: "border-primary/40 text-primary bg-primary/10",
+  Improving: "border-accent/40 text-accent bg-accent/10",
+  New: "border-border text-muted-foreground bg-surface-2",
+};
+
+export function RiskRecognitionCard({ progress }: { progress: ZunoProgress }) {
+  const { riskRecognitionScore: score, riskRecognitionMax: max, concepts } = progress;
+  return (
+    <section className="surface-card animate-fade-up p-6 transition-shadow duration-300 hover:shadow-elevated sm:p-8">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="zuno-eyebrow">Learning progress</p>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight">Risk Recognition</h2>
+        </div>
+        <p className="font-display text-primary text-3xl font-bold">
+          {score} <span className="text-lg text-muted-foreground">/ {max}</span>
+        </p>
+      </div>
+      <div className="mt-5 flex gap-1.5" aria-hidden>
+        {Array.from({ length: max }).map((_, i) => (
+          <span
+            key={i}
+            className={cn(
+              "h-1.5 flex-1 rounded-full transition-all duration-500",
+              i < score ? "bg-primary" : "bg-secondary",
+            )}
+            style={{ transitionDelay: `${i * 60}ms` }}
+          />
+        ))}
+      </div>
+      <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+        {concepts.map((c) => (
+          <li
+            key={c.label}
+            className="flex items-center justify-between rounded-2xl border border-border bg-surface-2/50 px-4 py-3 transition-colors duration-200 hover:border-primary/30"
+          >
+            <span className="text-sm">{c.label}</span>
+            <span
+              className={cn(
+                "rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-widest",
+                levelStyles[c.level],
+              )}
+            >
+              {c.level}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-5 text-xs text-muted-foreground/80">
+        This is educational progress only. It is not a financial risk score and says nothing about
+        your suitability for any investment.
+      </p>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/zuno/ZunoNav.tsx">
+import { Link } from "@tanstack/react-router";
+import { Home, Target, PieChart, Gavel } from "lucide-react";
+import type { ReactNode } from "react";
+
+const items = [
+  { to: "/", label: "Home", Icon: Home, group: "ZUNO" },
+  { to: "/test", label: "Test", Icon: Target, group: "Decision support" },
+  { to: "/portfolio", label: "Portfolio", Icon: PieChart, group: "Decision support" },
+  { to: "/court", label: "Court", Icon: Gavel, group: "Learning" },
+] as const;
+
+const groups = ["ZUNO", "Decision support", "Learning"] as const;
+
+const activeCls = "text-sidebar-accent-foreground";
+const inactiveCls = "text-muted-foreground hover:text-foreground";
+
+function Sidebar() {
+  return (
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar/80 px-5 py-8 backdrop-blur-xl lg:flex">
+      <Link
+        to="/"
+        className="font-display inline-flex items-center gap-2 text-xl font-bold tracking-[0.18em] transition-opacity hover:opacity-80"
+      >
+        <span className="bg-primary grid size-7 place-items-center rounded-lg text-sm text-primary-foreground">
+          Z
+        </span>
+        ZUNO
+      </Link>
+      <p className="mt-2 pl-9 text-xs text-muted-foreground">Think before you win.</p>
+
+      <nav className="mt-10 flex flex-col gap-6">
+        {groups.map((group) => (
+          <div key={group}>
+            <p className="zuno-eyebrow">{group}</p>
+            <ul className="mt-2 flex flex-col gap-1">
+              {items
+                .filter((i) => i.group === group)
+                .map(({ to, label, Icon }) => (
+                  <li key={to}>
+                    <Link
+                      to={to}
+                      activeOptions={{ exact: to === "/" }}
+                      activeProps={{
+                        className: `bg-sidebar-accent ${activeCls} font-semibold`,
+                      }}
+                      inactiveProps={{ className: inactiveCls }}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 hover:bg-surface-2"
+                    >
+                      <Icon className="size-4" />
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+
+      <p className="mt-auto text-[0.65rem] leading-relaxed text-muted-foreground/70">
+        ZUNO is an education prototype. It uses simulated data and does not provide investment
+        advice.
+      </p>
+    </aside>
+  );
+}
+
+function BottomNav() {
+  return (
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/85 backdrop-blur-xl lg:hidden">
+      <ul className="mx-auto flex max-w-md items-stretch justify-between px-2 py-1.5">
+        {items.map(({ to, label, Icon }) => (
+          <li key={to} className="flex-1">
+            <Link
+              to={to}
+              activeOptions={{ exact: to === "/" }}
+              activeProps={{ className: `${activeCls} font-semibold` }}
+              inactiveProps={{ className: inactiveCls }}
+              className="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[0.7rem] transition-colors duration-200 hover:bg-surface-2 data-[status=active]:bg-sidebar-accent"
+            >
+              <Icon className="size-5" />
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function MobileHeader() {
+  return (
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/85 px-5 py-4 backdrop-blur-xl lg:hidden">
+      <Link to="/" className="font-display flex items-center gap-2 text-base font-bold tracking-[0.18em]">
+        <span className="bg-primary grid size-6 place-items-center rounded-md text-[11px] text-primary-foreground">
+          Z
+        </span>
+        ZUNO
+      </Link>
+      <span className="zuno-eyebrow">Think before you win</span>
+    </header>
+  );
+}
+
+export function ZunoShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative min-h-screen">
+      <Sidebar />
+      <MobileHeader />
+      <main className="mx-auto w-full max-w-3xl px-5 pt-8 pb-28 lg:max-w-4xl lg:ml-60 lg:px-8 lg:pt-14 lg:pb-16">
+        {children}
+      </main>
+      <BottomNav />
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/zuno/ZunoShell.tsx">
+import type { ReactNode } from "react";
+import { DISCLAIMER } from "@/lib/fan-portfolio";
+import { cn } from "@/lib/utils";
+
+interface ZunoShellProps {
+  moduleLabel: string;
+  stepLabel: string;
+  step: number;
+  totalSteps: number;
+  children: ReactNode;
+}
+
+export function ZunoShell({ moduleLabel, stepLabel, step, totalSteps, children }: ZunoShellProps) {
+  return (
+    <div className="relative min-h-screen">
+      <div className="zuno-hero-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" />
+
+      <div className="relative mx-auto flex min-h-screen w-full max-w-3xl flex-col px-5 pt-6 pb-10 sm:px-8">
+        <header className="flex items-center justify-between gap-3">
+          <span className="font-display text-lg font-bold tracking-[0.3em]">ZUNO</span>
+          <span className="surface-card rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            {moduleLabel}
+          </span>
+        </header>
+
+        <div className="mt-8">
+          <div className="flex items-baseline justify-between">
+            <span className="zuno-eyebrow">{stepLabel}</span>
+            <span className="zuno-num text-xs tracking-[0.14em] text-muted-foreground">
+              {step} / {totalSteps}
+            </span>
+          </div>
+          <div className="mt-3 flex gap-1.5">
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "h-1.5 flex-1 overflow-hidden rounded-full transition-colors duration-500",
+                  i < step ? "bg-primary" : "bg-surface-2",
+                )}
+                style={{ transitionDelay: `${i * 40}ms` }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <main className="flex-1 pt-10">{children}</main>
+
+        <footer className="pt-12">
+          <p className="text-center text-xs leading-relaxed text-muted-foreground">{DISCLAIMER}</p>
+        </footer>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/lib/fan-portfolio.ts">
+export type CategoryId =
+  "sportswear" | "media" | "entertainment" | "technology" | "gaming" | "venues";
+
+export interface FanCategory {
+  id: CategoryId;
+  name: string;
+  blurb: string;
+  defaultWeight: number;
+  scenarioReturn: number;
+  colorVar: string;
+}
+
+export const FAN_CATEGORIES: FanCategory[] = [
+  {
+    id: "sportswear",
+    name: "Sportswear",
+    blurb: "Kit, footwear and performance apparel makers",
+    defaultWeight: 20,
+    scenarioReturn: 25,
+    colorVar: "var(--chart-1)",
+  },
+  {
+    id: "media",
+    name: "Sports Media",
+    blurb: "Broadcast rights, streaming and sports publishing",
+    defaultWeight: 20,
+    scenarioReturn: -10,
+    colorVar: "var(--chart-2)",
+  },
+  {
+    id: "entertainment",
+    name: "Entertainment",
+    blurb: "Live events, music and wider entertainment groups",
+    defaultWeight: 20,
+    scenarioReturn: 8,
+    colorVar: "var(--chart-3)",
+  },
+  {
+    id: "technology",
+    name: "Sports Technology",
+    blurb: "Wearables, performance data and analytics",
+    defaultWeight: 15,
+    scenarioReturn: -5,
+    colorVar: "var(--chart-5)",
+  },
+  {
+    id: "gaming",
+    name: "Gaming & Fan Engagement",
+    blurb: "Sports games, fantasy leagues and fan platforms",
+    defaultWeight: 15,
+    scenarioReturn: 12,
+    colorVar: "var(--chart-6)",
+  },
+  {
+    id: "venues",
+    name: "Venues & Infrastructure",
+    blurb: "Stadiums, arenas and event infrastructure",
+    defaultWeight: 10,
+    scenarioReturn: -8,
+    colorVar: "var(--chart-4)",
+  },
+];
+
+export const SIMULATED_AMOUNT = 500;
+
+export const CONCENTRATED_POSITION = {
+  label: "One concentrated position",
+  description: "£500 behind a single outcome",
+  downside: -50,
+  upside: 50,
+};
+
+export type Weights = Record<CategoryId, number>;
+
+export const defaultWeights: Weights = FAN_CATEGORIES.reduce((acc, c) => {
+  acc[c.id] = c.defaultWeight;
+  return acc;
+}, {} as Weights);
+
+export const totalWeight = (w: Weights) => FAN_CATEGORIES.reduce((sum, c) => sum + w[c.id], 0);
+
+export const normalisedWeights = (w: Weights): Weights => {
+  const total = totalWeight(w);
+  if (total <= 0) {
+    return FAN_CATEGORIES.reduce(
+      (a, c) => {
+        a[c.id] = 0;
+        return a;
+      },
+      {} as Weights,
+    );
+  }
+  return FAN_CATEGORIES.reduce((a, c) => {
+    a[c.id] = (w[c.id] / total) * 100;
+    return a;
+  }, {} as Weights);
+};
+
+export const portfolioReturn = (w: Weights) => {
+  const n = normalisedWeights(w);
+  return FAN_CATEGORIES.reduce((sum, c) => sum + (n[c.id] / 100) * c.scenarioReturn, 0);
+};
+
+export const applyReturn = (amount: number, pct: number) => amount * (1 + pct / 100);
+
+export const activeExposures = (w: Weights) => FAN_CATEGORIES.filter((c) => w[c.id] > 0).length;
+
+export const diversificationScore = (w: Weights) => {
+  const n = normalisedWeights(w);
+  const shares = FAN_CATEGORIES.map((c) => n[c.id] / 100).filter((s) => s > 0);
+  if (shares.length === 0) return 0;
+  const hhi = shares.reduce((sum, s) => sum + s * s, 0);
+  const count = FAN_CATEGORIES.length;
+  const score = (1 - hhi) / (1 - 1 / count);
+  return Math.max(0, Math.min(100, score * 100));
+};
+
+export const concentrationLabel = (score: number) => {
+  if (score < 34) return "More concentrated";
+  if (score < 70) return "Partly spread";
+  return "More diversified";
+};
+
+export const concentrationNote = (score: number) => {
+  if (score < 34)
+    return "Most of this simulated £500 sits behind a small number of exposures. The result leans heavily on one part of the ecosystem being right.";
+  if (score < 70)
+    return "This is spread across some of the ecosystem, but a few categories still drive most of the outcome.";
+  return "This is spread across most of the ecosystem. No single category decides the result — but every category can still fall.";
+};
+
+export const formatMoney = (n: number) =>
+  n.toLocaleString("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  });
+
+export const formatPct = (n: number) => `${n >= 0 ? "+" : ""}${n.toFixed(1)}%`;
+
+export const LEARNING_STATEMENTS = [
+  "I was relying heavily on one prediction",
+  "I didn't realise how concentrated my decision was",
+  "I understand diversification better",
+  "I was mainly focused on the upside",
+];
+
+export const DISCLAIMER =
+  "ZUNO is a decision-training prototype. Nothing here is financial advice or a personalised recommendation. Figures are illustrative demo data.";
+</file>
+
+<file path="src/lib/zuno-data.ts">
+export type Horizon = "short" | "medium" | "long";
+export type Driver = "conviction" | "hype" | "curiosity" | "fear-of-missing-out";
+export type LossCapacity = "none" | "limited" | "manageable" | "high";
+export type DecisionType = "crypto" | "stock" | "gambling" | "etf";
+export type UserGoal =
+  "make-money-quickly" | "exposure" | "understand" | "trend" | "support" | "entertainment";
+
+export interface Declaration {
+  idea: string;
+  amount: number;
+  decisionType: DecisionType | null;
+  assetOrOpportunity: string;
+  horizon: Horizon | null;
+  driver: Driver | null;
+  lossCapacity: LossCapacity | null;
+  userGoal: UserGoal | null;
+}
+
+export const emptyDeclaration: Declaration = {
+  idea: "",
+  amount: 500,
+  decisionType: null,
+  assetOrOpportunity: "",
+  horizon: null,
+  driver: null,
+  lossCapacity: null,
+  userGoal: null,
+};
+
+export const decisionTypeOptions = [
+  {
+    id: "crypto" as const,
+    label: "Crypto or a speculative asset",
+    hint: "A price-driven opportunity with high uncertainty.",
+  },
+  {
+    id: "stock" as const,
+    label: "One individual stock",
+    hint: "Your outcome depends heavily on one company and one thesis.",
+  },
+  {
+    id: "gambling" as const,
+    label: "Sports betting or gambling",
+    hint: "An outcome shaped by probability, odds and repeated decisions.",
+  },
+  {
+    id: "etf" as const,
+    label: "A diversified fund or ETF",
+    hint: "A spread of holdings that still carries market risk.",
+  },
+];
+
+export const horizonOptions = [
+  {
+    id: "short" as const,
+    label: "Less than a year",
+    hint: "A short-term decision can leave less time to recover from a fall.",
+  },
+  {
+    id: "medium" as const,
+    label: "One to five years",
+    hint: "You have some time, but the outcome can still be uneven.",
+  },
+  {
+    id: "long" as const,
+    label: "More than five years",
+    hint: "A longer horizon may help, but it does not remove the risk of loss.",
+  },
+];
+
+export const driverOptions = [
+  {
+    id: "conviction" as const,
+    label: "I believe in the idea",
+    hint: "Strong conviction can make downside feel easier to overlook.",
+  },
+  {
+    id: "hype" as const,
+    label: "It is getting a lot of attention",
+    hint: "Popularity is not the same thing as evidence.",
+  },
+  {
+    id: "curiosity" as const,
+    label: "I want to learn by trying",
+    hint: "Learning with money still needs a clear limit.",
+  },
+  {
+    id: "fear-of-missing-out" as const,
+    label: "I do not want to miss out",
+    hint: "FOMO can compress the time available for a calm decision.",
+  },
+];
+
+export const lossCapacityOptions = [
+  {
+    id: "none" as const,
+    label: "I could not afford to lose it",
+    hint: "That is a strong signal to pause before committing.",
+  },
+  {
+    id: "limited" as const,
+    label: "It would make things difficult",
+    hint: "A loss could affect near-term plans or essentials.",
+  },
+  {
+    id: "manageable" as const,
+    label: "It would be uncomfortable but manageable",
+    hint: "You have some room, but the loss would still matter.",
+  },
+  {
+    id: "high" as const,
+    label: "It would not change my plans",
+    hint: "You may have more capacity, but the investment can still fall.",
+  },
+];
+
+export const lossScenarios = [0, 20, 50, 80, 100];
+
+export const formatGBP = (amount: number) =>
+  amount.toLocaleString("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 });
+
+export const recoveryGain = (lossPct: number) =>
+  lossPct >= 100 ? Infinity : (lossPct / (100 - lossPct)) * 100;
+
+const lossCapacityLevel = (capacity: LossCapacity | null) =>
+  capacity === "none" ? "Very High" : capacity === "limited" ? "High" : "Medium";
+
+const typeLabel: Record<DecisionType, string> = {
+  crypto: "crypto or a speculative asset",
+  stock: "one individual stock",
+  gambling: "sports betting",
+  etf: "a diversified fund or ETF",
+};
+
+export function scenarioCopy(declaration: Declaration) {
+  const highPressure =
+    declaration.lossCapacity === "none" || declaration.lossCapacity === "limited";
+  const type = declaration.decisionType ?? "crypto";
+  if (type === "gambling") {
+    return {
+      eyebrow: highPressure ? "Affordability matters" : "Test the odds",
+      title: highPressure
+        ? "Could a losing run change your plans?"
+        : "What happens when probability goes against you?",
+      subtitle:
+        declaration.driver === "fear-of-missing-out"
+          ? "Urgency can turn one bet into a sequence. Test the cost of being wrong more than once."
+          : "A sporting outcome is uncertain. Stress-test the probability, the odds and the temptation to chase losses.",
+      visualiser: { prefix: "If the bet loses", recoveryMode: "gambling" },
+      snapshotHeading: "Probability snapshot",
+      reasoningTitle: "Why this deserves a pause",
+      reasoningSubtitle:
+        "The risk is not a market metric. It is how probability, repetition and emotion can compound.",
+    };
+  }
+  if (type === "etf") {
+    return {
+      eyebrow: highPressure ? "Capacity still matters" : "Stress test the horizon",
+      title: highPressure
+        ? "Could a drawdown disrupt your plans?"
+        : "What does a market fall mean over your horizon?",
+      subtitle:
+        "Diversification can reduce single-company exposure, but it cannot make market losses impossible.",
+      visualiser: { prefix: "If the fund falls", recoveryMode: "market" },
+      snapshotHeading: "Market snapshot",
+      reasoningTitle: "Why this deserves a pause",
+      reasoningSubtitle:
+        "A diversified decision changes the shape of risk, not the fact that prices can fall.",
+    };
+  }
+  if (type === "stock") {
+    return {
+      eyebrow: highPressure ? "The single thesis matters" : "Stress test the prediction",
+      title: highPressure
+        ? "What if this one company disappoints?"
+        : "What happens if your one prediction is wrong?",
+      subtitle:
+        "A single stock can be a strong belief and still leave the whole amount dependent on one company.",
+      visualiser: { prefix: "If the stock falls", recoveryMode: "market" },
+      snapshotHeading: "Company snapshot",
+      reasoningTitle: "Why this deserves a pause",
+      reasoningSubtitle:
+        "The question is not whether the company is good. It is how much of the outcome rests on one thesis.",
+    };
+  }
+  return {
+    eyebrow: highPressure ? "The downside matters" : "Stress test",
+    title: highPressure ? "Could this loss change your plans?" : "What happens if it falls?",
+    subtitle: `Move the scenario slider to see what a fall in ${typeLabel[type]} could mean for your money.`,
+    visualiser: { prefix: "If it falls", recoveryMode: "market" },
+    snapshotHeading: "Risk snapshot",
+    reasoningTitle: "Why this deserves a pause",
+    reasoningSubtitle:
+      "The concern is not that the idea must fail. It is that several risks can stack together.",
+  };
+}
+
+export function buildRiskSnapshot(declaration: Declaration) {
+  const type = declaration.decisionType ?? "crypto";
+  if (type === "gambling") {
+    return [
+      {
+        label: "Probability exposure",
+        level: "High",
+        note: "The odds describe likelihood, not a promise that this outcome will happen.",
+      },
+      {
+        label: "Repeated-loss risk",
+        level: declaration.driver === "fear-of-missing-out" ? "Very High" : "High",
+        note: "One loss can create pressure to place another bet to get back to even.",
+      },
+      {
+        label: "Emotional pressure",
+        level: declaration.driver === "fear-of-missing-out" ? "High" : "Medium",
+        note: "Urgency and a favourite team can make entertainment feel like a plan.",
+      },
+      {
+        label: "Affordability",
+        level: lossCapacityLevel(declaration.lossCapacity),
+        note: "A stake is not entertainment money if losing it changes essential plans.",
+      },
+    ];
+  }
+  if (type === "etf") {
+    return [
+      {
+        label: "Diversification",
+        level: "Lower",
+        note: "Several holdings reduce dependence on one company, but all can fall together.",
+      },
+      {
+        label: "Market volatility",
+        level: "Medium",
+        note: "Prices can move unevenly even when the fund is diversified.",
+      },
+      {
+        label: "Drawdown exposure",
+        level: declaration.horizon === "short" ? "High" : "Medium",
+        note: "A short horizon leaves less time for a fall to recover.",
+      },
+      {
+        label: "Loss capacity",
+        level: lossCapacityLevel(declaration.lossCapacity),
+        note: "Diversification does not make a loss harmless to your plans.",
+      },
+    ];
+  }
+  if (type === "stock") {
+    return [
+      {
+        label: "Company-specific risk",
+        level: "High",
+        note: "One company's results, decisions or setbacks can drive the whole outcome.",
+      },
+      {
+        label: "Concentration",
+        level: "High",
+        note: `Your ${formatGBP(declaration.amount)} is concentrated behind one thesis.`,
+      },
+      {
+        label: "Confirmation bias",
+        level: declaration.driver === "conviction" ? "High" : "Medium",
+        note: "Research can become a search for evidence that agrees with the original story.",
+      },
+      {
+        label: "Time horizon",
+        level: declaration.horizon === "short" ? "High" : "Medium",
+        note: "A short deadline gives one prediction less room to be tested over time.",
+      },
+    ];
+  }
+  return [
+    {
+      label: "Amount at risk",
+      level: declaration.amount > 500 ? "High" : "Medium",
+      note: "The full amount can be exposed to the outcome.",
+    },
+    {
+      label: "Concentration",
+      level: "Very High",
+      note: `Your ${formatGBP(declaration.amount)} is concentrated in one speculative outcome.`,
+    },
+    {
+      label: "Loss capacity",
+      level: lossCapacityLevel(declaration.lossCapacity),
+      note:
+        declaration.lossCapacity === "none" || declaration.lossCapacity === "limited"
+          ? "A loss matters more when it competes with essential plans."
+          : "Capacity can soften the impact, but it does not change the possibility of loss.",
+    },
+    {
+      label: "Time pressure",
+      level: declaration.driver === "fear-of-missing-out" ? "High" : "Medium",
+      note:
+        declaration.driver === "fear-of-missing-out"
+          ? "FOMO compresses the time available to test the original assumption."
+          : "Social proof and excitement can still make a speculative decision feel more certain than it is.",
+    },
+  ];
+}
+
+export function buildReasoningCards(declaration: Declaration) {
+  const type = declaration.decisionType ?? "crypto";
+  const pressure = declaration.driver === "fear-of-missing-out";
+  if (type === "gambling") {
+    return [
+      {
+        title: "Odds are not a promise",
+        body: "Even a favourite can lose. Probability describes a range of possible outcomes, not certainty.",
+      },
+      {
+        title: pressure
+          ? "Urgency can become loss chasing"
+          : "One loss can change the next decision",
+        body: pressure
+          ? "When the reason to act is FOMO, a losing result can create pressure to place another bet quickly."
+          : "Sunk-cost thinking can make a person increase the stake simply because the first bet lost.",
+      },
+      {
+        title: "Entertainment is not wealth-building",
+        body: `Your ${formatGBP(declaration.amount)} needs to be affordable as entertainment, because the expected outcome is uncertain and repeated losses are possible.`,
+      },
+    ];
+  }
+  if (type === "etf") {
+    return [
+      {
+        title: "Diversification changes the dependence",
+        body: `Your ${formatGBP(declaration.amount)} is spread across holdings rather than resting on one company, but the market can still fall together.`,
+      },
+      {
+        title: "A drawdown tests the horizon",
+        body:
+          declaration.horizon === "short"
+            ? "A short horizon gives a fall less time to recover before you need the money."
+            : "A longer horizon may give a drawdown more time to recover, without guaranteeing that it will.",
+      },
+      {
+        title: "Spread is not certainty",
+        body: "Diversification can reduce concentration risk. It cannot promise returns or remove market volatility.",
+      },
+    ];
+  }
+  if (type === "stock") {
+    return [
+      {
+        title: "One company can decide everything",
+        body: `Because ${formatGBP(declaration.amount)} is behind one company, one earnings miss, scandal or broken thesis can affect the full amount.`,
+      },
+      {
+        title: "Conviction can filter the evidence",
+        body:
+          declaration.driver === "conviction"
+            ? "Personal research is useful, but confirmation bias can make supporting evidence louder than evidence that would change your mind."
+            : "A compelling narrative can make a single-company bet feel more understood than it really is.",
+      },
+      {
+        title: "Ask what would prove you wrong",
+        body: "A clear disconfirming condition is a stronger test than a story about why the price should rise.",
+      },
+    ];
+  }
+  return [
+    {
+      title: "One outcome can decide everything",
+      body: `Because ${formatGBP(declaration.amount)} is concentrated in one speculative asset, most of the outcome depends on that single position.`,
+    },
+    {
+      title: "A loss needs a bigger recovery",
+      body: "A 50% fall needs a 100% gain just to get back to where you started. The path down and the path back are not symmetrical.",
+    },
+    {
+      title: "Your reason for acting is part of the risk",
+      body:
+        declaration.driver === "fear-of-missing-out"
+          ? "When the main driver is fear of missing out, slowing down is a useful test of whether the decision still stands."
+          : pressure
+            ? "FOMO compresses the decision and makes the upside story feel more urgent than the downside."
+            : "Conviction can be useful, but it is strongest when paired with a plan for being wrong.",
+    },
+  ];
+}
+
+export function buildEducationalConcepts(declaration: Declaration) {
+  const type = declaration.decisionType ?? "crypto";
+  if (type === "gambling") {
+    return declaration.driver === "fear-of-missing-out"
+      ? ["Probability / odds", "Loss chasing", "Emotional pressure"]
+      : ["Probability / odds", "Loss chasing", "Sunk-cost thinking"];
+  }
+  if (type === "etf") return ["Diversification", "Drawdowns", "Time horizon"];
+  if (type === "stock") {
+    return declaration.driver === "conviction"
+      ? ["Company-specific risk", "Concentration", "Confirmation bias"]
+      : ["Company-specific risk", "Concentration", "Narrative investing"];
+  }
+  return declaration.driver === "fear-of-missing-out"
+    ? ["FOMO", "Concentration", "Volatility"]
+    : ["Volatility", "Concentration", "Liquidity risk"];
+}
+
+export const motivationOptions = [
+  { id: "make-money-quickly" as const, label: "Make money quickly" },
+  { id: "exposure" as const, label: "Get exposure to something I believe in" },
+  { id: "understand" as const, label: "Invest in something I understand" },
+  { id: "trend" as const, label: "Participate in a trend" },
+  { id: "support" as const, label: "Support something I care about" },
+  { id: "entertainment" as const, label: "Entertainment" },
+];
 </file>
 
 <file path="src/routes/__root.tsx">
@@ -5613,17 +8266,17 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+    <div className="bg-hero flex min-h-screen items-center justify-center px-4">
+      <div className="animate-fade-up max-w-md text-center">
+        <h1 className="text-gradient-primary text-8xl font-bold">404</h1>
+        <h2 className="mt-4 font-display text-xl font-semibold">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0"
           >
             Go home
           </Link>
@@ -5641,27 +8294,27 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+    <div className="bg-hero flex min-h-screen items-center justify-center px-4">
+      <div className="animate-fade-up max-w-md text-center">
+        <h1 className="font-display text-xl font-semibold tracking-tight">
           This page didn't load
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0"
           >
             Try again
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="surface-card inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
           >
             Go home
           </a>
@@ -5730,9 +8383,402 @@ function RootComponent() {
 }
 </file>
 
+<file path="src/routes/portfolio.tsx">
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ZunoShell } from "@/components/zuno/ZunoShell";
+import {
+  AlternativeIntro,
+  BuildYourPortfolio,
+  CompareDecision,
+  ConcentratedVsDiversified,
+  LearningTakeaway,
+  MeetFanPortfolio,
+  PortfolioDashboard,
+} from "@/components/zuno/screens";
+import { defaultWeights, type Weights } from "@/lib/fan-portfolio";
+import { ZunoButton } from "@/components/zuno/primitives";
+import { useZunoSession } from "@/lib/zuno-session";
+
+const TITLE = "ZUNO Fan Portfolio — explore a diversified alternative";
+const DESCRIPTION =
+  "A simulated Fan Portfolio built around the sports and entertainment ecosystem. See how concentration and diversification change what your decision depends on.";
+
+export const Route = createFileRoute("/portfolio")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+    ],
+  }),
+  component: PortfolioModule,
+});
+
+const STEPS = [
+  "Step 1 — Alternative",
+  "Step 2 — Fan Portfolio",
+  "Step 3 — Allocation",
+  "Step 4 — Compare outcomes",
+  "Step 5 — Build",
+  "Step 6 — Your decision",
+  "Step 7 — Learn",
+];
+
+const scrollToTop = () => {
+  if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+function PortfolioModule() {
+  const [step, setStep] = useState(1);
+  const [weights, setWeights] = useState<Weights>({ ...defaultWeights });
+  const { session, markPortfolioViewed } = useZunoSession();
+  const decision = session.declaration;
+  const amount = decision?.amount ?? 500;
+
+  useEffect(() => {
+    if (decision && !session.portfolioViewed) markPortfolioViewed();
+  }, [decision, markPortfolioViewed, session.portfolioViewed]);
+
+  const next = () => {
+    setStep((s) => Math.min(s + 1, STEPS.length));
+    scrollToTop();
+  };
+  const back = () => {
+    setStep((s) => Math.max(s - 1, 1));
+    scrollToTop();
+  };
+
+  return (
+    <ZunoShell
+      moduleLabel="Alternative · Fan Portfolio"
+      stepLabel={STEPS[step - 1] ?? STEPS[0]!}
+      step={step}
+      totalSteps={STEPS.length}
+    >
+      <div key={step} className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+        {step === 1 && <AlternativeIntro decision={decision} onNext={next} />}
+        {step === 2 && <MeetFanPortfolio decision={decision} onNext={next} />}
+        {step === 3 && <PortfolioDashboard amount={amount} onNext={next} />}
+        {step === 4 && <ConcentratedVsDiversified amount={amount} onNext={next} />}
+        {step === 5 && (
+          <BuildYourPortfolio weights={weights} setWeights={setWeights} onNext={next} />
+        )}
+        {step === 6 && (
+          <CompareDecision amount={amount} decision={decision} weights={weights} onNext={next} />
+        )}
+        {step === 7 && <LearningTakeaway />}
+      </div>
+
+      {step > 1 ? (
+        <div className="pt-4">
+          <ZunoButton variant="ghost" onClick={back}>
+            Back
+          </ZunoButton>
+        </div>
+      ) : (
+        <div className="pt-4">
+          <Link
+            to="/test"
+            className="inline-flex w-full items-center justify-center rounded-2xl border border-border bg-surface/60 px-5 py-4 font-display text-base font-semibold text-foreground transition-all duration-200 hover:bg-surface-2 active:scale-[0.99]"
+          >
+            Back to Stress Test
+          </Link>
+        </div>
+      )}
+    </ZunoShell>
+  );
+}
+</file>
+
+<file path="src/routes/test.tsx">
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { PhoneShell } from "@/components/zuno/PhoneShell";
+import { DeclareWizard } from "@/components/zuno/screens/DeclareWizard";
+import { DecisionSummary } from "@/components/zuno/screens/DecisionSummary";
+import { StressTest } from "@/components/zuno/screens/StressTest";
+import { WhyRisky } from "@/components/zuno/screens/WhyRisky";
+import { PauseScreen } from "@/components/zuno/screens/PauseScreen";
+import { buildEducationalConcepts, emptyDeclaration, type Declaration } from "@/lib/zuno-data";
+import { useZunoSession } from "@/lib/zuno-session";
+
+export const Route = createFileRoute("/test")({
+  head: () => ({
+    meta: [
+      { title: "ZUNO — Stress-test your money decision before you act" },
+      {
+        name: "description",
+        content:
+          "ZUNO is a financial decision-training prototype: declare what you're considering, see the real downside, and learn to spot the risk yourself.",
+      },
+      { property: "og:title", content: "ZUNO — Stress-test your money decision" },
+      {
+        property: "og:description",
+        content:
+          "Declare the decision, see what you're actually risking, then explore a different way to get there.",
+      },
+    ],
+  }),
+  component: TestFlow,
+});
+
+type Stage = "declare" | "summary" | "stress" | "why" | "pause";
+
+const stageOrder: Stage[] = ["declare", "summary", "stress", "why", "pause"];
+
+function TestFlow() {
+  const [stage, setStage] = useState<Stage>("declare");
+  const [declaration, setDeclaration] = useState<Declaration>(emptyDeclaration);
+  const { session, saveDeclaration, markStressTestCompleted } = useZunoSession();
+
+  useEffect(() => {
+    if (session.declaration) setDeclaration(session.declaration);
+  }, [session.declaration]);
+
+  const goBack = () => {
+    const i = stageOrder.indexOf(stage);
+    if (i > 0) setStage(stageOrder[i - 1] ?? "declare");
+  };
+
+  return (
+    <PhoneShell
+      onBack={stage === "declare" ? undefined : goBack}
+      step={
+
+        <span className="surface-card rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          Declare · Stress test
+        </span>
+      }
+    >
+      {stage === "declare" && (
+        <DeclareWizard
+          onComplete={(d) => {
+            setDeclaration(d);
+            saveDeclaration(d);
+            setStage("summary");
+          }}
+        />
+      )}
+      {stage === "summary" && (
+        <DecisionSummary declaration={declaration} onContinue={() => setStage("stress")} />
+      )}
+      {stage === "stress" && (
+        <StressTest
+          declaration={declaration}
+          onContinue={() => {
+            markStressTestCompleted(
+              buildEducationalConcepts(declaration),
+              declaration.decisionType ?? "crypto",
+            );
+            setStage("why");
+          }}
+        />
+      )}
+      {stage === "why" && (
+        <WhyRisky declaration={declaration} onContinue={() => setStage("pause")} />
+      )}
+      {stage === "pause" && <PauseScreen />}
+    </PhoneShell>
+  );
+}
+</file>
+
+<file path="src/routeTree.gen.ts">
+/* eslint-disable */
+
+// @ts-nocheck
+
+// noinspection JSUnusedGlobalSymbols
+
+// This file was automatically generated by TanStack Router.
+// You should NOT make any changes in this file as it will be overwritten.
+// Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
+
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as CourtRouteImport } from './routes/court'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as TestRouteImport } from './routes/test'
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CourtRoute = CourtRouteImport.update({
+  id: '/court',
+  path: '/court',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestRoute = TestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/court': typeof CourtRoute
+  '/portfolio': typeof PortfolioRoute
+  '/test': typeof TestRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/court': typeof CourtRoute
+  '/portfolio': typeof PortfolioRoute
+  '/test': typeof TestRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/court': typeof CourtRoute
+  '/portfolio': typeof PortfolioRoute
+  '/test': typeof TestRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/court' | '/portfolio' | '/test'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/court' | '/portfolio' | '/test'
+  id: '__root__' | '/' | '/court' | '/portfolio' | '/test'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  CourtRoute: typeof CourtRoute
+  PortfolioRoute: typeof PortfolioRoute
+  TestRoute: typeof TestRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/court': {
+      id: '/court'
+      path: '/court'
+      fullPath: '/court'
+      preLoaderRoute: typeof CourtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  CourtRoute: CourtRoute,
+  PortfolioRoute: PortfolioRoute,
+  TestRoute: TestRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
+</file>
+
+<file path="src/components/court/VerdictReveal.tsx">
+import type { Scenario, Verdict } from "@/data/court-scenarios";
+
+const toneFor: Record<Verdict, string> = {
+  LEGITIMATE: "text-primary border-primary/40 bg-primary/10",
+  RISKY: "text-caution-foreground border-caution/50 bg-caution/15",
+  MISLEADING: "text-verdict border-verdict/40 bg-verdict/10",
+};
+
+export function VerdictReveal({
+  scenario,
+  choice,
+  correct,
+}: {
+  scenario: Scenario;
+  choice: Verdict;
+  correct: boolean;
+}) {
+  return (
+    <div className="surface-card relative overflow-hidden p-8 text-center sm:p-12">
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute -top-20 left-1/2 size-64 -translate-x-1/2 rounded-full blur-3xl ${
+          correct ? "bg-primary opacity-20" : "bg-caution opacity-20"
+        }`}
+      />
+      <div className="relative">
+        <p className="label-mono text-muted-foreground">{scenario.caseNumber} · Verdict</p>
+
+        <h2
+          className={`animate-verdict-slam mx-auto mt-5 inline-block rounded-2xl border px-6 py-3 font-display text-4xl font-bold tracking-tight sm:text-6xl ${toneFor[scenario.verdict]}`}
+        >
+          {scenario.verdict}
+        </h2>
+
+        <p
+          className="animate-fade-up mt-6 text-sm text-muted-foreground"
+          style={{ animationDelay: "150ms" }}
+        >
+          You chose: {choice}
+        </p>
+
+        <p
+          className={`animate-fade-up font-display mt-3 text-xl font-semibold tracking-tight sm:text-2xl ${
+            correct ? "text-primary" : "text-foreground"
+          }`}
+          style={{ animationDelay: "250ms" }}
+        >
+          {correct
+            ? "Good call. You spotted the warning signs."
+            : "Not quite. Let's break down what you missed."}
+        </p>
+
+        <p
+          className="animate-fade-up mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground"
+          style={{ animationDelay: "350ms" }}
+        >
+          {scenario.summary}
+        </p>
+      </div>
+    </div>
+  );
+}
+</file>
+
 <file path="src/routes/court.tsx">
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Gavel, HelpCircle, RotateCcw, Sparkles } from "lucide-react";
 import { ClaimCard } from "@/components/court/ClaimCard";
 import { CourtButton } from "@/components/court/CourtButton";
@@ -5744,6 +8790,7 @@ import { VerdictButton } from "@/components/court/VerdictButton";
 import { VerdictReveal } from "@/components/court/VerdictReveal";
 import { ReasoningCardView, WarningSignCard } from "@/components/court/WarningSignCard";
 import { scenarios, verdictOptions, type Verdict } from "@/data/court-scenarios";
+import { useZunoSession } from "@/lib/zuno-session";
 
 const title = "Finfluencer Court — ZUNO";
 const description =
@@ -5769,12 +8816,27 @@ function CourtPage() {
   const [stage, setStage] = useState<Stage>("intro");
   const [round, setRound] = useState(0);
   const [choice, setChoice] = useState<Verdict | null>(null);
-  const [answers, setAnswers] = useState<{ scenarioId: string; choice: Verdict; correct: boolean }[]>(
-    [],
-  );
+  const [answers, setAnswers] = useState<
+    { scenarioId: string; choice: Verdict; correct: boolean }[]
+  >([]);
+  const { session, saveCourtProgress } = useZunoSession();
+  const orderedScenarios = useMemo(() => {
+    const preferredId =
+      session.selectedScenario === "gambling"
+        ? "loss-chasing-bet"
+        : session.selectedScenario === "stock"
+          ? "earnings-fomo"
+          : session.selectedScenario === "etf"
+            ? "leverage"
+            : "guaranteed-crypto";
+    const preferred = scenarios.find((item) => item.id === preferredId);
+    return preferred
+      ? [preferred, ...scenarios.filter((item) => item.id !== preferredId)]
+      : scenarios;
+  }, [session.selectedScenario]);
 
-  const scenario = scenarios[round]!;
-  const total = scenarios.length;
+  const scenario = orderedScenarios[round]!;
+  const total = orderedScenarios.length;
   const score = answers.filter((a) => a.correct).length;
   const streak = useMemo(() => {
     let s = 0;
@@ -5788,7 +8850,7 @@ function CourtPage() {
   const categories: CategoryResult[] = useMemo(() => {
     const map = new Map<string, { hit: number; seen: number }>();
     answers.forEach((a) => {
-      const s = scenarios.find((x) => x.id === a.scenarioId)!;
+      const s = orderedScenarios.find((x) => x.id === a.scenarioId)!;
       const entry = map.get(s.conceptLabel) ?? { hit: 0, seen: 0 };
       entry.seen += 1;
       if (a.correct) entry.hit += 1;
@@ -5798,7 +8860,11 @@ function CourtPage() {
       label,
       strength: v.hit === v.seen ? "Strong" : "Improving",
     }));
-  }, [answers]);
+  }, [answers, orderedScenarios]);
+
+  useEffect(() => {
+    if (answers.length > 0) saveCourtProgress(answers.length, score, total);
+  }, [answers, saveCourtProgress, score, total]);
 
   function lockIn(v: Verdict) {
     if (choice) return;
@@ -5836,7 +8902,7 @@ function CourtPage() {
             <span className="label-mono text-muted-foreground">/ court</span>
           </Link>
           {stage !== "intro" && (
-            <span className="label-mono rounded-full border border-border bg-surface px-3 py-1 text-muted-foreground">
+            <span className="surface-card label-mono rounded-full px-3 py-1 text-muted-foreground">
               {scenario.caseNumber}
             </span>
           )}
@@ -5878,7 +8944,11 @@ function CourtPage() {
 
         {stage === "reveal" && choice && (
           <section className="space-y-8">
-            <VerdictReveal scenario={scenario} choice={choice} correct={choice === scenario.verdict} />
+            <VerdictReveal
+              scenario={scenario}
+              choice={choice}
+              correct={choice === scenario.verdict}
+            />
 
             <div>
               <div className="flex items-center gap-2">
@@ -5952,7 +9022,7 @@ function Intro({ onEnter, rounds }: { onEnter: () => void; rounds: number }) {
 
   return (
     <section className="space-y-8">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-elevated sm:p-12">
+      <div className="surface-card animate-fade-up relative overflow-hidden p-8 sm:p-12">
         <span className="label-mono inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-primary">
           <Gavel className="size-3.5" aria-hidden />
           Now in session · {rounds} cases
@@ -6004,8 +9074,8 @@ function Final({ onRestart }: { onRestart: () => void }) {
 
   return (
     <section className="space-y-8">
-      <div className="rounded-3xl border border-border bg-card p-8 shadow-elevated sm:p-12">
-        <Sparkles className="size-6 text-primary" aria-hidden />
+      <div className="surface-card animate-fade-up p-8 sm:p-12">
+        <Sparkles className="text-primary size-6" aria-hidden />
         <h2 className="mt-5 font-display text-3xl leading-tight font-bold sm:text-4xl">
           The goal isn't to know every investment. It's to recognise bad reasoning before you act.
         </h2>
@@ -6040,205 +9110,100 @@ function Final({ onRestart }: { onRestart: () => void }) {
 </file>
 
 <file path="src/routes/index.tsx">
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Gavel, LineChart, PieChart, Target } from "lucide-react";
-import { CourtButton } from "@/components/court/CourtButton";
-
-const title = "ZUNO — Think before you win";
-const description =
-  "ZUNO sits between financial hype and action. Declare a decision, stress test it, explore a fan portfolio, then train your judgement in Finfluencer Court.";
+import { createFileRoute } from "@tanstack/react-router";
+import { ZunoShell } from "@/components/zuno/ZunoNav";
+import { CtaButton } from "@/components/zuno/CtaButton";
+import { JourneyTracker } from "@/components/zuno/JourneyTracker";
+import { FanPortfolioCard } from "@/components/zuno/FanPortfolioCard";
+import { CourtEntryCard } from "@/components/zuno/CourtEntryCard";
+import { RiskRecognitionCard } from "@/components/zuno/RiskRecognitionCard";
+import { ContinueJourneyCard } from "@/components/zuno/ContinueJourneyCard";
+import { ReturningUserPanel } from "@/components/zuno/ReturningUserPanel";
+import { useZunoProgress } from "@/lib/zuno-progress";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { title: "ZUNO — Think before you win." },
+      {
+        name: "description",
+        content:
+          "Understand the risk behind the hype before you act. Stress-test a decision, explore the Fan Portfolio, or train your judgement in Finfluencer Court.",
+      },
+      { property: "og:title", content: "ZUNO — Think before you win." },
+      {
+        property: "og:description",
+        content: "Understand the risk behind the hype before you act.",
+      },
     ],
   }),
   component: Index,
 });
 
-const journey = [
-  {
-    step: "01",
-    label: "Declare",
-    icon: Target,
-    copy: "Tell ZUNO what you're thinking of doing.",
-    status: "Live",
-  },
-  {
-    step: "02",
-    label: "Stress test",
-    icon: LineChart,
-    copy: "See the downside before you act on it.",
-    status: "Live",
-  },
-  {
-    step: "03",
-    label: "Fan portfolio",
-    icon: PieChart,
-    copy: "Explore other ways to express the same belief.",
-    status: "Live",
-  },
-  {
-    step: "04",
-    label: "Finfluencer Court",
-    icon: Gavel,
-    copy: "Judge viral claims and learn the reasoning behind them.",
-    status: "New",
-  },
-];
-
 function Index() {
+  const progress = useZunoProgress();
+
   return (
-    <main className="court-backdrop min-h-screen">
-      <div className="mx-auto w-full max-w-3xl px-5 py-14 sm:py-20">
-        <span className="font-display text-lg font-bold tracking-tight">ZUNO</span>
+    <ZunoShell>
+      <div className="space-y-12 lg:space-y-16">
+        <section>
 
-        <h1 className="mt-10 font-display text-4xl leading-[1.05] font-bold sm:text-6xl">
-          Think before you <span className="text-gradient-primary">win</span>.
-        </h1>
-        <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-          {description}
-        </p>
 
-        <div className="mt-10 grid gap-3">
-          {journey.map((j) => (
-            <div
-              key={j.label}
-              className="flex items-start gap-4 rounded-2xl border border-border bg-surface px-5 py-4"
-            >
-              <j.icon className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="label-mono text-muted-foreground">{j.step}</span>
-                  <p className="font-display text-base font-semibold">{j.label}</p>
-                  <span
-                    className={`label-mono rounded-full px-2 py-0.5 ${
-                      j.status === "New"
-                        ? "bg-primary/15 text-primary"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {j.status}
-                  </span>
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">{j.copy}</p>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        <div className="mt-10">
-          <Link to="/court">
-            <CourtButton size="lg">
-              Enter Finfluencer Court
-              <ArrowRight className="size-4" aria-hidden />
-            </CourtButton>
-          </Link>
-        </div>
 
-        <p className="mt-14 text-xs leading-relaxed text-muted-foreground">
+
+          <p className="zuno-eyebrow">ZUNO</p>
+          <h1 className="animate-fade-up mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            Think before you{" "}
+            <span className="text-gradient-primary">win.</span>
+          </h1>
+
+          <p
+            className="animate-fade-up mt-4 max-w-lg text-base text-muted-foreground sm:text-lg"
+            style={{ animationDelay: "100ms" }}
+          >
+            Understand the risk behind the hype before you act. ZUNO helps you think — it never
+            tells you what to invest in.
+          </p>
+
+
+          <div
+            className="surface-card card-hover animate-fade-up mt-8 p-6 hover:border-primary/40 sm:p-8"
+            style={{ animationDelay: "200ms" }}
+          >
+            <p className="zuno-eyebrow">Decision support</p>
+
+            <h2 className="font-display mt-3 text-2xl font-bold tracking-tight">Test a decision</h2>
+            <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
+              Thinking about putting your money into something? Stress-test it first.
+            </p>
+            <CtaButton to="/test" className="mt-6">
+              Test a decision
+            </CtaButton>
+          </div>
+        </section>
+
+        <CourtEntryCard variant="hero" />
+
+        {progress.returning ? <ReturningUserPanel progress={progress} /> : null}
+
+        <JourneyTracker />
+
+        <FanPortfolioCard />
+
+        <CourtEntryCard variant="feature" />
+
+        <ContinueJourneyCard progress={progress} />
+
+        <RiskRecognitionCard progress={progress} />
+
+        <p className="text-xs leading-relaxed text-muted-foreground/80">
           ZUNO is an education prototype. It uses simulated data and does not provide investment
-          advice or recommend any asset.
+          advice, personalised recommendations, or any assessment of your financial suitability.
         </p>
       </div>
-    </main>
+    </ZunoShell>
   );
-}
-</file>
-
-<file path="src/routeTree.gen.ts">
-/* eslint-disable */
-
-// @ts-nocheck
-
-// noinspection JSUnusedGlobalSymbols
-
-// This file was automatically generated by TanStack Router.
-// You should NOT make any changes in this file as it will be overwritten.
-// Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
-
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as CourtRouteImport } from './routes/court'
-
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CourtRoute = CourtRouteImport.update({
-  id: '/court',
-  path: '/court',
-  getParentRoute: () => rootRouteImport,
-} as any)
-
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/court': typeof CourtRoute
-}
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/court': typeof CourtRoute
-}
-export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/court': typeof CourtRoute
-}
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/court'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/court'
-  id: '__root__' | '/' | '/court'
-  fileRoutesById: FileRoutesById
-}
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CourtRoute: typeof CourtRoute
-}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/court': {
-      id: '/court'
-      path: '/court'
-      fullPath: '/court'
-      preLoaderRoute: typeof CourtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
-}
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CourtRoute: CourtRoute,
-}
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
 }
 </file>
 
