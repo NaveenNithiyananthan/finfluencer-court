@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ZunoShell } from "@/components/zuno/ZunoNav";
-import { CtaButton } from "@/components/zuno/CtaButton";
+import { Hero } from "@/components/zuno/Hero";
+import { ThemeTicker } from "@/components/zuno/ThemeTicker";
 import { JourneyTracker } from "@/components/zuno/JourneyTracker";
 import { FanPortfolioCard } from "@/components/zuno/FanPortfolioCard";
 import { CourtEntryCard } from "@/components/zuno/CourtEntryCard";
@@ -34,42 +35,8 @@ function Index() {
   return (
     <ZunoShell>
       <div className="space-y-12 lg:space-y-16">
-        <section>
-
-
-
-
-
-          <p className="zuno-eyebrow">ZUNO</p>
-          <h1 className="animate-fade-up mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-            Think before you{" "}
-            <span className="text-gradient-primary">win.</span>
-          </h1>
-
-          <p
-            className="animate-fade-up mt-4 max-w-lg text-base text-muted-foreground sm:text-lg"
-            style={{ animationDelay: "100ms" }}
-          >
-            Understand the risk behind the hype before you act. ZUNO helps you think — it never
-            tells you what to invest in.
-          </p>
-
-
-          <div
-            className="surface-card card-hover animate-fade-up mt-8 p-6 hover:border-primary/40 sm:p-8"
-            style={{ animationDelay: "200ms" }}
-          >
-            <p className="zuno-eyebrow">Decision support</p>
-
-            <h2 className="font-display mt-3 text-2xl font-bold tracking-tight">Test a decision</h2>
-            <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
-              Thinking about putting your money into something? Stress-test it first.
-            </p>
-            <CtaButton to="/test" className="mt-6">
-              Test a decision
-            </CtaButton>
-          </div>
-        </section>
+        <Hero />
+        <ThemeTicker />
 
         <CourtEntryCard variant="hero" />
 
