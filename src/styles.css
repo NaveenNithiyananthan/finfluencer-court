@@ -438,6 +438,30 @@
   mask-image: linear-gradient(to bottom, black, transparent);
 }
 
+/* Subtle graph-paper grid for the home hero.
+   Line colour derives from --foreground so it reads on the light palette
+   (the old volt-era version used white lines on a dark background). */
+@utility bg-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--foreground) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--foreground) 5%, transparent) 1px,
+      transparent 1px
+    );
+}
+
+/* Radial fade paired with bg-grid so the grid dissolves from the top centre */
+@utility mask-radial-fade {
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, black, transparent);
+}
+
 /* ---------- Range inputs ---------- */
 
 input[type="range"] {
