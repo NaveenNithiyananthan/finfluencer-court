@@ -12,11 +12,28 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+function BrandMark() {
+  return (
+    <svg viewBox="0 0 64 64" className="mx-auto size-12" role="img" aria-label="ZUNO">
+      <rect width="64" height="64" rx="14" fill="#101828" />
+      <path
+        d="M18 20H46L18 44H46"
+        fill="none"
+        stroke="#4cc2ff"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function NotFoundComponent() {
   return (
     <div className="bg-hero flex min-h-screen items-center justify-center px-4">
       <div className="animate-fade-up max-w-md text-center">
-        <h1 className="text-gradient-primary text-8xl font-bold">404</h1>
+        <BrandMark />
+        <h1 className="text-gradient-primary mt-6 text-8xl font-bold">404</h1>
         <h2 className="mt-4 font-display text-xl font-semibold">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
@@ -44,7 +61,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="bg-hero flex min-h-screen items-center justify-center px-4">
       <div className="animate-fade-up max-w-md text-center">
-        <h1 className="font-display text-xl font-semibold tracking-tight">
+        <BrandMark />
+        <h1 className="mt-6 font-display text-xl font-semibold tracking-tight">
           This page didn't load
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">

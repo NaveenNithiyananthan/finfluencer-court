@@ -27,12 +27,18 @@ export function StressTest({
       <SectionHeader eyebrow={copy.eyebrow} subtitle={copy.subtitle} title={copy.title} />
 
       <section className="space-y-6">
-        <div className="animate-fade-up">
+        <figure className="surface-card animate-fade-up relative overflow-hidden p-6">
+          <span
+            aria-hidden
+            className="font-display pointer-events-none absolute -top-4 right-3 select-none text-8xl leading-none text-primary/10"
+          >
+            ”
+          </span>
           <p className="zuno-eyebrow">Putting your words on trial</p>
-          <h2 className="mt-2 font-display text-2xl font-bold leading-snug sm:text-3xl">
+          <h2 className="mt-2 max-w-xl font-display text-2xl font-bold leading-snug sm:text-3xl">
             “{declaration.idea}”
           </h2>
-        </div>
+        </figure>
 
         <blockquote
           className="my-6 animate-fade-up border-l-2 border-primary pl-4 italic text-muted-foreground"

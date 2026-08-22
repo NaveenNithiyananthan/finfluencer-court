@@ -17,6 +17,16 @@ type DebtAnswer = "yes" | "no";
 type SavingsAnswer = "solid" | "a-little" | "none";
 type PurposeAnswer = "essentials" | "specific-goal" | "spare-cash";
 
+const stepRail = (
+  <ol className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+    <li className="text-primary">01 · Foundations</li>
+    <li aria-hidden className="size-1 rounded-full bg-border" />
+    <li>02 · The idea</li>
+    <li aria-hidden className="size-1 rounded-full bg-border" />
+    <li>03 · Stress test</li>
+  </ol>
+);
+
 export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declaration) => void }) {
   const [draft, setDraft] = useState<Declaration>({ ...emptyDeclaration });
   const [debt, setDebt] = useState<DebtAnswer | null>(null);
@@ -49,6 +59,8 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
 
   return (
     <div className="space-y-8">
+      {stepRail}
+
       <section className="animate-fade-up space-y-5">
         <SectionHeader
           eyebrow="Step 01: The Foundations"
@@ -119,6 +131,13 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
         subtitle="Tell ZUNO what you are considering."
         title="What are you thinking of doing?"
       />
+
+      {!foundationsComplete && (
+        <p className="-mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="size-1.5 animate-pulse rounded-full bg-caution" />
+          Answer the three questions above to unlock this step.
+        </p>
+      )}
 
       <div
         className={cn(
@@ -231,6 +250,11 @@ export function DeclareWizard({ onComplete }: { onComplete: (declaration: Declar
 
         <div className="animate-fade-up pt-2" style={{ animationDelay: "360ms" }}>
           <CtaButton onClick={submit}>Stress-test this idea</CtaButton>
+          {foundationsComplete && !draft.idea.trim() && (
+            <p className="mt-3 text-center text-xs text-muted-foreground">
+              Describe your idea above — one honest sentence is enough.
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -89,20 +89,27 @@ export function MeetFanPortfolio({
             : "A simulated portfolio built around the sports and entertainment ecosystem."
         }
       />
-      <div className="space-y-4">
+      <div className="space-y-3">
         {[
           "Same interest, different shape",
           "See how diversification changes the risk profile",
           "This is a simulation, not a shopping list",
-        ].map((title) => (
-          <ZunoCard key={title} tone="quiet">
+        ].map((title, i) => (
+          <div
+            key={title}
+            className="surface-card animate-fade-up flex items-center gap-3 p-4"
+            style={{ animationDelay: `${i * 70}ms` }}
+          >
+            <span className="grid size-8 shrink-0 place-items-center rounded-full border border-primary/25 bg-gradient-to-br from-primary/20 to-primary/5 font-display text-sm font-semibold text-primary">
+              {i + 1}
+            </span>
             <p className="font-display text-base font-semibold">{title}</p>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              You can care about sport and still spread how you are exposed to it.
-            </p>
-          </ZunoCard>
+          </div>
         ))}
       </div>
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        You can care about sport and still spread how you are exposed to it.
+      </p>
       <ZunoButton onClick={onNext}>See the simulated portfolio</ZunoButton>
     </div>
   );
@@ -282,14 +289,17 @@ export function LearningTakeaway() {
       <SectionHeader
         eyebrow="What's next"
         title="Want to learn how portfolios are actually built?"
-        supporting="Everything you just explored was a simulation. The real skill is learning how investors choose, weight and review holdings over time."
+        supporting="Everything you just explored was a simulation."
       />
-      <ZunoCard tone="quiet">
-        <p className="text-[15px] leading-relaxed">
-          You've seen how concentration raises the stakes and diversification spreads them. The next
-          step is turning that instinct into a repeatable process you could use with real money.
+      <div className="bg-hero surface-card animate-scale-in space-y-4 p-6">
+        <p className="font-display text-2xl font-semibold leading-snug tracking-tight">
+          You've felt the difference between one outcome and a spread of them.
         </p>
-      </ZunoCard>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          The real skill is learning how investors choose, weight and review holdings over time —
+          turning today's instinct into a repeatable process you could one day use with real money.
+        </p>
+      </div>
       <Link className="block" to="/">
         <ZunoButton>Back to home</ZunoButton>
       </Link>
