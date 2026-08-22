@@ -189,13 +189,15 @@
     --primary: 69 94% 64%;
     --primary-foreground: 240 10% 4%;
 
-    /* Frosted glass/surface effects */
-    --card: 0 0% 100%;
+    /* Card & secondary are dark ink surfaces. The frosted-glass look is
+       produced by foreground-alpha layers (see surface-card / ui/card.tsx),
+       never by a white --card — white here caused white-on-white text. */
+    --card: 240 8% 10%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 4%;
     --popover-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 100%;
+    --secondary: 240 6% 16%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 15%;
