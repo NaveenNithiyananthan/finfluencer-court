@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ZunoShell } from "@/components/zuno/ZunoShell";
 import {
@@ -11,7 +11,7 @@ import {
   PortfolioDashboard,
 } from "@/components/zuno/screens";
 import { defaultWeights, type Weights } from "@/lib/fan-portfolio";
-import { ZunoButton } from "@/components/zuno/primitives";
+import { ZunoButton, ZunoLinkButton } from "@/components/zuno/primitives";
 import { useZunoSession } from "@/lib/zuno-session";
 
 const TITLE = "ZUNO Fan Portfolio — explore a diversified alternative";
@@ -93,12 +93,9 @@ function PortfolioModule() {
         </div>
       ) : (
         <div className="pt-4">
-          <Link
-            to="/test"
-            className="inline-flex w-full items-center justify-center rounded-2xl border border-border bg-surface/60 px-5 py-4 font-display text-base font-semibold text-foreground transition-all duration-200 hover:bg-surface-2 active:scale-[0.99]"
-          >
+          <ZunoLinkButton to="/test" variant="ghost">
             Back to Stress Test
-          </Link>
+          </ZunoLinkButton>
         </div>
       )}
     </ZunoShell>

@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -63,6 +64,33 @@ export function ZunoButton({
         className,
       )}
     />
+  );
+}
+
+export function ZunoLinkButton({
+  to,
+  children,
+  variant = "primary",
+  className,
+}: {
+  to: string;
+  children: ReactNode;
+  variant?: "primary" | "ghost";
+  className?: string;
+}) {
+  return (
+    <Link
+      to={to}
+      className={cn(
+        "inline-flex w-full items-center justify-center rounded-full px-5 py-4 font-display text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]",
+        variant === "primary" &&
+          "bg-primary text-primary-foreground shadow-glow hover:brightness-110",
+        variant === "ghost" && "surface-card hover:border-primary/40",
+        className,
+      )}
+    >
+      {children}
+    </Link>
   );
 }
 
