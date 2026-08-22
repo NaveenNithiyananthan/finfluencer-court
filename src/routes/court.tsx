@@ -123,7 +123,7 @@ function CourtPage() {
             <span className="label-mono text-muted-foreground">/ court</span>
           </Link>
           {stage !== "intro" && (
-            <span className="label-mono rounded-full border border-border bg-surface px-3 py-1 text-muted-foreground">
+            <span className="surface-card label-mono rounded-full px-3 py-1 text-muted-foreground">
               {scenario.caseNumber}
             </span>
           )}
@@ -243,7 +243,7 @@ function Intro({ onEnter, rounds }: { onEnter: () => void; rounds: number }) {
 
   return (
     <section className="space-y-8">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-elevated sm:p-12">
+      <div className="surface-card animate-fade-up relative overflow-hidden p-8 sm:p-12">
         <span className="label-mono inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-primary">
           <Gavel className="size-3.5" aria-hidden />
           Now in session · {rounds} cases
@@ -295,8 +295,8 @@ function Final({ onRestart }: { onRestart: () => void }) {
 
   return (
     <section className="space-y-8">
-      <div className="rounded-3xl border border-border bg-card p-8 shadow-elevated sm:p-12">
-        <Sparkles className="size-6 text-primary" aria-hidden />
+      <div className="surface-card animate-fade-up p-8 sm:p-12">
+        <Sparkles className="text-primary size-6" aria-hidden />
         <h2 className="mt-5 font-display text-3xl leading-tight font-bold sm:text-4xl">
           The goal isn't to know every investment. It's to recognise bad reasoning before you act.
         </h2>

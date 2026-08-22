@@ -1,7 +1,21 @@
+import { formatGBP, lossScenarios, recoveryGain } from "@/lib/zuno-data";
+
+export function LossScenarioVisualiser({
+  amount,
+  lossPct,
+  onChange,
+  prefix,
+}: {
+  amount: number;
+  lossPct: number;
+  onChange: (nextLossPct: number) => void;
+  prefix: string;
+}) {
   const remaining = Math.round(amount * (1 - lossPct / 100));
   const lost = amount - remaining;
   const gainNeeded = recoveryGain(lossPct);
   const sliderIdx = Math.max(0, lossScenarios.indexOf(lossPct));
+
   return (
     <div className="surface-card animate-fade-up overflow-hidden">
       <div className="bg-hero p-6">

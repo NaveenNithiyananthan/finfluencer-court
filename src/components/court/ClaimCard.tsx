@@ -1,3 +1,6 @@
+import { BadgeCheck, Heart, MessageCircle, Repeat2 } from "lucide-react";
+import type { Scenario } from "@/data/court-scenarios";
+
 export function ClaimCard({ scenario, locked }: { scenario: Scenario; locked?: boolean }) {
   return (
     <div
