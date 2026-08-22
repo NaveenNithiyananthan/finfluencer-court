@@ -1,14 +1,7 @@
-import { CtaButton } from "../CtaButton";
 import { SectionHeader } from "../SectionHeader";
 import { buildReasoningCards, scenarioCopy, type Declaration } from "@/lib/zuno-data";
 
-export function WhyRisky({
-  declaration,
-  onContinue,
-}: {
-  declaration: Declaration;
-  onContinue: () => void;
-}) {
+export function WhyRisky({ declaration }: { declaration: Declaration }) {
   const copy = scenarioCopy(declaration);
   const cards = buildReasoningCards(declaration);
   return (
@@ -35,7 +28,6 @@ export function WhyRisky({
           </article>
         ))}
       </div>
-      <CtaButton onClick={onContinue}>Continue</CtaButton>
     </div>
   );
 }

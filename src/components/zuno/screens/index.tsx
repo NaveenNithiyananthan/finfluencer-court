@@ -32,7 +32,6 @@ import {
 export { DeclareWizard } from "./DeclareWizard";
 export { StressTest } from "./StressTest";
 export { WhyRisky } from "./WhyRisky";
-export { PauseScreen } from "./PauseScreen";
 
 export function AlternativeIntro({
   decision,
