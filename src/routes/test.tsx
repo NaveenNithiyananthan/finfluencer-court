@@ -37,6 +37,12 @@ function TestFlow() {
     if (session.declaration) setDeclaration(session.declaration);
   }, [session.declaration]);
 
+  // When the wizard hands over to the story, bring the viewport to the top
+  // so the StressTest section starts where the user expects it.
+  useEffect(() => {
+    if (started) window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [started]);
+
   return (
     <PhoneShell
       onBack={started ? () => setStarted(false) : undefined}
